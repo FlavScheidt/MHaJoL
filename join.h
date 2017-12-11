@@ -16,7 +16,6 @@
 typedef struct lList
 {
 	long int C_CUSTKEY;
-	float C_ACCTBAL;
 	struct lList *next;
 }linkedList;
 

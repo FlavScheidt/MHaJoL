@@ -67,61 +67,61 @@ int hashJoin (customer *t_customer, orders *t_orders, int tamCustomer, int tamOr
 	}
 
 	//Generates hash table
-	for (int i = 0; i<tamCustomer; i++)
+	for (int i = 0; i<tamOrders; i++)
 	{
 		control = 0;
 
-		sprintf(str, "%d", t_customer[i].C_CUSTKEY);
+		sprintf(str, "%ld", t_orders[i].O_CUSTKEY);
 		index = HASH_FUNC;
 
-		if (buckets[index]->C_CUSTKEY == -1)
-			buckets[index]->C_CUSTKEY = t_customer[i].C_CUSTKEY;
+		node = buckets[index];
+		if (node->C_CUSTKEY == -1)
+		{
+			node->C_CUSTKEY = t_orders[i].O_CUSTKEY;
+			node->next = NULL;
+		}
 		else
 		{
-
-			node = buckets[index];
-			while (node->next != NULL && control == 0)
+			while (node->next != NULL && control == 0);
 			{
-				if (node->C_CUSTKEY == t_customer[i].C_CUSTKEY)
-					control =1;
-
 				node = node->next;
+
+				if (node->C_CUSTKEY == t_orders[i].O_CUSTKEY)
+					control = 1;
 			}
 
-			node->next = (linkedList *) malloc(sizeof(linkedList));
-			node->next->C_CUSTKEY = t_customer[i].C_CUSTKEY;
-			node->next->next = NULL;
-		} 
-
+			if (control == 0 && node != NULL)
+			{
+				node->next = (linkedList *) malloc(sizeof(linkedList));
+				node->next->C_CUSTKEY = t_orders[i].O_CUSTKEY;
+				node->next->next = NULL;
+			}
+		}
 	}
 
 	//Loop on orders to verify the existence of the register
-	for (int i=0; i<tamOrders; i++)
+	for (int i=0; i<tamCustomer; i++)
 	{
-		sprintf(str, "%ld", t_orders[i].O_CUSTKEY);
+		sprintf(str, "%d", t_customer[i].C_CUSTKEY);
 		index = HASH_FUNC;
 	
 		control = 0;
 		node = buckets[index];
 
-		if (node->C_CUSTKEY == t_orders[i].O_CUSTKEY)
+		if (node->C_CUSTKEY != t_customer[i].C_CUSTKEY)
 		{
-			control = 1;
-			t_result[index] = node->C_ACCTBAL;
-			nResult++;
-		}
-
-		while (node->next != NULL && control == 0)
-		{
-			if (node->C_CUSTKEY == t_orders[i].O_CUSTKEY)
-				control =1;
+			while (node->next != NULL && control == 0)
+			{
 				node = node->next;
-		}
-		
-		if (control == 0)
-		{
-			t_result[index] = node->C_ACCTBAL;
-			nResult++;
+				if (node->C_CUSTKEY == t_customer[i].C_CUSTKEY)
+					control = 1;
+			}
+
+			if (control == 0)
+			{
+				t_result[index] = t_customer[i].C_ACCTBAL;
+				nResult++;
+			}
 		}
 	}
 

@@ -23,14 +23,14 @@ int main()
 		t_result[i] = 0.0;
 
 	//Nested Loop Join
-	init = time(NULL);
-	nResult=nestedLoopJoin(t_customer, t_orders, tamCustomer, tamOrders, t_result);
-	end = time(NULL);
+	// init = time(NULL);
+	// nResult=nestedLoopJoin(t_customer, t_orders, tamCustomer, tamOrders, t_result);
+	// end = time(NULL);
 
-	printf("Nested Loop Join\n");
-	printf("-----------------\n");
-	printf("%d linhas\n", nResult);
-	printf("%.f segundos \n\n", difftime(end,init));
+	// printf("Nested Loop Join\n");
+	// printf("-----------------\n");
+	// printf("%d linhas\n", nResult);
+	// printf("%.f segundos \n\n", difftime(end,init));
 
 	//Hash Loop Join
 	init = time(NULL);
