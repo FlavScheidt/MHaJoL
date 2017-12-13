@@ -1,6 +1,4 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+#include "functions.h"
 
 /******** VETOR DE STRUCTS CUSTOMER *********/
 typedef struct customer
@@ -13,9 +11,9 @@ typedef struct customer
 	float C_ACCTBAL;
 	char C_MKTSEGMENT[10];
 	char C_COMMENT[117];
-} customer;
+} tuples_customer;
 
-customer *t_customer;
+tuples_customer *t_customer;
 
 /******** VETOR DE STRUCTS ORDERS ***********/
 typedef struct orders
@@ -29,16 +27,33 @@ typedef struct orders
 	char O_CLERK[15];
 	int O_SHIPPRIORITY;
 	char O_COMMENT[79];
-} orders;
+} tuples_orders;
 
-orders *t_orders;
+tuples_orders *t_orders;
+
+/******** VETOR DE STRUCTS COLUMN CUSTOMER *********/
+typedef struct customer_c
+{
+	int C_CUSTKEY;
+	float C_ACCTBAL;
+} column_customer;
+
+column_customer *c_customer;
+
+/******** VETOR DE STRUCTS COLUMN ORDERS ***********/
+typedef struct orders_c
+{
+	long int O_CUSTKEY;
+} column_orders;
+
+column_orders *c_orders;
+
 
 /******** FUNÇÕES ***********/
-void printOrders(orders *t_orders, int tam);
-void readOrders(char fileName[10], FILE *file, orders *t_orders);
-void printCustomer(customer *t_customer, int tam);
-void readCustomer(char fileName[10], FILE *file, customer *t_customer);
-int findSeparator(int init, size_t len, char *line);
-int countLines(char fileName[10]);
-float toFloat(const char* s);
-int toInt(char a[]);
+void printOrdersTuple(tuples_orders *t_orders, int tam);
+void readOrdersTuple(char fileName[10], tuples_orders *t_orders);
+void printCustomerTuple(tuples_customer *t_customer, int tam);
+void readCustomerTuple(char fileName[10], tuples_customer *t_customer);
+
+void readOrdersColumn(char fileName[10], column_orders *c_orders);
+void readCustomerColumn(char fileName[10], column_customer *c_customer);

@@ -10,7 +10,7 @@
 //                ->  Seq Scan on orders  (cost=0.00..330816.00 rows=5513600 width=8)
 // (7 rows)
 
-int nestedLoopJoin (customer *t_customer, orders *t_orders, int tamCustomer, int tamOrders, float * t_result)
+int nestedLoopJoin (column_customer *c_customer, column_orders *c_orders, int tamCustomer, int tamOrders, float * t_result)
 {
 	int exists = 0;
 	int index = 0;
@@ -19,12 +19,12 @@ int nestedLoopJoin (customer *t_customer, orders *t_orders, int tamCustomer, int
 	{
 		for (int j=0; j<tamOrders && exists == 0; j++)
 		{
-			if (t_customer[i].C_CUSTKEY == t_orders[j].O_CUSTKEY)
+			if (c_customer[i].C_CUSTKEY == c_orders[j].O_CUSTKEY)
 				exists = 1;
 		}
 		if (!exists)
 		{
-			t_result[index] = t_customer[i].C_ACCTBAL;
+			t_result[index] = c_customer[i].C_ACCTBAL;
 			index++;
 		}
 		else
@@ -45,7 +45,7 @@ int nestedLoopJoin (customer *t_customer, orders *t_orders, int tamCustomer, int
 // (8 rows)
 
 
-int hashJoin (customer *t_customer, orders *t_orders, int tamCustomer, int tamOrders, float * t_result)
+int hashJoin (column_customer *c_customer, column_orders *c_orders, int tamCustomer, int tamOrders, float * t_result)
 {
 	//int exists = 0;
 	int index = 0;
@@ -53,11 +53,13 @@ int hashJoin (customer *t_customer, orders *t_orders, int tamCustomer, int tamOr
 	int nResult=0;
 	int nBuckets = HASH_BUCKETS;
 	char str[10];
+	clock_t init, end;
 
 	linkedList * node;
 
 	linkedList * buckets[nBuckets];
 
+	init = clock();
 	//Initialize buckets
 	for (int n = 0; n<nBuckets; n++)
 	{
@@ -65,65 +67,76 @@ int hashJoin (customer *t_customer, orders *t_orders, int tamCustomer, int tamOr
 		buckets[n]->C_CUSTKEY = -1;
 		buckets[n]->next = NULL;
 	}
+	end = clock();
+
+	printf("Initialization: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 
 	//Generates hash table
+	init = clock();
 	for (int i = 0; i<tamOrders; i++)
 	{
 		control = 0;
 
-		sprintf(str, "%ld", t_orders[i].O_CUSTKEY);
+		sprintf(str, "%ld", c_orders[i].O_CUSTKEY);
 		index = HASH_FUNC;
 
 		node = buckets[index];
 		if (node->C_CUSTKEY == -1)
 		{
-			node->C_CUSTKEY = t_orders[i].O_CUSTKEY;
+			node->C_CUSTKEY = c_orders[i].O_CUSTKEY;
 			node->next = NULL;
 		}
 		else
 		{
-			while (node->next != NULL && control == 0);
+			while (node->next != NULL)
 			{
 				node = node->next;
 
-				if (node->C_CUSTKEY == t_orders[i].O_CUSTKEY)
+				if (node->C_CUSTKEY == c_orders[i].O_CUSTKEY)
 					control = 1;
 			}
 
 			if (control == 0 && node != NULL)
 			{
 				node->next = (linkedList *) malloc(sizeof(linkedList));
-				node->next->C_CUSTKEY = t_orders[i].O_CUSTKEY;
+				node->next->C_CUSTKEY = c_orders[i].O_CUSTKEY;
 				node->next->next = NULL;
 			}
 		}
 	}
+	end = clock();
 
+	printf("Hash Table Generation: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
+
+
+	init = clock();
 	//Loop on orders to verify the existence of the register
 	for (int i=0; i<tamCustomer; i++)
 	{
-		sprintf(str, "%d", t_customer[i].C_CUSTKEY);
+		sprintf(str, "%d", c_customer[i].C_CUSTKEY);
 		index = HASH_FUNC;
 	
 		control = 0;
 		node = buckets[index];
 
-		if (node->C_CUSTKEY != t_customer[i].C_CUSTKEY)
+		if (node->C_CUSTKEY != c_customer[i].C_CUSTKEY)
 		{
 			while (node->next != NULL && control == 0)
 			{
 				node = node->next;
-				if (node->C_CUSTKEY == t_customer[i].C_CUSTKEY)
+				if (node->C_CUSTKEY == c_customer[i].C_CUSTKEY)
 					control = 1;
 			}
 
 			if (control == 0)
 			{
-				t_result[index] = t_customer[i].C_ACCTBAL;
+				t_result[index] = c_customer[i].C_ACCTBAL;
 				nResult++;
 			}
 		}
 	}
+	end = clock();
+	printf("Join Core: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 
 	return nResult;
 }

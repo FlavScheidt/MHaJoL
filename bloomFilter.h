@@ -10,4 +10,5 @@
 #define HASH_INDEX3 ((hash_jenkins(str) << 10) >> 10) & (nBuckets-1)
 #define HASH_INDEX4 ((hash_pearson(str) << 10) >> 10) & (nBuckets-1)
 
-int bloomFilter(customer *t_customer, orders *t_orders, int tamCustomer, int tamOrders, float * t_result);
+int bloomFilter(column_customer *c_customer, column_orders *c_orders, int tamCustomer, int tamOrders, float * t_result, int nBuckets);
+int bloomNested(column_customer *c_customer, column_orders *c_orders, int tamCustomer, int tamOrders, float * t_result, int nBuckets);
