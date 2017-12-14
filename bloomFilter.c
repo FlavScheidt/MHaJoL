@@ -47,6 +47,120 @@ int bloomFilter(column_customer *c_customer, column_orders *c_orders, int tamCus
 	return index;
 }
 
+int bloomFilterParam(column_customer *c_customer, column_orders *c_orders, int tamCustomer, int tamOrders, float * t_result, int nBuckets, int nHash)
+{
+	int index = 0;
+	char bloom[nBuckets];
+	char str[10];
+	clock_t init, end;
+
+	init = clock();
+	for (int b=0; b<nBuckets; b++)
+		bloom[b] = 0;
+	end = clock();
+	printf("Initialization: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
+
+
+	//Generate bitmask
+	init = clock();
+	for(int i=0; i<tamOrders; i++)
+	{
+		sprintf(str, "%ld", c_orders[i].O_CUSTKEY);
+		if (nHash >= 0)
+			bloom[HASH_INDEX0] = 1;
+		if (nHash >= 1)
+			bloom[HASH_INDEX1] = 1;
+		if (nHash >= 2)
+			bloom[HASH_INDEX2] = 1;
+		if (nHash >= 3)
+			bloom[HASH_INDEX3] = 1;
+		if (nHash == 4)
+		bloom[HASH_INDEX4] = 1;
+	}
+	end = clock();
+	printf("Bloom Filter Generation: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
+
+	//Join
+	if (nHash == 0)
+	{
+		init = clock();
+		for (int j=0; j<tamCustomer; j++)
+		{
+			sprintf(str, "%d", c_customer[j].C_CUSTKEY);
+			if (bloom[HASH_INDEX0] == 0)
+			{
+				t_result[index] = c_customer[j].C_ACCTBAL;
+				index++;
+			}
+		}
+		end = clock();
+		printf("Join Core: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
+	}
+	if (nHash == 1)
+	{
+		init = clock();
+		for (int j=0; j<tamCustomer; j++)
+		{
+			sprintf(str, "%d", c_customer[j].C_CUSTKEY);
+			if (bloom[HASH_INDEX0] == 0 || bloom[HASH_INDEX1] == 0)
+			{
+				t_result[index] = c_customer[j].C_ACCTBAL;
+				index++;
+			}
+		}
+		end = clock();
+		printf("Join Core: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
+	}
+	if (nHash == 2)
+	{
+		init = clock();
+		for (int j=0; j<tamCustomer; j++)
+		{
+			sprintf(str, "%d", c_customer[j].C_CUSTKEY);
+			if (bloom[HASH_INDEX0] == 0 || bloom[HASH_INDEX1] == 0 || bloom[HASH_INDEX2] == 0)
+			{
+				t_result[index] = c_customer[j].C_ACCTBAL;
+				index++;
+			}
+		}
+		end = clock();
+		printf("Join Core: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
+	}
+	if (nHash == 3)
+	{
+		init = clock();
+		for (int j=0; j<tamCustomer; j++)
+		{
+			sprintf(str, "%d", c_customer[j].C_CUSTKEY);
+			if (bloom[HASH_INDEX0] == 0 || bloom[HASH_INDEX1] == 0 || bloom[HASH_INDEX2] == 0 || bloom[HASH_INDEX3] == 0)
+			{
+				t_result[index] = c_customer[j].C_ACCTBAL;
+				index++;
+			}
+		}
+		end = clock();
+		printf("Join Core: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
+	}
+	else if (nHash == 4)
+	{
+		init = clock();
+		for (int j=0; j<tamCustomer; j++)
+		{
+			sprintf(str, "%d", c_customer[j].C_CUSTKEY);
+			if (bloom[HASH_INDEX0] == 0 || bloom[HASH_INDEX1] == 0 || bloom[HASH_INDEX2] == 0 || bloom[HASH_INDEX3] == 0 || bloom[HASH_INDEX4] == 0)
+			{
+				t_result[index] = c_customer[j].C_ACCTBAL;
+				index++;
+			}
+		}
+		end = clock();
+		printf("Join Core: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
+	}
+
+	return index;
+}
+
+
 int bloomNested(column_customer *c_customer, column_orders *c_orders, int tamCustomer, int tamOrders, float * t_result, int nBuckets)
 {
 	int index = 0;
@@ -68,7 +182,7 @@ int bloomNested(column_customer *c_customer, column_orders *c_orders, int tamCus
 	{
 		sprintf(str, "%ld", c_orders[i].O_CUSTKEY);
 		bloom[HASH_INDEX0] = 1;
-		//bloom[HASH_INDEX1] = 1;
+		bloom[HASH_INDEX1] = 1;
 		bloom[HASH_INDEX2] = 1;
 		bloom[HASH_INDEX3] = 1;
 		bloom[HASH_INDEX4] = 1;

@@ -7,10 +7,18 @@ int main(int argc, char ** argv)
 	int nResult;
 	clock_t init, end;
 	int nBuckets;
+	int nHash;
 
 	//Arguments
 	if (argc > 1)
+	{
 		nBuckets = toInt(argv[1]);
+
+		if (argc > 2)
+			 nHash = toInt(argv[2]);
+		else
+			nHash = 4;
+	}
 	else
 		nBuckets = 4194304;
 
@@ -29,23 +37,23 @@ int main(int argc, char ** argv)
 		t_result[i] = 0.0;
 
 	//Nested Loop Join
-	// init = clock();
-	// nResult=nestedLoopJoin(c_customer, c_orders, tamCustomer, tamOrders, t_result);
-	// end = clock();
+	init = clock();
+	nResult=nestedLoopJoin(c_customer, c_orders, tamCustomer, tamOrders, t_result);
+	end = clock();
 
-	// printf("Nested Loop Join\n");
-	// printf("-----------------\n");
-	// printf("%d linhas\n", nResult);
-	// printf("%.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
+	printf("Nested Loop Join\n");
+	printf("-----------------\n");
+	printf("%d linhas\n", nResult);
+	printf("%.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 
 	//Hash Loop Join
-	// printf("Hash Join\n");
-	// printf("-----------------\n");
-	// init = clock();
-	// nResult=hashJoin(c_customer, c_orders, tamCustomer, tamOrders, t_result);
-	// end = clock();
-	// printf("%d linhas\n", nResult);
-	// printf("%.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
+	printf("Hash Join\n");
+	printf("-----------------\n");
+	init = clock();
+	nResult=hashJoin(c_customer, c_orders, tamCustomer, tamOrders, t_result);
+	end = clock();
+	printf("%d linhas\n", nResult);
+	printf("%.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 
 	printf("Bloom  Join\n");
 	printf("-----------------\n");
@@ -55,18 +63,27 @@ int main(int argc, char ** argv)
 	printf("%d linhas\n", nResult);
 	printf("%.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 
-	// printf("Bloom Nested Join\n");
-	// printf("-----------------\n");
-	// init = clock();
-	// nResult=bloomNested(c_customer, c_orders, tamCustomer, tamOrders, t_result, nBuckets);
-	// end = clock();
-	// printf("%d linhas\n", nResult);
-	// printf("%.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
+	printf("Bloom Nested Join\n");
+	printf("-----------------\n");
+	init = clock();
+	nResult=bloomNested(c_customer, c_orders, tamCustomer, tamOrders, t_result, nBuckets);
+	end = clock();
+	printf("%d linhas\n", nResult);
+	printf("%.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 
-	// printf("Bloom Hash Join\n");
+	printf("Bloom Hash Join\n");
+	printf("-----------------\n");
+	init = clock();
+	nResult=bloomHash(c_customer, c_orders, tamCustomer, tamOrders, t_result, nBuckets);
+	end = clock();
+	printf("%d linhas\n", nResult);
+	printf("%.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
+
+	// printf("Bloom Join\n");
 	// printf("-----------------\n");
+	// printf("%d Buckets %d Hash Functions\n", nBuckets, nHash);
 	// init = clock();
-	// nResult=bloomHash(c_customer, c_orders, tamCustomer, tamOrders, t_result, nBuckets);
+	// nResult=bloomFilterParam(c_customer, c_orders, tamCustomer, tamOrders, t_result, nBuckets, nHash);
 	// end = clock();
 	// printf("%d linhas\n", nResult);
 	// printf("%.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
