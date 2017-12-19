@@ -1,0 +1,37 @@
+Nested Loop Join
+-----------------
+30000 linhas
+136678 ms 
+
+Hash Join
+-----------------
+Initialization: 4 ms 
+Hash Table Generation: 429 ms 
+Join Core: 35 ms 
+30000 linhas
+467 ms 
+
+Bloom  Join
+-----------------
+Initialization: 15 ms 
+Bloom Filter Generation: 339 ms 
+Join Core: 35 ms 
+29988 linhas
+388 ms 
+
+Bloom Nested Join
+-----------------
+Initialization: 14 ms 
+Bloom Filter Generation: 395 ms 
+Join Core: 18153 ms 
+30000 linhas
+18562 ms 
+
+Bloom Hash Join
+-----------------
+Initialization: 18 ms 
+Bloom Filter and Hash Table Generation: 640 ms 
+Join core: 62 ms 
+30000 linhas
+720 ms 
+

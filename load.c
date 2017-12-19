@@ -6,7 +6,7 @@ void printCustomerTuple(tuples_customer *t_customer, int tam)
 		printf("%d; %s; %s; %ld; %s; %f; %s; %s \n", t_customer[i].C_CUSTKEY, t_customer[i].C_NAME, t_customer[i].C_ADDRESS, t_customer[i].C_NATIONKEY, t_customer[i].C_PHONE, t_customer[i].C_ACCTBAL, t_customer[i].C_MKTSEGMENT, t_customer[i].C_COMMENT);
 }
 
-void readCustomerTuple(char fileName[10], tuples_customer *t_customer)
+void readCustomerTuple(char fileName[50], tuples_customer *t_customer)
 {
 	char read;
 	size_t len = 0;
@@ -90,7 +90,7 @@ void printOrdersTuple(tuples_orders *t_orders, int tam)
 		printf("%d; %ld; %c; %f; %d; %s; %s; %d, %s \n", t_orders[i].O_ORDERKEY, t_orders[i].O_CUSTKEY, t_orders[i].O_ORDERSTATUS, t_orders[i].O_TOTALPRICE, t_orders[i].O_ORDERDATE, t_orders[i].O_ORDERPRIORITY, t_orders[i].O_CLERK, t_orders[i].O_SHIPPRIORITY, t_orders[i].O_COMMENT);
 }
 
-void readOrdersTuple(char fileName[10], tuples_orders *t_orders)
+void readOrdersTuple(char fileName[50], tuples_orders *t_orders)
 {
 	char read;
 	size_t len = 0;
@@ -177,7 +177,7 @@ void readOrdersTuple(char fileName[10], tuples_orders *t_orders)
 	fclose(file);
 }
 
-void readOrdersColumn(char fileName[10], column_orders *c_orders)
+void readOrdersColumn(char fileName[50], column_orders *c_orders, int type)
 {
 	char read;
 	size_t len = 0;
@@ -191,57 +191,77 @@ void readOrdersColumn(char fileName[10], column_orders *c_orders)
 	file = fopen(fileName, "r+");
 	rewind(file);
 
-	while ((read = getline(&line, &len, file)) != -1)
+	if (type == 0)
 	{
-		lineInit = 0;
+		while ((read = getline(&line, &len, file)) != -1)
+		{
+			lineInit = 0;
 
-		//int O_ORDERKEY;
-		lineEnd = findSeparator(0, len, line);
-		lineInit = lineEnd+1;
+			//int O_ORDERKEY;
+			lineEnd = findSeparator(0, len, line);
+			lineInit = lineEnd+1;
 
-		//long int O_CUSTKEY;
-		lineEnd = findSeparator(lineInit, len, line);
-		strncpy(dest, &line[lineInit], lineEnd-lineInit);
-		dest[lineEnd-lineInit] = '\0';
-		lineInit = lineEnd+1;
+			//long int O_CUSTKEY;
+			lineEnd = findSeparator(lineInit, len, line);
+			strncpy(dest, &line[lineInit], lineEnd-lineInit);
+			dest[lineEnd-lineInit] = '\0';
+			lineInit = lineEnd+1;
 
-		c_orders[nLine].O_CUSTKEY=toInt(dest);
+			c_orders[nLine].O_CUSTKEY=toInt(dest);
 
-		//char O_ORDERSTATUS;
-		lineEnd = findSeparator(lineInit, len, line);
-		lineInit = lineEnd+1;
+			//char O_ORDERSTATUS;
+			lineEnd = findSeparator(lineInit, len, line);
+			lineInit = lineEnd+1;
 
-		//float O_TOTALPRICE;
-		lineEnd = findSeparator(lineInit, len, line);
-		lineInit = lineEnd+1;
+			//float O_TOTALPRICE;
+			lineEnd = findSeparator(lineInit, len, line);
+			lineInit = lineEnd+1;
 
-		//int O_ORDERDATE;
-		lineEnd = findSeparator(lineInit, len, line);
-		lineInit = lineEnd+1;
+			//int O_ORDERDATE;
+			lineEnd = findSeparator(lineInit, len, line);
+			lineInit = lineEnd+1;
 
-		//char O_ORDERPRIORITY[15];
-		lineEnd = findSeparator(lineInit, len, line);
-		lineInit = lineEnd+1;
+			//char O_ORDERPRIORITY[15];
+			lineEnd = findSeparator(lineInit, len, line);
+			lineInit = lineEnd+1;
 
-		//char O_CLERK[15];
-		lineEnd = findSeparator(lineInit, len, line);
-		lineInit = lineEnd+1;	
+			//char O_CLERK[15];
+			lineEnd = findSeparator(lineInit, len, line);
+			lineInit = lineEnd+1;	
 
-		//int O_SHIPPRIORITY;
-		lineEnd = findSeparator(lineInit, len, line);;
-		lineInit = lineEnd+1;
-		
-		//char 	O_COMMENT	
-		lineEnd = findSeparator(lineInit, len, line);
-		lineInit = lineEnd+1;
+			//int O_SHIPPRIORITY;
+			lineEnd = findSeparator(lineInit, len, line);;
+			lineInit = lineEnd+1;
+			
+			//char 	O_COMMENT	
+			lineEnd = findSeparator(lineInit, len, line);
+			lineInit = lineEnd+1;
 
-		nLine++;
+			nLine++;
+		}
+	}
+	else
+	{
+		while ((read = getline(&line, &len, file)) != -1)
+		{
+			lineInit = 0;
+
+			//long int O_CUSTKEY;
+			lineEnd = findSeparator(lineInit, len, line);
+			strncpy(dest, &line[lineInit], lineEnd-lineInit);
+			dest[lineEnd-lineInit] = '\0';
+			lineInit = lineEnd+1;
+
+			c_orders[nLine].O_CUSTKEY=toInt(dest);
+
+			nLine++;
+		}
 	}
 
 	fclose(file);
 }
 
-void readCustomerColumn(char fileName[10], column_customer *c_customer)
+void readCustomerColumn(char fileName[50], column_customer *c_customer)
 {
 	char read;
 	size_t len = 0;

@@ -51,9 +51,9 @@ column_orders *c_orders;
 
 /******** FUNÇÕES ***********/
 void printOrdersTuple(tuples_orders *t_orders, int tam);
-void readOrdersTuple(char fileName[10], tuples_orders *t_orders);
+void readOrdersTuple(char fileName[50], tuples_orders *t_orders);
 void printCustomerTuple(tuples_customer *t_customer, int tam);
-void readCustomerTuple(char fileName[10], tuples_customer *t_customer);
+void readCustomerTuple(char fileName[50], tuples_customer *t_customer);
 
-void readOrdersColumn(char fileName[10], column_orders *c_orders);
-void readCustomerColumn(char fileName[10], column_customer *c_customer);
+void readOrdersColumn(char fileName[50], column_orders *c_orders, int type);
+void readCustomerColumn(char fileName[50], column_customer *c_customer);

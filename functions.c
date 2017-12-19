@@ -49,13 +49,13 @@ float toFloat(const char* s)
 	return rez * fact;
 }
 
-int countLines(char fileName[10])
+int countLines(char fileName[50])
 {
 	char read;
 	size_t len = 0;
 	char *line = NULL;	
 	int nLines=0;
-	FILE *file = fopen(fileName, "r");
+	FILE *file = fopen(fileName, "r+");
 
 	while ((read = getline(&line, &len, file)) != -1)
 		nLines++;
