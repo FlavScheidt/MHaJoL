@@ -8,11 +8,11 @@ fi
 
 
 #Selectivity from 0 to 1.0, by 0.1
-for i in `seq 0 10`;
+for i in `seq 1 9`;
 do
 	selectivity=$((i*10))
 
-	DAT_DIR="${OUT_DIR}/filterBuckets/_${selectivity}"
+	DAT_DIR="${OUT_DIR}/filterBuckets/new/_${selectivity}"
 	OUTPUT_FILE="${OUT_DIR}/filterBuckets_${i}.gnu"
 	OUTPUT_IMAGE="${OUT_DIR}/filterBuckets_${i}.png"
 

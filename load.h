@@ -19,7 +19,7 @@ tuples_customer *t_customer;
 typedef struct orders
 {
 	int O_ORDERKEY;
-	long int O_CUSTKEY;
+	int O_CUSTKEY;
 	char O_ORDERSTATUS;
 	float O_TOTALPRICE;
 	int O_ORDERDATE; //date
@@ -34,7 +34,7 @@ tuples_orders *t_orders;
 /******** VETOR DE STRUCTS COLUMN CUSTOMER *********/
 typedef struct customer_c
 {
-	int C_CUSTKEY;
+	unsigned int C_CUSTKEY;
 	float C_ACCTBAL;
 } column_customer;
 
@@ -43,7 +43,7 @@ column_customer *c_customer;
 /******** VETOR DE STRUCTS COLUMN ORDERS ***********/
 typedef struct orders_c
 {
-	long int O_CUSTKEY;
+	unsigned int O_CUSTKEY;
 } column_orders;
 
 column_orders *c_orders;
@@ -57,3 +57,5 @@ void readCustomerTuple(char fileName[50], tuples_customer *t_customer);
 
 void readOrdersColumn(char fileName[50], column_orders *c_orders, int type);
 void readCustomerColumn(char fileName[50], column_customer *c_customer);
+
+void load(int sel, float * t_result, column_customer **c_customer, column_orders **c_orders, int * tamOrders, int * tamCustomer, int tamResult, char fileName[50]);

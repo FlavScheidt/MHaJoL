@@ -10,14 +10,14 @@ do
 
 	echo "Making directories..."
 	#Makes the .dat folder needed for the plots
-	DAT_DIR="/home/flav/mestrado/BloomJoin/gnu/filterBuckets/_${selectivity}"
+	DAT_DIR="/home/flav/mestrado/BloomJoin/gnu/filterBuckets/new/_${selectivity}"
 	if [ ! -d "$DAT_DIR" ]
 	then
 		mkdir "$DAT_DIR"
 	fi
 
 	#Makes the .out folder needed for the plots
-	OUT_DIR="/home/flav/mestrado/BloomJoin/scripts/filterBucketsResults/_${selectivity}"
+	OUT_DIR="/home/flav/mestrado/BloomJoin/scripts/filterBucketsResults/new/_${selectivity}"
 	if [ ! -d "$OUT_DIR" ]
 	then
 		mkdir "$OUT_DIR"

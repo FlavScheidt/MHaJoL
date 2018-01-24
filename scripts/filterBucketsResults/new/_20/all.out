@@ -1,0 +1,160 @@
+Hash Join
+-----------------
+Initialization: 2 ms 
+Hash Table Generation: 1141 ms 
+Join Core: 46 ms 
+30000 linhas
+1189 ms 
+
+Bloom  Join
+-----------------
+Initialization: 14 ms 
+Bloom Filter Generation: 836 ms 
+Join Core: 65 ms 
+29995 linhas
+915 ms 
+
+Bloom Nested Join
+-----------------
+Initialization: 13 ms 
+Bloom Filter Generation: 805 ms 
+Join Core: 20019 ms 
+30000 linhas
+20837 ms 
+
+Bloom Hash Join
+-----------------
+Initialization: 15 ms 
+Bloom Filter and Hash Table Generation: 1629 ms 
+Join core: 102 ms 
+30000 linhas
+1746 ms 
+
+Hash Join
+-----------------
+Initialization: 2 ms 
+Hash Table Generation: 1854 ms 
+Join Core: 34 ms 
+30000 linhas
+1890 ms 
+
+Bloom  Join
+-----------------
+Initialization: 15 ms 
+Bloom Filter Generation: 1459 ms 
+Join Core: 39 ms 
+29995 linhas
+1513 ms 
+
+Bloom Nested Join
+-----------------
+Initialization: 13 ms 
+Bloom Filter Generation: 1455 ms 
+Join Core: 18661 ms 
+30000 linhas
+20129 ms 
+
+Bloom Hash Join
+-----------------
+Initialization: 15 ms 
+Bloom Filter and Hash Table Generation: 2993 ms 
+Join core: 73 ms 
+30000 linhas
+3081 ms 
+
+Hash Join
+-----------------
+Initialization: 2 ms 
+Hash Table Generation: 2308 ms 
+Join Core: 34 ms 
+30000 linhas
+2345 ms 
+
+Bloom  Join
+-----------------
+Initialization: 15 ms 
+Bloom Filter Generation: 1859 ms 
+Join Core: 38 ms 
+29995 linhas
+1913 ms 
+
+Bloom Nested Join
+-----------------
+Initialization: 13 ms 
+Bloom Filter Generation: 1851 ms 
+Join Core: 18847 ms 
+30000 linhas
+20711 ms 
+
+Bloom Hash Join
+-----------------
+Initialization: 15 ms 
+Bloom Filter and Hash Table Generation: 3737 ms 
+Join core: 75 ms 
+30000 linhas
+3827 ms 
+
+Hash Join
+-----------------
+Initialization: 2 ms 
+Hash Table Generation: 2755 ms 
+Join Core: 33 ms 
+30000 linhas
+2790 ms 
+
+Bloom  Join
+-----------------
+Initialization: 14 ms 
+Bloom Filter Generation: 2200 ms 
+Join Core: 37 ms 
+29997 linhas
+2251 ms 
+
+Bloom Nested Join
+-----------------
+Initialization: 13 ms 
+Bloom Filter Generation: 2178 ms 
+Join Core: 19106 ms 
+30000 linhas
+21298 ms 
+
+Bloom Hash Join
+-----------------
+Initialization: 15 ms 
+Bloom Filter and Hash Table Generation: 4427 ms 
+Join core: 79 ms 
+30000 linhas
+4522 ms 
+
+Hash Join
+-----------------
+Initialization: 2 ms 
+Hash Table Generation: 584 ms 
+Join Core: 44 ms 
+30000 linhas
+631 ms 
+
+Bloom  Join
+-----------------
+Initialization: 15 ms 
+Bloom Filter Generation: 402 ms 
+Join Core: 47 ms 
+29997 linhas
+464 ms 
+
+Bloom Nested Join
+-----------------
+Initialization: 14 ms 
+Bloom Filter Generation: 395 ms 
+Join Core: 19276 ms 
+30000 linhas
+19685 ms 
+
+Bloom Hash Join
+-----------------
+Initialization: 15 ms 
+Bloom Filter and Hash Table Generation: 842 ms 
+Join core: 100 ms 
+30000 linhas
+957 ms 
+

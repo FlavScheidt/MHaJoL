@@ -1,14 +1,11 @@
 #include "bloomFilter.h"
 
-// short int * generateBitVector()
-int bloomFilter(column_customer *c_customer, column_orders *c_orders, int tamCustomer, int tamOrders, float * t_result, int nBuckets)
+void generateBloomFilter(column_orders *c_orders, int tamOrders, int nBuckets, char * bloom)
 {
-	int index = 0;
-	char bloom[nBuckets];
 	char str[10];
 	clock_t init, end;
-
 	init = clock();
+
 	for (int b=0; b<nBuckets; b++)
 		bloom[b] = 0;
 	end = clock();
@@ -19,23 +16,33 @@ int bloomFilter(column_customer *c_customer, column_orders *c_orders, int tamCus
 	init = clock();
 	for(int i=0; i<tamOrders; i++)
 	{
-		sprintf(str, "%ld", c_orders[i].O_CUSTKEY);
+		sprintf(str, "%d", c_orders[i].O_CUSTKEY);
 		bloom[HASH_INDEX0] = 1;
-		//bloom[HASH_INDEX1] = 1;
+		bloom[HASH_INDEX1] = 1;
 		bloom[HASH_INDEX2] = 1;
 		bloom[HASH_INDEX3] = 1;
 		bloom[HASH_INDEX4] = 1;
 	}
 	end = clock();
 	printf("Bloom Filter Generation: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
+}
 
+// short int * generateBitVector()
+int bloomFilter(column_customer *c_customer, column_orders *c_orders, int tamCustomer, int tamOrders, float * t_result, int nBuckets)
+{
+	int index = 0;
+	char bloom[nBuckets];
+	char str[10];
+	clock_t init, end;
+
+	generateBloomFilter(c_orders, tamOrders, nBuckets, bloom);
 
 	//Join
 	init = clock();
 	for (int j=0; j<tamCustomer; j++)
 	{
 		sprintf(str, "%d", c_customer[j].C_CUSTKEY);
-		if (bloom[HASH_INDEX0] == 0 || /*bloom[HASH_INDEX1] == 0 ||*/ bloom[HASH_INDEX2] == 0 || bloom[HASH_INDEX3] == 0 || bloom[HASH_INDEX4] == 0)
+		if ((bloom[HASH_INDEX0] == 0 || bloom[HASH_INDEX1] == 0 || bloom[HASH_INDEX2] == 0 || bloom[HASH_INDEX3] == 0 || bloom[HASH_INDEX4]) == 0)
 		{
 			t_result[index] = c_customer[j].C_ACCTBAL;
 			index++;
@@ -65,7 +72,7 @@ int bloomFilterParam(column_customer *c_customer, column_orders *c_orders, int t
 	init = clock();
 	for(int i=0; i<tamOrders; i++)
 	{
-		sprintf(str, "%ld", c_orders[i].O_CUSTKEY);
+		sprintf(str, "%d", c_orders[i].O_CUSTKEY);
 		if (nHash >= 0)
 			bloom[HASH_INDEX0] = 1;
 		if (nHash >= 1)
@@ -169,33 +176,14 @@ int bloomNested(column_customer *c_customer, column_orders *c_orders, int tamCus
 	char str[10];
 	clock_t init, end;
 
-	init = clock();
-	for (int b=0; b<nBuckets; b++)
-		bloom[b] = 0;
-	end = clock();
-
-	printf("Initialization: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
-
-	//Generate bitmask
-	init = clock();
-	for(int i=0; i<tamOrders; i++)
-	{
-		sprintf(str, "%ld", c_orders[i].O_CUSTKEY);
-		bloom[HASH_INDEX0] = 1;
-		bloom[HASH_INDEX1] = 1;
-		bloom[HASH_INDEX2] = 1;
-		bloom[HASH_INDEX3] = 1;
-		bloom[HASH_INDEX4] = 1;
-	}
-	end = clock();
-	printf("Bloom Filter Generation: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
+	generateBloomFilter(c_orders, tamOrders, nBuckets, bloom);
 
 	//Join
 	init = clock();
 	for (int i=0; i<tamCustomer; i++)
 	{
 		sprintf(str, "%d", c_customer[i].C_CUSTKEY);
-		if (bloom[HASH_INDEX0] == 0 /*|| bloom[HASH_INDEX1] == 0*/ || bloom[HASH_INDEX2] == 0 || bloom[HASH_INDEX3] == 0 || bloom[HASH_INDEX4] == 0)
+		if (bloom[HASH_INDEX0] == 0 || bloom[HASH_INDEX1] == 0 || bloom[HASH_INDEX2] == 0 || bloom[HASH_INDEX3] == 0 || bloom[HASH_INDEX4] == 0)
 		{
 			t_result[index] = c_customer[i].C_ACCTBAL;
 			index++;
@@ -232,7 +220,9 @@ int bloomHash(column_customer *c_customer, column_orders *c_orders, int tamCusto
 	clock_t init, end;
 
 	linkedList * node;
-	linkedList * buckets[HASH_BUCKETS];
+
+	linkedList ** buckets;
+	buckets = malloc(nBuckets*sizeof(linkedList));
 
 	//Initialize buckets
 	init = clock();
@@ -255,11 +245,11 @@ int bloomHash(column_customer *c_customer, column_orders *c_orders, int tamCusto
 	{
 		control = 0;
 
-		sprintf(str, "%ld", c_orders[i].O_CUSTKEY);
+		sprintf(str, "%d", c_orders[i].O_CUSTKEY);
 		index = HASH_FUNC;
 
 		bloom[HASH_INDEX0] = 1;
-		//bloom[HASH_INDEX1] = 1;
+		bloom[HASH_INDEX1] = 1;
 		bloom[HASH_INDEX2] = 1;
 		bloom[HASH_INDEX3] = 1;
 		bloom[HASH_INDEX4] = 1;
@@ -296,10 +286,9 @@ int bloomHash(column_customer *c_customer, column_orders *c_orders, int tamCusto
 	for (int j=0; j<tamCustomer; j++)
 	{
 		sprintf(str, "%d", c_customer[j].C_CUSTKEY);
-		if (bloom[HASH_INDEX0] == 0 /*|| bloom[HASH_INDEX1] == 0 */|| bloom[HASH_INDEX2] == 0 || bloom[HASH_INDEX3] == 0 || bloom[HASH_INDEX4] == 0)
+		if ((bloom[HASH_INDEX0] == 0 || bloom[HASH_INDEX1] == 0 || bloom[HASH_INDEX2] == 0 || bloom[HASH_INDEX3] == 0 || bloom[HASH_INDEX4]) == 0)
 		{
-			t_result[index] = c_customer[j].C_ACCTBAL;
-			index++;
+			t_result[nResult] = c_customer[j].C_ACCTBAL;
 			nResult++;
 		}
 		else
@@ -328,6 +317,16 @@ int bloomHash(column_customer *c_customer, column_orders *c_orders, int tamCusto
 	}
 	end = clock();
 	printf("Join core: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
+
+	int ocupation = 0;
+
+	for (int i=0; i<nBuckets; i++)
+	{
+		if (bloom[i] == 1)
+			ocupation++;
+	}
+
+	printf("Bloom Filter Ocupation: %d%% \n", (ocupation*100)/HASH_BUCKETS);
 
 	return nResult;
 }

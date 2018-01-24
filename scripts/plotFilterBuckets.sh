@@ -10,8 +10,8 @@ do
 	nRegisters=$(cat $file | grep -m 1 "linhas" | cut -d " " -f1)
 	nRegistersPerc=$(echo "(${nRegisters}/50004)*100" | bc -l)
 
-	outputFile="/home/flav/mestrado/BloomJoin/gnu/filterBuckets/_${nHash}.dat"
-	outputFile2="/home/flav/mestrado/BloomJoin/gnu/filterBuckets/time.dat"
+	outputFile="/home/flav/mestrado/BloomJoin/gnu/filterBuckets/new/_${nHash}.dat"
+	outputFile2="/home/flav/mestrado/BloomJoin/gnu/filterBuckets/new/time.dat"
 
 	nBucketsNew=""
 	for char in $(echo "${nBuckets}" | fold -w1);

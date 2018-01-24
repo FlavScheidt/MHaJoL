@@ -1,4 +1,4 @@
-#include "bloomFilter.h"
+#include "join.h"
 
 int main(int argc, char ** argv)
 {
@@ -12,6 +12,11 @@ int main(int argc, char ** argv)
 	int sel =0;
 	char selectivity[4];
 	char fileName[50];
+
+	int tamResult = 150000;
+
+	//nBuckets = 4194304;
+	nBuckets = HASH_BUCKETS;
 
 	//Arguments
 	if (argc > 1)
@@ -28,7 +33,7 @@ int main(int argc, char ** argv)
 			 	nHash = 4;
 		}
 		else
-			nBuckets = 4194304;
+			nBuckets = HASH_BUCKETS;
 	}
 	else
 		strcpy(selectivity, "no\0");
@@ -42,67 +47,195 @@ int main(int argc, char ** argv)
 		strcat(fileName, ".tbl\0");
 	}
 
-	// Load Tables
-	tamCustomer = countLines("/home/flav/mestrado/BloomJoin/tbl/customer.tbl");
-	c_customer = malloc(tamCustomer*sizeof(column_customer));
-	readCustomerColumn("/home/flav/mestrado/BloomJoin/tbl/customer.tbl", c_customer);
-
-	tamOrders = countLines(fileName);
-	c_orders = malloc(tamOrders*sizeof(column_orders));
-	readOrdersColumn(fileName, c_orders, sel);
-
-	//Result Table
-	t_result = malloc(tamOrders*sizeof(float));
-	for (int i=0; i<tamOrders; i++)
-		t_result[i] = 0.0;
+	t_result = malloc(tamResult*sizeof(float));
 
 	if (param==0)
 	{
+		/************************************************/
 		//Nested Loop Join
-		init = clock();
-		nResult=nestedLoopJoin(c_customer, c_orders, tamCustomer, tamOrders, t_result);
-		end = clock();
+		/************************************************/
+		// // Load Tables
+		// tamCustomer = countLines("/home/flav/mestrado/BloomJoin/tbl/customer.tbl");
+		// c_customer = malloc(tamCustomer*sizeof(column_customer));
+		// readCustomerColumn("/home/flav/mestrado/BloomJoin/tbl/customer.tbl", c_customer);
 
-		printf("Nested Loop Join\n");
-		printf("-----------------\n");
-		printf("%d linhas\n", nResult);
-		printf("%.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
+		// tamOrders = countLines(fileName);
+		// c_orders = malloc(tamOrders*sizeof(column_orders));
+		// readOrdersColumn(fileName, c_orders, sel);
 
-		//Hash Loop Join
-		printf("Hash Join\n");
-		printf("-----------------\n");
-		init = clock();
-		nResult=hashJoin(c_customer, c_orders, tamCustomer, tamOrders, t_result);
-		end = clock();
-		printf("%d linhas\n", nResult);
-		printf("%.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
+		// //Result Table
+		// for (int i=0; i<tamResult; i++)
+		// 	t_result[i] = 0.0;
 
-		printf("Bloom  Join\n");
-		printf("-----------------\n");
-		init = clock();
-		nResult=bloomFilter(c_customer, c_orders, tamCustomer, tamOrders, t_result, nBuckets);
-		end = clock();
-		printf("%d linhas\n", nResult);
-		printf("%.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 
-		printf("Bloom Nested Join\n");
-		printf("-----------------\n");
-		init = clock();
-		nResult=bloomNested(c_customer, c_orders, tamCustomer, tamOrders, t_result, nBuckets);
-		end = clock();
-		printf("%d linhas\n", nResult);
-		printf("%.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
+		// init = clock();
+		// nResult=nestedLoopJoin(c_customer, c_orders, tamCustomer, tamOrders, t_result);
+		// end = clock();
 
-		printf("Bloom Hash Join\n");
-		printf("-----------------\n");
-		init = clock();
-		nResult=bloomHash(c_customer, c_orders, tamCustomer, tamOrders, t_result, nBuckets);
-		end = clock();
-		printf("%d linhas\n", nResult);
-		printf("%.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
+		// printf("Nested Loop Join\n");
+		// printf("-----------------\n");
+		// printf("%d linhas\n", nResult);
+		// printf("%.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
+
+		// free(c_orders);
+		// free(c_customer);
+
+		// /****************************************/
+		// //Hash Join
+		// /****************************************/
+		// //Load Tables
+		// tamCustomer = countLines("/home/flav/mestrado/BloomJoin/tbl/customer.tbl");
+		// c_customer = malloc(tamCustomer*sizeof(column_customer));
+		// readCustomerColumn("/home/flav/mestrado/BloomJoin/tbl/customer.tbl", c_customer);
+
+		// tamOrders = countLines(fileName);
+		// c_orders = malloc(tamOrders*sizeof(column_orders));
+		// readOrdersColumn(fileName, c_orders, sel);
+
+		// //Result Table
+		// for (int i=0; i<tamResult; i++)
+		// 	t_result[i] = 0.0;
+
+		// printf("Hash Join\n");
+		// printf("-----------------\n");
+		// init = clock();
+		// nResult=hashJoin(c_customer, c_orders, tamCustomer, tamOrders, t_result);
+		// end = clock();
+		// printf("%d linhas\n", nResult);
+		// printf("%.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
+
+		// free(c_orders);
+		// free(c_customer);
+
+		// /*****************************************/
+		// // printf("Bloom  Join\n");
+		// /*****************************************/
+		// // Load Tables
+		// tamCustomer = countLines("/home/flav/mestrado/BloomJoin/tbl/customer.tbl");
+		// c_customer = malloc(tamCustomer*sizeof(column_customer));
+		// readCustomerColumn("/home/flav/mestrado/BloomJoin/tbl/customer.tbl", c_customer);
+
+		// tamOrders = countLines(fileName);
+		// c_orders = malloc(tamOrders*sizeof(column_orders));
+		// readOrdersColumn(fileName, c_orders, sel);
+
+		// //Result Table
+		// for (int i=0; i<tamResult; i++)
+		// 	t_result[i] = 0.0;
+
+		// printf("Bloom Join \n");
+		// printf("-----------------\n");
+		// init = clock();
+		// nResult=bloomFilter(c_customer, c_orders, tamCustomer, tamOrders, t_result, nBuckets);
+		// end = clock();
+		// printf("%d linhas\n", nResult);
+		// printf("%.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
+
+		// free(c_orders);
+		// free(c_customer);
+
+		// /***************************************/
+		// // Bloom Nested Join
+		// /***************************************/
+		// // Load Tables
+		// tamCustomer = countLines("/home/flav/mestrado/BloomJoin/tbl/customer.tbl");
+		// c_customer = malloc(tamCustomer*sizeof(column_customer));
+		// readCustomerColumn("/home/flav/mestrado/BloomJoin/tbl/customer.tbl", c_customer);
+
+		// tamOrders = countLines(fileName);
+		// c_orders = malloc(tamOrders*sizeof(column_orders));
+		// readOrdersColumn(fileName, c_orders, sel);
+
+		// //Result Table
+		// for (int i=0; i<tamResult; i++)
+		// 	t_result[i] = 0.0;
+
+		// printf("Bloom Nested Join\n");
+		// printf("-----------------\n");
+		// init = clock();
+		// nResult=bloomNested(c_customer, c_orders, tamCustomer, tamOrders, t_result, nBuckets);
+		// end = clock();
+		// printf("%d linhas\n", nResult);
+		// printf("%.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
+
+		// free(c_orders);
+		// free(c_customer);
+
+		// /*************************************/
+		// // Bloom Hash Join
+		// /*************************************/
+		// tamCustomer = countLines("/home/flav/mestrado/BloomJoin/tbl/customer.tbl");
+		// c_customer = malloc(tamCustomer*sizeof(column_customer));
+		// readCustomerColumn("/home/flav/mestrado/BloomJoin/tbl/customer.tbl", c_customer);
+
+		// tamOrders = countLines(fileName);
+		// c_orders = malloc(tamOrders*sizeof(column_orders));
+		// readOrdersColumn(fileName, c_orders, sel);
+
+		// //Result Table
+		// for (int i=0; i<tamResult; i++)
+		// 	t_result[i] = 0.0;
+
+		// printf("Bloom Hash Join\n");
+		// printf("-----------------\n");
+		// init = clock();
+		// nResult=bloomHash(c_customer, c_orders, tamCustomer, tamOrders, t_result, nBuckets);
+		// end = clock();
+		// printf("%d linhas\n", nResult);
+		// printf("%.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
+
+		// free(c_orders);
+		// free(c_customer);
+
+		/***********************************/
+		// Cuckoo Join
+		/***********************************/
+		// Load Tables
+		tamCustomer = countLines("/home/flav/mestrado/BloomJoin/tbl/customer.tbl");
+		c_customer = malloc(tamCustomer*sizeof(column_customer));
+		readCustomerColumn("/home/flav/mestrado/BloomJoin/tbl/customer.tbl", c_customer);
+
+		tamOrders = countLines(fileName);
+		c_orders = malloc(tamOrders*sizeof(column_orders));
+		readOrdersColumn(fileName, c_orders, sel);
+
+		char str[10];
+		for (int i=0; i<tamCustomer; i++)
+		{
+			sprintf(str, "%d", c_customer[i].C_CUSTKEY);
+
+			printf("Valor: %d \n 	Mumur2Desloc: %d Murmur2: %d\n 	Murmur3Desloc: %d Murmur3: %d\n 	Jenkins Desloc: %d Jenkins: %d\n 	Pearson Desloc: %d Pearson: %d\n 	FNV1a: %d\n 	Elf: %d\n", c_customer[i].C_CUSTKEY, (int) HASH_INDEX0, (int)CUCKOO_H1, HASH_INDEX3, (int) CUCKOO_H2,(int) HASH_INDEX1, (int)(hash_jenkins(str) & (nBuckets-1)), (int) HASH_INDEX2, (int) (hash_pearson(str) & (nBuckets-1)), (int)fnv1a(str) & (nBuckets-1), (int) ElfHash(str) & (nBuckets-1));
+		}
+
+		//Result Table
+		// for (int i=0; i<tamResult; i++)
+		// 	t_result[i] = 0.0;
+
+		// printf("Cuckoo Join\n");
+		// printf("-----------------\n");
+		// init = clock();
+		// nResult=cuckooHash(c_customer, c_orders, tamCustomer, tamOrders, t_result, CUCKOO_SIZE);
+		// end = clock();
+		// printf("%d linhas\n", nResult);
+		// printf("%.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
+
+		free(c_orders);
+		free(c_customer);
 	}
 	else
 	{
+		tamCustomer = countLines("/home/flav/mestrado/BloomJoin/tbl/customer.tbl");
+		c_customer = malloc(tamCustomer*sizeof(column_customer));
+		readCustomerColumn("/home/flav/mestrado/BloomJoin/tbl/customer.tbl", c_customer);
+
+		tamOrders = countLines(fileName);
+		c_orders = malloc(tamOrders*sizeof(column_orders));
+		readOrdersColumn(fileName, c_orders, sel);
+
+		//Result Table
+		for (int i=0; i<tamResult; i++)
+			t_result[i] = 0.0;
+
 		printf("Bloom Join\n");
 		printf("-----------------\n");
 		printf("%d Buckets %d Hash Functions\n", nBuckets, nHash);

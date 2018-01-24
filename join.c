@@ -49,15 +49,12 @@ int hashJoin (column_customer *c_customer, column_orders *c_orders, int tamCusto
 {
 	//int exists = 0;
 	int index = 0;
-	int control = 0;
 	int nResult=0;
 	int nBuckets = HASH_BUCKETS;
-	char str[10];
 	clock_t init, end;
 
-	linkedList * node;
-
-	linkedList * buckets[nBuckets];
+	linkedList ** buckets;
+	buckets = malloc(nBuckets*sizeof(linkedList));
 
 	init = clock();
 	//Initialize buckets
@@ -71,68 +68,16 @@ int hashJoin (column_customer *c_customer, column_orders *c_orders, int tamCusto
 
 	printf("Initialization: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 
-	//Generates hash table
-	init = clock();
-	for (int i = 0; i<tamOrders; i++)
-	{
-		control = 0;
-
-		sprintf(str, "%ld", c_orders[i].O_CUSTKEY);
-		index = HASH_FUNC;
-
-		node = buckets[index];
-		if (node->C_CUSTKEY == -1)
-		{
-			node->C_CUSTKEY = c_orders[i].O_CUSTKEY;
-			node->next = NULL;
-		}
-		else
-		{
-			while (node->next != NULL)
-			{
-				node = node->next;
-
-				if (node->C_CUSTKEY == c_orders[i].O_CUSTKEY)
-					control = 1;
-			}
-
-			if (control == 0 && node != NULL)
-			{
-				node->next = (linkedList *) malloc(sizeof(linkedList));
-				node->next->C_CUSTKEY = c_orders[i].O_CUSTKEY;
-				node->next->next = NULL;
-			}
-		}
-	}
-	end = clock();
-
-	printf("Hash Table Generation: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
-
+	generateHashTable(c_orders, tamOrders, buckets);
 
 	init = clock();
 	//Loop on orders to verify the existence of the register
 	for (int i=0; i<tamCustomer; i++)
 	{
-		sprintf(str, "%d", c_customer[i].C_CUSTKEY);
-		index = HASH_FUNC;
-	
-		control = 0;
-		node = buckets[index];
-
-		if (node->C_CUSTKEY != c_customer[i].C_CUSTKEY)
+		if (lookupHashTable(buckets, c_customer[i].C_CUSTKEY) == 0)
 		{
-			while (node->next != NULL && control == 0)
-			{
-				node = node->next;
-				if (node->C_CUSTKEY == c_customer[i].C_CUSTKEY)
-					control = 1;
-			}
-
-			if (control == 0)
-			{
-				t_result[index] = c_customer[i].C_ACCTBAL;
-				nResult++;
-			}
+			t_result[index] = c_customer[i].C_ACCTBAL;
+			nResult++;
 		}
 	}
 	end = clock();

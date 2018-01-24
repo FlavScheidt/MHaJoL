@@ -87,7 +87,7 @@ void readCustomerTuple(char fileName[50], tuples_customer *t_customer)
 void printOrdersTuple(tuples_orders *t_orders, int tam)
 {
 	for (int i=0; i<tam; i++)
-		printf("%d; %ld; %c; %f; %d; %s; %s; %d, %s \n", t_orders[i].O_ORDERKEY, t_orders[i].O_CUSTKEY, t_orders[i].O_ORDERSTATUS, t_orders[i].O_TOTALPRICE, t_orders[i].O_ORDERDATE, t_orders[i].O_ORDERPRIORITY, t_orders[i].O_CLERK, t_orders[i].O_SHIPPRIORITY, t_orders[i].O_COMMENT);
+		printf("%d; %d; %c; %f; %d; %s; %s; %d, %s \n", t_orders[i].O_ORDERKEY, t_orders[i].O_CUSTKEY, t_orders[i].O_ORDERSTATUS, t_orders[i].O_TOTALPRICE, t_orders[i].O_ORDERDATE, t_orders[i].O_ORDERPRIORITY, t_orders[i].O_CLERK, t_orders[i].O_SHIPPRIORITY, t_orders[i].O_COMMENT);
 }
 
 void readOrdersTuple(char fileName[50], tuples_orders *t_orders)
@@ -323,6 +323,7 @@ void readCustomerColumn(char fileName[50], column_customer *c_customer)
 	}
 	fclose(file);
 }
+
 // int main()
 // {
 // 	FILE *file;

@@ -6,7 +6,7 @@ do
 	bucketsSize=$((2**i))
 	for j in `seq 0 4`;
 	do
-		outputName="/home/flav/mestrado/BloomJoin/scripts/filterBucketsResults/_${i}_${bucketsSize}_${j}.out"
+		outputName="/home/flav/mestrado/BloomJoin/scripts/filterBucketsResults/new/_${i}_${bucketsSize}_${j}.out"
 		./BloomFilterx86 ${bucketsSize} ${j} &>> ${outputName}
 	done
 done

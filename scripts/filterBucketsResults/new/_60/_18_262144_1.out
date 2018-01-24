@@ -1,0 +1,45 @@
+Bloom Join
+-----------------
+262144 Buckets 1 Hash Functions
+Initialization: 1 ms 
+Bloom Filter Generation: 450 ms 
+Join Core: 22 ms 
+78041 linhas
+473 ms 
+
+Bloom Join
+-----------------
+262144 Buckets 1 Hash Functions
+Initialization: 1 ms 
+Bloom Filter Generation: 920 ms 
+Join Core: 22 ms 
+77893 linhas
+943 ms 
+
+Bloom Join
+-----------------
+262144 Buckets 1 Hash Functions
+Initialization: 1 ms 
+Bloom Filter Generation: 1083 ms 
+Join Core: 22 ms 
+77906 linhas
+1106 ms 
+
+Bloom Join
+-----------------
+262144 Buckets 1 Hash Functions
+Initialization: 1 ms 
+Bloom Filter Generation: 1321 ms 
+Join Core: 22 ms 
+77735 linhas
+1344 ms 
+
+Bloom Join
+-----------------
+262144 Buckets 1 Hash Functions
+Initialization: 1 ms 
+Bloom Filter Generation: 214 ms 
+Join Core: 22 ms 
+77792 linhas
+237 ms 
+

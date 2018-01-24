@@ -1,15 +1,19 @@
 CC=gcc
 CFLAGS=-g -Wall
-DEPS = functions.h load.h oat_hash.h hash_any.h join.h MurmurHash2.h oat_hash.h bloomFilter.h
-OBJ = functions.o load.o oat_hash.o hash_any.o join.o MurmurHash2.o bloomFilter.o main.o
+DEPS = functions.h hashEssentials.h load.h hashTable.h join.h bloomFilter.h hash/hash.h cuckoo.h
 
-%.o: %.c $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS)
+csrc = $(wildcard hash/*.c) \
+       $(wildcard ./*.c) \
+
+OBJ = $(csrc:.c=.o)
+
+LDFLAGS = -lGL -lglut -lpng -lz -lm
 
 BloomFilterx86: $(OBJ)
-	gcc -o $@ $^ $(CFLAGS)
+	$(CC) -o $@ $^ $(CFLAGS)
 
 .PHONY: clean
 
 clean:
+	rm -f hash/*.o hash/hash
 	rm -f *.o BloomFilterx86
