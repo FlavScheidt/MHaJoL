@@ -42,20 +42,20 @@ do
 	# outputName="${OUT_DIR}/all.out"
 	# /home/flav/mestrado/BloomJoin/BloomFilterx86 ${selectivity} &>> ${outputName}
 
-	# #Runs the join with variation
-	# #Loop over 2^5 to 2^20 varying the number of hash functions to discover the best fit for the selectivity
-	# echo "Runs the BloomFilter with buckets and functions variation..."
-	# for k in `seq 14 22`;
-	# do
-	# 	bucketsSize=$((2**k))
-	# 	for j in `seq 0 4`;
-	# 	do
-	# 		echo "	${bucketsSize} buckets ${k}+1 hash functions"
+	#Runs the join with variation
+	#Loop over 2^5 to 2^20 varying the number of hash functions to discover the best fit for the selectivity
+	echo "Runs the BloomFilter with buckets and functions variation..."
+	for k in `seq 14 22`;
+	do
+		bucketsSize=$((2**k))
+		for j in `seq 0 4`;
+		do
+			echo "	${bucketsSize} buckets ${k}+1 hash functions"
 
-	# 		outputName="${OUT_DIR}/_${k}_${bucketsSize}_${j}.out"
-	# 		/home/flav/mestrado/BloomJoin/BloomFilterx86 ${selectivity} ${bucketsSize} ${j} &>> ${outputName}
-	# 	done
-	# done
+			outputName="${OUT_DIR}/_${k}_${bucketsSize}_${j}.out"
+			/home/flav/mestrado/BloomJoin/BloomFilterx86 ${selectivity} ${bucketsSize} ${j} &>> ${outputName}
+		done
+	done
 
 	echo "Generating .dat files to plot the data..."
 	#The number of registers returned by the nested loop join

@@ -43,3 +43,21 @@ Join Core: 33 ms
 0 linhas
 355 ms 
 
+Bloom Join
+-----------------
+16384 Buckets 4 Hash Functions
+Initialization: 0 ms 
+Bloom Filter Generation: 374 ms 
+Join Core: 37 ms 
+0 linhas
+411 ms 
+
+Bloom Join
+-----------------
+16384 Buckets 4 Hash Functions
+Initialization: 0 ms 
+Bloom Filter Generation: 374 ms 
+Join Core: 37 ms 
+0 linhas
+412 ms 
+
