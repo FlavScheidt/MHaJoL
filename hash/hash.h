@@ -84,6 +84,7 @@ extern "C" {
 
 uint32_t
 murmurhash3 (const char *, uint32_t, uint32_t);
+uint16_t murmurhash316 (const char *key, uint16_t len, uint16_t seed);
 
 #ifdef __cplusplus
 }
@@ -105,9 +106,16 @@ int mulAddSh (const char *s, int d);
 #define PRIME 0x01000193 //   16777619
 #define SEED 0x811C9DC5 // 2166136261
 
+#define PRIME8 0x00000013 //   19
+#define SEED8 0x000000A1 // 161
+
 uint32_t fnv1aByte(unsigned char oneByte, uint32_t hash);
 uint32_t fnv1aShort(unsigned short twoBytes, uint32_t hash);
 uint32_t fnv1a(void * fourBytes);
+
+uint8_t fnv1aByte8(unsigned char oneByte, uint8_t hash);
+uint8_t fnv1aShort8(unsigned short twoBytes, uint8_t hash);
+uint8_t fnv1a8(unsigned int fourBytes);
 
 /*************************************
   Elf Hash

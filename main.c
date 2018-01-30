@@ -80,9 +80,9 @@ int main(int argc, char ** argv)
 		// free(c_orders);
 		// free(c_customer);
 
-		// /****************************************/
-		// //Hash Join
-		// /****************************************/
+		/****************************************/
+		//Hash Join
+		/****************************************/
 		// //Load Tables
 		// tamCustomer = countLines("/home/flav/mestrado/BloomJoin/tbl/customer.tbl");
 		// c_customer = malloc(tamCustomer*sizeof(column_customer));
@@ -187,27 +187,19 @@ int main(int argc, char ** argv)
 		// free(c_orders);
 		// free(c_customer);
 
-		/***********************************/
-		// Cuckoo Join
-		/***********************************/
-		// Load Tables
-		tamCustomer = countLines("/home/flav/mestrado/BloomJoin/tbl/customer.tbl");
-		c_customer = malloc(tamCustomer*sizeof(column_customer));
-		readCustomerColumn("/home/flav/mestrado/BloomJoin/tbl/customer.tbl", c_customer);
+		// /***********************************/
+		// // Cuckoo Join
+		// /***********************************/
+		// // Load Tables
+		// tamCustomer = countLines("/home/flav/mestrado/BloomJoin/tbl/customer.tbl");
+		// c_customer = malloc(tamCustomer*sizeof(column_customer));
+		// readCustomerColumn("/home/flav/mestrado/BloomJoin/tbl/customer.tbl", c_customer);
 
-		tamOrders = countLines(fileName);
-		c_orders = malloc(tamOrders*sizeof(column_orders));
-		readOrdersColumn(fileName, c_orders, sel);
+		// tamOrders = countLines(fileName);
+		// c_orders = malloc(tamOrders*sizeof(column_orders));
+		// readOrdersColumn(fileName, c_orders, sel);
 
-		char str[10];
-		for (int i=0; i<tamCustomer; i++)
-		{
-			sprintf(str, "%d", c_customer[i].C_CUSTKEY);
-
-			printf("Valor: %d \n 	Mumur2Desloc: %d Murmur2: %d\n 	Murmur3Desloc: %d Murmur3: %d\n 	Jenkins Desloc: %d Jenkins: %d\n 	Pearson Desloc: %d Pearson: %d\n 	FNV1a: %d\n 	Elf: %d\n", c_customer[i].C_CUSTKEY, (int) HASH_INDEX0, (int)CUCKOO_H1, HASH_INDEX3, (int) CUCKOO_H2,(int) HASH_INDEX1, (int)(hash_jenkins(str) & (nBuckets-1)), (int) HASH_INDEX2, (int) (hash_pearson(str) & (nBuckets-1)), (int)fnv1a(str) & (nBuckets-1), (int) ElfHash(str) & (nBuckets-1));
-		}
-
-		//Result Table
+		// //Result Table
 		// for (int i=0; i<tamResult; i++)
 		// 	t_result[i] = 0.0;
 
@@ -219,8 +211,46 @@ int main(int argc, char ** argv)
 		// printf("%d linhas\n", nResult);
 		// printf("%.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 
-		free(c_orders);
-		free(c_customer);
+		// free(c_orders);
+		// free(c_customer);
+
+		// /***********************************/
+		// // Cuckoo Filter Join
+		// /***********************************/
+		// Load Tables
+		tamCustomer = countLines("/home/flav/mestrado/BloomJoin/tbl/customer.tbl");
+		c_customer = malloc(tamCustomer*sizeof(column_customer));
+		readCustomerColumn("/home/flav/mestrado/BloomJoin/tbl/customer.tbl", c_customer);
+
+		tamOrders = countLines(fileName);
+		c_orders = malloc(tamOrders*sizeof(column_orders));
+		readOrdersColumn(fileName, c_orders, sel);
+
+		//Result Table
+		for (int i=0; i<tamResult; i++)
+			t_result[i] = 0.0;
+
+		// printf("Cuckoo Join\n");
+		// printf("-----------------\n");
+		// init = clock();
+		// nResult=cuckooFilterJoin(c_customer, c_orders, tamCustomer, tamOrders, t_result, CUCKOO_FILTER_SIZE);
+		// end = clock();
+		// printf("%d linhas\n", nResult);
+		// printf("%.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
+
+		// free(c_orders);
+		// free(c_customer);
+
+		//Hash testing
+		char str[10];
+		for (int i=0; i<tamCustomer; i++)
+		{
+			sprintf(str, "%d", c_customer[i].C_CUSTKEY);
+
+			printf("Valor: %d \n 	Murmur3 16: %d Murmur3: %d\n 	FNV1a: %d\n 	FNV1A 8: %d\n", c_customer[i].C_CUSTKEY, murmurhash316(str, strlen(str), tamOrders) & (nBuckets-1), murmurhash3(str, strlen(str), tamOrders) & (nBuckets-1), fnv1a(str) & (nBuckets-1), fnv1a8(c_customer[i].C_CUSTKEY) & (nBuckets-1));
+
+			// printf("Valor: %d \n 	Mumur2Desloc: %d Murmur2: %d\n 	Murmur3Desloc: %d Murmur3: %d\n 	Jenkins Desloc: %d Jenkins: %d\n 	Pearson Desloc: %d Pearson: %d\n 	FNV1a: %d\n 	Elf: %d\n", c_customer[i].C_CUSTKEY, (int) HASH_INDEX0, (int)CUCKOO_H1, HASH_INDEX3, (int) CUCKOO_H2,(int) HASH_INDEX1, (int)(hash_jenkins(str) & (nBuckets-1)), (int) HASH_INDEX2, (int) (hash_pearson(str) & (nBuckets-1)), (int)fnv1a(str) & (nBuckets-1), (int) ElfHash(str) & (nBuckets-1));
+		}
 	}
 	else
 	{
