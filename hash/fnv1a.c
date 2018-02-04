@@ -13,12 +13,11 @@ inline uint32_t fnv1aShort(unsigned short twoBytes, uint32_t hash)
 	return fnv1aByte(*ptr, hash);
 }
 /// hash a 32 bit integer (four bytes)
-inline uint32_t fnv1a(void * fourBytes)
+inline uint32_t fnv1a(unsigned int fourBytes)
 {
-	int target = *((int *) fourBytes);
 	uint32_t hash = SEED;
 
-	const unsigned char* ptr = (const unsigned char*) &target;
+	const unsigned char* ptr = (const unsigned char*) &fourBytes;
 	hash = fnv1aShort(*ptr++, hash);
 	hash = fnv1aShort(*ptr++, hash);
 	hash = fnv1aShort(*ptr++, hash);
@@ -37,9 +36,9 @@ inline uint8_t fnv1aByte8(unsigned char oneByte, uint8_t hash)
 inline uint8_t fnv1aShort8(unsigned short twoBytes, uint8_t hash)
 {
 	const unsigned char* ptr = (const unsigned char*) &twoBytes;
-	hash = fnv1aByte(*ptr++, hash);
+	hash = fnv1aByte(*ptr, hash);
 
-	return fnv1aByte(*ptr, hash);
+	return fnv1aByte(*ptr++, hash);
 }
 /// hash a 32 bit integer (four bytes)
 inline uint8_t fnv1a8(unsigned int fourBytes)
@@ -48,7 +47,7 @@ inline uint8_t fnv1a8(unsigned int fourBytes)
 
 	const unsigned char* ptr = (const unsigned char*) &fourBytes;
 
-	hash = fnv1aShort(*ptr++, hash);
+	hash = fnv1aShort(*ptr, hash);
 
-	return fnv1aShort(*ptr, hash);
+	return fnv1aShort(*ptr++, hash);
 }

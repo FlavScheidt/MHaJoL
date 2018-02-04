@@ -111,7 +111,7 @@ int mulAddSh (const char *s, int d);
 
 uint32_t fnv1aByte(unsigned char oneByte, uint32_t hash);
 uint32_t fnv1aShort(unsigned short twoBytes, uint32_t hash);
-uint32_t fnv1a(void * fourBytes);
+uint32_t fnv1a(unsigned int fourBytes);
 
 uint8_t fnv1aByte8(unsigned char oneByte, uint8_t hash);
 uint8_t fnv1aShort8(unsigned short twoBytes, uint8_t hash);
