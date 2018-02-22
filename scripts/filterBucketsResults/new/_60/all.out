@@ -1,160 +1,56 @@
-Hash Join
+Nested Loop Join
 -----------------
-Initialization: 2 ms 
-Hash Table Generation: 692 ms 
-Join Core: 32 ms 
 90000 linhas
-726 ms 
-
-Bloom  Join
------------------
-Initialization: 14 ms 
-Bloom Filter Generation: 709 ms 
-Join Core: 29 ms 
-90000 linhas
-752 ms 
-
-Bloom Nested Join
------------------
-Initialization: 13 ms 
-Bloom Filter Generation: 710 ms 
-Join Core: 4717 ms 
-90000 linhas
-5441 ms 
-
-Bloom Hash Join
------------------
-Initialization: 15 ms 
-Bloom Filter and Hash Table Generation: 1210 ms 
-Join core: 41 ms 
-90000 linhas
-1267 ms 
+386074 ms 
 
 Hash Join
 -----------------
-Initialization: 2 ms 
-Hash Table Generation: 1379 ms 
-Join Core: 33 ms 
+Initialization: 144 ms 
+Hash Table Generation: 589 ms 
+Join Core: 60 ms 
 90000 linhas
-1414 ms 
+792 ms 
 
-Bloom  Join
+Bloom Join 
 -----------------
-Initialization: 14 ms 
-Bloom Filter Generation: 1420 ms 
-Join Core: 30 ms 
+Initialization: 0 ms 
+Bloom Filter Generation: 448 ms 
+Join Core: 44 ms 
 90000 linhas
-1463 ms 
-
-Bloom Nested Join
------------------
-Initialization: 13 ms 
-Bloom Filter Generation: 1417 ms 
-Join Core: 4816 ms 
-90000 linhas
-6247 ms 
-
-Bloom Hash Join
------------------
-Initialization: 15 ms 
-Bloom Filter and Hash Table Generation: 2427 ms 
-Join core: 44 ms 
-90000 linhas
-2487 ms 
-
-Hash Join
------------------
-Initialization: 2 ms 
-Hash Table Generation: 1707 ms 
-Join Core: 32 ms 
-90000 linhas
-1741 ms 
-
-Bloom  Join
------------------
-Initialization: 14 ms 
-Bloom Filter Generation: 1795 ms 
-Join Core: 29 ms 
-90000 linhas
-1838 ms 
+492 ms 
 
 Bloom Nested Join
 -----------------
-Initialization: 14 ms 
-Bloom Filter Generation: 1779 ms 
-Join Core: 4918 ms 
+Initialization: 0 ms 
+Bloom Filter Generation: 444 ms 
+Join Core: 4842 ms 
 90000 linhas
-6710 ms 
+5286 ms 
 
 Bloom Hash Join
 -----------------
-Initialization: 15 ms 
-Bloom Filter and Hash Table Generation: 3040 ms 
-Join core: 42 ms 
+Initialization: 142 ms 
+Bloom Filter and Hash Table Generation: 869 ms 
+Join core: 60 ms 
+Bloom Filter Ocupation: 0% 
 90000 linhas
-3097 ms 
+1080 ms 
 
-Hash Join
+Cuckoo Join
 -----------------
-Initialization: 2 ms 
-Hash Table Generation: 2174 ms 
-Join Core: 35 ms 
+Initialization: 0 ms 
+Cuckoo Table Generation: 278 ms 
+Join core: 29 ms 
+Cuckoo Ocupation: 23% 
 90000 linhas
-2210 ms 
+309 ms 
 
-Bloom  Join
+Cuckoo Filter Join
 -----------------
-Initialization: 14 ms 
-Bloom Filter Generation: 2166 ms 
-Join Core: 33 ms 
-90000 linhas
-2213 ms 
-
-Bloom Nested Join
------------------
-Initialization: 14 ms 
-Bloom Filter Generation: 2144 ms 
-Join Core: 4941 ms 
-90000 linhas
-7099 ms 
-
-Bloom Hash Join
------------------
-Initialization: 16 ms 
-Bloom Filter and Hash Table Generation: 3761 ms 
-Join core: 64 ms 
-90000 linhas
-3841 ms 
-
-Hash Join
------------------
-Initialization: 2 ms 
-Hash Table Generation: 342 ms 
-Join Core: 33 ms 
-90000 linhas
-377 ms 
-
-Bloom  Join
------------------
-Initialization: 15 ms 
-Bloom Filter Generation: 365 ms 
-Join Core: 30 ms 
-90000 linhas
-409 ms 
-
-Bloom Nested Join
------------------
-Initialization: 13 ms 
-Bloom Filter Generation: 371 ms 
-Join Core: 4603 ms 
-90000 linhas
-4987 ms 
-
-Bloom Hash Join
------------------
-Initialization: 15 ms 
-Bloom Filter and Hash Table Generation: 623 ms 
-Join core: 57 ms 
-90000 linhas
-696 ms 
+Initialization: 0 ms 
+Cuckoo Filter Generation: 2501 ms 
+Join core: 49 ms 
+Cuckoo Ocupation: 24% 
+90103 linhas
+2550 ms 
 

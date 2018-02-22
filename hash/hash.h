@@ -109,6 +109,9 @@ int mulAddSh (const char *s, int d);
 #define PRIME8 0x00000013 //   19
 #define SEED8 0x000000A1 // 161
 
+#define PRIME16 0x00001DC3 //   7619
+#define SEED16 0x00008DA5 // 36261
+
 uint32_t fnv1aByte(unsigned char oneByte, uint32_t hash);
 uint32_t fnv1aShort(unsigned short twoBytes, uint32_t hash);
 uint32_t fnv1a(unsigned int fourBytes);
@@ -116,6 +119,11 @@ uint32_t fnv1a(unsigned int fourBytes);
 uint8_t fnv1aByte8(unsigned char oneByte, uint8_t hash);
 uint8_t fnv1aShort8(unsigned short twoBytes, uint8_t hash);
 uint8_t fnv1a8(unsigned int fourBytes);
+
+uint16_t fnv1aByte16(unsigned char oneByte, uint16_t hash);
+uint16_t fnv1aShort16(unsigned short twoBytes, uint16_t hash);
+uint16_t fnv1a16(unsigned int fourBytes);
+
 
 /*************************************
   Elf Hash

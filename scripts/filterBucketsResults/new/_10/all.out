@@ -1,160 +1,151 @@
-Hash Join
+Nested Loop Join
 -----------------
-Initialization: 2 ms 
-Hash Table Generation: 2134 ms 
-Join Core: 33 ms 
 15000 linhas
-2170 ms 
-
-Bloom  Join
------------------
-Initialization: 14 ms 
-Bloom Filter Generation: 1461 ms 
-Join Core: 39 ms 
-14997 linhas
-1514 ms 
-
-Bloom Nested Join
------------------
-Initialization: 13 ms 
-Bloom Filter Generation: 1468 ms 
-Join Core: 23624 ms 
-15000 linhas
-25105 ms 
-
-Bloom Hash Join
------------------
-Initialization: 15 ms 
-Bloom Filter and Hash Table Generation: 4132 ms 
-Join core: 109 ms 
-15000 linhas
-4256 ms 
+84823 ms 
 
 Hash Join
 -----------------
-Initialization: 2 ms 
-Hash Table Generation: 5394 ms 
-Join Core: 48 ms 
+Initialization: 142 ms 
+Hash Table Generation: 597 ms 
+Join Core: 60 ms 
 15000 linhas
-5444 ms 
+799 ms 
 
-Bloom  Join
+Bloom Join 
 -----------------
-Initialization: 15 ms 
-Bloom Filter Generation: 2865 ms 
-Join Core: 52 ms 
-14998 linhas
-2933 ms 
+Initialization: 0 ms 
+Bloom Filter Generation: 464 ms 
+Join Core: 45 ms 
+15000 linhas
+509 ms 
 
 Bloom Nested Join
 -----------------
-Initialization: 13 ms 
-Bloom Filter Generation: 2784 ms 
-Join Core: 23713 ms 
+Initialization: 0 ms 
+Bloom Filter Generation: 458 ms 
+Join Core: 23683 ms 
 15000 linhas
-26510 ms 
+24141 ms 
 
 Bloom Hash Join
 -----------------
-Initialization: 15 ms 
-Bloom Filter and Hash Table Generation: 5471 ms 
-Join core: 82 ms 
+Initialization: 128 ms 
+Bloom Filter and Hash Table Generation: 749 ms 
+Join core: 69 ms 
+Bloom Filter Ocupation: 0% 
 15000 linhas
-5568 ms 
+955 ms 
 
-Hash Join
+Cuckoo Join
 -----------------
-Initialization: 4 ms 
-Hash Table Generation: 3973 ms 
-Join Core: 33 ms 
-15000 linhas
-4010 ms 
+Initialization: 0 ms 
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+	Realocating cuckoo table... it may take a while
+Cuckoo Table Generation: 254 ms 
+Join core: 23 ms 
+Cuckoo Ocupation: 51% 
+15001 linhas
+280 ms 
 
-Bloom  Join
+Cuckoo Filter Join
 -----------------
-Initialization: 14 ms 
-Bloom Filter Generation: 2971 ms 
-Join Core: 39 ms 
-14997 linhas
-3025 ms 
-
-Bloom Nested Join
------------------
-Initialization: 13 ms 
-Bloom Filter Generation: 2941 ms 
-Join Core: 23661 ms 
-15000 linhas
-26615 ms 
-
-Bloom Hash Join
------------------
-Initialization: 15 ms 
-Bloom Filter and Hash Table Generation: 6161 ms 
-Join core: 83 ms 
-15000 linhas
-6259 ms 
-
-Hash Join
------------------
-Initialization: 2 ms 
-Hash Table Generation: 4445 ms 
-Join Core: 33 ms 
-15000 linhas
-4480 ms 
-
-Bloom  Join
------------------
-Initialization: 14 ms 
-Bloom Filter Generation: 3477 ms 
-Join Core: 40 ms 
-14998 linhas
-3531 ms 
-
-Bloom Nested Join
------------------
-Initialization: 14 ms 
-Bloom Filter Generation: 3454 ms 
-Join Core: 23780 ms 
-15000 linhas
-27247 ms 
-
-Bloom Hash Join
------------------
-Initialization: 16 ms 
-Bloom Filter and Hash Table Generation: 6946 ms 
-Join core: 86 ms 
-15000 linhas
-7048 ms 
-
-Hash Join
------------------
-Initialization: 2 ms 
-Hash Table Generation: 640 ms 
-Join Core: 41 ms 
-15000 linhas
-683 ms 
-
-Bloom  Join
------------------
-Initialization: 15 ms 
-Bloom Filter Generation: 408 ms 
-Join Core: 53 ms 
-14998 linhas
-476 ms 
-
-Bloom Nested Join
------------------
-Initialization: 13 ms 
-Bloom Filter Generation: 404 ms 
-Join Core: 24310 ms 
-15000 linhas
-24727 ms 
-
-Bloom Hash Join
------------------
-Initialization: 15 ms 
-Bloom Filter and Hash Table Generation: 874 ms 
-Join core: 106 ms 
-15000 linhas
-996 ms 
+Initialization: 0 ms 
+Cuckoo Filter Generation: 2315 ms 
+Join core: 44 ms 
+Cuckoo Ocupation: 61% 
+40759 linhas
+2360 ms 
 

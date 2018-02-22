@@ -1,13 +1,16 @@
 #include "bloomFilter.h"
 
-void generateBloomFilter(column_orders *c_orders, int tamOrders, int nBuckets, char * bloom)
+void generateBloomFilter(column_orders *c_orders, int tamOrders, int nBuckets, uint64_t * bloom)
 {
 	char str[10];
 	clock_t init, end;
 	unsigned int key;
 	init = clock();
+	uint64_t index0, index1, index2, index3, index4;
+	uint64_t desloc0, desloc1, desloc2, desloc3, desloc4;
+	uint64_t one = 1;
 
-	for (int b=0; b<nBuckets; b++)
+	for (int b=0; b<(nBuckets/64); b++)
 		bloom[b] = 0;
 	end = clock();
 	printf("Initialization: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
@@ -19,11 +22,24 @@ void generateBloomFilter(column_orders *c_orders, int tamOrders, int nBuckets, c
 	{
 		sprintf(str, "%d", c_orders[i].O_CUSTKEY);
 		key = c_orders[i].O_CUSTKEY;
-		bloom[HASH_INDEX0] = 1;
-		bloom[HASH_INDEX1] = 1;
-		bloom[HASH_INDEX2] = 1;
-		bloom[HASH_INDEX3] = 1;
-		bloom[HASH_INDEX4] = 1;
+
+		index0 = HASH_INDEX0;
+		index1 = HASH_INDEX1;
+		index2 = HASH_INDEX2;
+		index3 = HASH_INDEX3;
+		index4 = HASH_INDEX4;
+
+		desloc0 = index0/64;
+		desloc1 = index1/64;
+		desloc2 = index2/64;
+		desloc3 = index3/64;
+		desloc4 = index4/64;
+
+		bloom[desloc0] = (one << (index0-(64*desloc0))) | bloom[desloc0];
+		bloom[desloc1] = (one << (index1-(64*desloc1))) | bloom[desloc1];
+		bloom[desloc2] = (one << (index2-(64*desloc2))) | bloom[desloc2];
+		bloom[desloc3] = (one << (index3-(64*desloc3))) | bloom[desloc3];
+		bloom[desloc4] = (one << (index4-(64*desloc4))) | bloom[desloc4];
 	}
 	end = clock();
 	printf("Bloom Filter Generation: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
@@ -33,10 +49,14 @@ void generateBloomFilter(column_orders *c_orders, int tamOrders, int nBuckets, c
 int bloomFilter(column_customer *c_customer, column_orders *c_orders, int tamCustomer, int tamOrders, float * t_result, int nBuckets)
 {
 	int index = 0;
-	char bloom[nBuckets];
+	//char bloom[nBuckets];
+	uint64_t * bloom;
+	bloom = malloc(nBuckets/8);
 	char str[10];
 	clock_t init, end;
 	unsigned int key;
+	uint64_t index0, index1, index2, index3, index4;
+	uint64_t desloc0, desloc1, desloc2, desloc3, desloc4;
 
 	generateBloomFilter(c_orders, tamOrders, nBuckets, bloom);
 
@@ -44,9 +64,26 @@ int bloomFilter(column_customer *c_customer, column_orders *c_orders, int tamCus
 	init = clock();
 	for (int j=0; j<tamCustomer; j++)
 	{
+		key = c_customer[j].C_CUSTKEY;
 		sprintf(str, "%d", c_customer[j].C_CUSTKEY);
-		key = c_orders[j].O_CUSTKEY;
-		if ((bloom[HASH_INDEX0] == 0 || bloom[HASH_INDEX1] == 0 || bloom[HASH_INDEX2] == 0 || bloom[HASH_INDEX3] == 0 || bloom[HASH_INDEX4]) == 0)
+
+		index0 = HASH_INDEX0;
+		index1 = HASH_INDEX1;
+		index2 = HASH_INDEX2;
+		index3 = HASH_INDEX3;
+		index4 = HASH_INDEX4;
+
+		desloc0 = index0/64;
+		desloc1 = index1/64;
+		desloc2 = index2/64;
+		desloc3 = index3/64;
+		desloc4 = index4/64;
+
+		if (((bloom[desloc0] << (63-(index0 - (64*desloc0)))) >> 63) == 0 
+			|| ((bloom[desloc1] << (63-(index1 - (64*desloc1)))) >> 63) == 0 
+			|| ((bloom[desloc2] << (63-(index2 - (64*desloc2)))) >> 63) == 0 
+			|| ((bloom[desloc3] << (63-(index3 - (64*desloc3)))) >> 63) == 0
+			|| ((bloom[desloc4] << (63-(index4 - (64*desloc4)))) >> 63) == 0)
 		{
 			t_result[index] = c_customer[j].C_ACCTBAL;
 			index++;
@@ -61,13 +98,17 @@ int bloomFilter(column_customer *c_customer, column_orders *c_orders, int tamCus
 int bloomFilterParam(column_customer *c_customer, column_orders *c_orders, int tamCustomer, int tamOrders, float * t_result, int nBuckets, int nHash)
 {
 	int index = 0;
-	char bloom[nBuckets];
+	uint64_t * bloom;
+	bloom = malloc(nBuckets/8);
 	char str[10];
 	clock_t init, end;
 	unsigned int key;
+	uint64_t index0, index1, index2, index3, index4;
+	uint64_t desloc0, desloc1, desloc2, desloc3, desloc4;
+	uint64_t one = 1;
 
 	init = clock();
-	for (int b=0; b<nBuckets; b++)
+	for (int b=0; b<(nBuckets/64); b++)
 		bloom[b] = 0;
 	end = clock();
 	printf("Initialization: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
@@ -79,16 +120,37 @@ int bloomFilterParam(column_customer *c_customer, column_orders *c_orders, int t
 	{
 		key = c_orders[i].O_CUSTKEY;
 		sprintf(str, "%d", c_orders[i].O_CUSTKEY);
+
 		if (nHash >= 0)
-			bloom[HASH_INDEX0] = 1;
+		{
+			index0 = HASH_INDEX0;
+			desloc0 = index0/64;
+			bloom[desloc0] = (one << (index0-(64*desloc0))) | bloom[desloc0];
+		}
 		if (nHash >= 1)
-			bloom[HASH_INDEX1] = 1;
+		{
+			index1 = HASH_INDEX1;
+			desloc1 = index1/64;
+			bloom[desloc1] = (one << (index1-(64*desloc1))) | bloom[desloc1];
+		}
 		if (nHash >= 2)
-			bloom[HASH_INDEX2] = 1;
+		{
+			index2 = HASH_INDEX2;
+			desloc2 = index2/64;
+			bloom[desloc2] = (one << (index2-(64*desloc2))) | bloom[desloc2];
+		}
 		if (nHash >= 3)
-			bloom[HASH_INDEX3] = 1;
+		{
+			index3 = HASH_INDEX3;
+			desloc3 = index3/64;
+			bloom[desloc3] = (one << (index3-(64*desloc3))) | bloom[desloc3];
+		}
 		if (nHash == 4)
-		bloom[HASH_INDEX4] = 1;
+		{
+			index4 = HASH_INDEX4;
+			desloc4 = index4/64;
+			bloom[desloc4] = (one << (index4-(64*desloc4))) | bloom[desloc4];
+		}
 	}
 	end = clock();
 	printf("Bloom Filter Generation: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
@@ -101,7 +163,11 @@ int bloomFilterParam(column_customer *c_customer, column_orders *c_orders, int t
 		{
 			sprintf(str, "%d", c_customer[j].C_CUSTKEY);
 			key = c_orders[j].O_CUSTKEY;
-			if (bloom[HASH_INDEX0] == 0)
+			index0 = HASH_INDEX0;
+
+			desloc0 = index0/64;
+
+			if (((bloom[desloc0] << (63-(index0 - (64*desloc0)))) >> 63) == 0)
 			{
 				t_result[index] = c_customer[j].C_ACCTBAL;
 				index++;
@@ -117,7 +183,14 @@ int bloomFilterParam(column_customer *c_customer, column_orders *c_orders, int t
 		{
 			key = c_orders[j].O_CUSTKEY;
 			sprintf(str, "%d", c_customer[j].C_CUSTKEY);
-			if (bloom[HASH_INDEX0] == 0 || bloom[HASH_INDEX1] == 0)
+			index0 = HASH_INDEX0;
+			index1 = HASH_INDEX1;
+
+			desloc0 = index0/64;
+			desloc1 = index1/64;
+
+			if (((bloom[desloc0] << (63-(index0 - (64*desloc0)))) >> 63) == 0 
+				|| ((bloom[desloc1] << (63-(index1 - (64*desloc1)))) >> 63) == 0)
 			{
 				t_result[index] = c_customer[j].C_ACCTBAL;
 				index++;
@@ -133,7 +206,17 @@ int bloomFilterParam(column_customer *c_customer, column_orders *c_orders, int t
 		{
 			key = c_orders[j].O_CUSTKEY;
 			sprintf(str, "%d", c_customer[j].C_CUSTKEY);
-			if (bloom[HASH_INDEX0] == 0 || bloom[HASH_INDEX1] == 0 || bloom[HASH_INDEX2] == 0)
+			index0 = HASH_INDEX0;
+			index1 = HASH_INDEX1;
+			index2 = HASH_INDEX2;
+
+			desloc0 = index0/64;
+			desloc1 = index1/64;
+			desloc2 = index2/64;
+
+			if (((bloom[desloc0] << (63-(index0 - (64*desloc0)))) >> 63) == 0 
+				|| ((bloom[desloc1] << (63-(index1 - (64*desloc1)))) >> 63) == 0 
+				|| ((bloom[desloc2] << (63-(index2 - (64*desloc2)))) >> 63) == 0)
 			{
 				t_result[index] = c_customer[j].C_ACCTBAL;
 				index++;
@@ -149,7 +232,20 @@ int bloomFilterParam(column_customer *c_customer, column_orders *c_orders, int t
 		{
 			key = c_orders[j].O_CUSTKEY;
 			sprintf(str, "%d", c_customer[j].C_CUSTKEY);
-			if (bloom[HASH_INDEX0] == 0 || bloom[HASH_INDEX1] == 0 || bloom[HASH_INDEX2] == 0 || bloom[HASH_INDEX3] == 0)
+			index0 = HASH_INDEX0;
+			index1 = HASH_INDEX1;
+			index2 = HASH_INDEX2;
+			index3 = HASH_INDEX3;
+
+			desloc0 = index0/64;
+			desloc1 = index1/64;
+			desloc2 = index2/64;
+			desloc3 = index3/64;
+
+			if (((bloom[desloc0] << (63-(index0 - (64*desloc0)))) >> 63) == 0 
+				|| ((bloom[desloc1] << (63-(index1 - (64*desloc1)))) >> 63) == 0 
+				|| ((bloom[desloc2] << (63-(index2 - (64*desloc2)))) >> 63) == 0 
+				|| ((bloom[desloc3] << (63-(index3 - (64*desloc3)))) >> 63) == 0)
 			{
 				t_result[index] = c_customer[j].C_ACCTBAL;
 				index++;
@@ -165,7 +261,23 @@ int bloomFilterParam(column_customer *c_customer, column_orders *c_orders, int t
 		{
 			key = c_orders[j].O_CUSTKEY;
 			sprintf(str, "%d", c_customer[j].C_CUSTKEY);
-			if (bloom[HASH_INDEX0] == 0 || bloom[HASH_INDEX1] == 0 || bloom[HASH_INDEX2] == 0 || bloom[HASH_INDEX3] == 0 || bloom[HASH_INDEX4] == 0)
+			index0 = HASH_INDEX0;
+			index1 = HASH_INDEX1;
+			index2 = HASH_INDEX2;
+			index3 = HASH_INDEX3;
+			index4 = HASH_INDEX4;
+
+			desloc0 = index0/64;
+			desloc1 = index1/64;
+			desloc2 = index2/64;
+			desloc3 = index3/64;
+			desloc4 = index4/64;
+
+			if (((bloom[desloc0] << (63-(index0 - (64*desloc0)))) >> 63) == 0 
+				|| ((bloom[desloc1] << (63-(index1 - (64*desloc1)))) >> 63) == 0 
+				|| ((bloom[desloc2] << (63-(index2 - (64*desloc2)))) >> 63) == 0 
+				|| ((bloom[desloc3] << (63-(index3 - (64*desloc3)))) >> 63) == 0
+				|| ((bloom[desloc4] << (63-(index4 - (64*desloc4)))) >> 63) == 0)
 			{
 				t_result[index] = c_customer[j].C_ACCTBAL;
 				index++;
@@ -183,10 +295,13 @@ int bloomNested(column_customer *c_customer, column_orders *c_orders, int tamCus
 {
 	int index = 0;
 	int exists = 0;
-	char bloom[nBuckets];
+	uint64_t * bloom;
+	bloom = malloc(nBuckets/8);
 	char str[10];
 	clock_t init, end;
 	unsigned int key;
+	uint64_t index0, index1, index2, index3, index4;
+	uint64_t desloc0, desloc1, desloc2, desloc3, desloc4;
 
 	generateBloomFilter(c_orders, tamOrders, nBuckets, bloom);
 
@@ -196,7 +311,24 @@ int bloomNested(column_customer *c_customer, column_orders *c_orders, int tamCus
 	{
 		key = c_orders[i].O_CUSTKEY;
 		sprintf(str, "%d", c_customer[i].C_CUSTKEY);
-		if (bloom[HASH_INDEX0] == 0 || bloom[HASH_INDEX1] == 0 || bloom[HASH_INDEX2] == 0 || bloom[HASH_INDEX3] == 0 || bloom[HASH_INDEX4] == 0)
+
+		index0 = HASH_INDEX0;
+		index1 = HASH_INDEX1;
+		index2 = HASH_INDEX2;
+		index3 = HASH_INDEX3;
+		index4 = HASH_INDEX4;
+
+		desloc0 = index0/64;
+		desloc1 = index1/64;
+		desloc2 = index2/64;
+		desloc3 = index3/64;
+		desloc4 = index4/64;
+
+		if (((bloom[desloc0] << (63-(index0 - (64*desloc0)))) >> 63) == 0 
+			|| ((bloom[desloc1] << (63-(index1 - (64*desloc1)))) >> 63) == 0 
+			|| ((bloom[desloc2] << (63-(index2 - (64*desloc2)))) >> 63) == 0 
+			|| ((bloom[desloc3] << (63-(index3 - (64*desloc3)))) >> 63) == 0
+			|| ((bloom[desloc4] << (63-(index4 - (64*desloc4)))) >> 63) == 0)
 		{
 			t_result[index] = c_customer[i].C_ACCTBAL;
 			index++;
@@ -232,6 +364,11 @@ int bloomHash(column_customer *c_customer, column_orders *c_orders, int tamCusto
 	char str[10];
 	clock_t init, end;
 	unsigned int key;
+	uint64_t index0, index1, index2, index3, index4;
+	uint64_t desloc0, desloc1, desloc2, desloc3, desloc4;
+	uint64_t one = 1;
+	uint64_t * bloom;
+	bloom = malloc(nBuckets/8);
 
 	linkedList * node;
 
@@ -247,8 +384,7 @@ int bloomHash(column_customer *c_customer, column_orders *c_orders, int tamCusto
 		buckets[n]->next = NULL;
 	}
 
-	char bloom[nBuckets];
-	for (int b=0; b<nBuckets; b++)
+	for (int b=0; b<(nBuckets/64); b++)
 		bloom[b] = 0;
 	end = clock();
 	printf("Initialization: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
@@ -258,16 +394,28 @@ int bloomHash(column_customer *c_customer, column_orders *c_orders, int tamCusto
 	for (int i = 0; i<tamOrders; i++)
 	{
 		control = 0;
-
-		key = c_orders[i].O_CUSTKEY;
 		sprintf(str, "%d", c_orders[i].O_CUSTKEY);
-		index = HASH_FUNC;
+		key = c_orders[i].O_CUSTKEY;
 
-		bloom[HASH_INDEX0] = 1;
-		bloom[HASH_INDEX1] = 1;
-		bloom[HASH_INDEX2] = 1;
-		bloom[HASH_INDEX3] = 1;
-		bloom[HASH_INDEX4] = 1;
+		index0 = HASH_INDEX0;
+		index1 = HASH_INDEX1;
+		index2 = HASH_INDEX2;
+		index3 = HASH_INDEX3;
+		index4 = HASH_INDEX4;
+
+		desloc0 = index0/64;
+		desloc1 = index1/64;
+		desloc2 = index2/64;
+		desloc3 = index3/64;
+		desloc4 = index4/64;
+
+		bloom[desloc0] = (one << (index0-(64*desloc0))) | bloom[desloc0];
+		bloom[desloc1] = (one << (index1-(64*desloc1))) | bloom[desloc1];
+		bloom[desloc2] = (one << (index2-(64*desloc2))) | bloom[desloc2];
+		bloom[desloc3] = (one << (index3-(64*desloc3))) | bloom[desloc3];
+		bloom[desloc4] = (one << (index4-(64*desloc4))) | bloom[desloc4];
+
+		index = HASH_FUNC;
 
 		node = buckets[index];
 		if (node->C_CUSTKEY == -1)
@@ -302,7 +450,23 @@ int bloomHash(column_customer *c_customer, column_orders *c_orders, int tamCusto
 	{
 		sprintf(str, "%d", c_customer[j].C_CUSTKEY);
 		key = c_orders[j].O_CUSTKEY;
-		if ((bloom[HASH_INDEX0] == 0 || bloom[HASH_INDEX1] == 0 || bloom[HASH_INDEX2] == 0 || bloom[HASH_INDEX3] == 0 || bloom[HASH_INDEX4]) == 0)
+		index0 = HASH_INDEX0;
+		index1 = HASH_INDEX1;
+		index2 = HASH_INDEX2;
+		index3 = HASH_INDEX3;
+		index4 = HASH_INDEX4;
+
+		desloc0 = index0/64;
+		desloc1 = index1/64;
+		desloc2 = index2/64;
+		desloc3 = index3/64;
+		desloc4 = index4/64;
+
+		if (((bloom[desloc0] << (63-(index0 - (64*desloc0)))) >> 63) == 0 
+			|| ((bloom[desloc1] << (63-(index1 - (64*desloc1)))) >> 63) == 0 
+			|| ((bloom[desloc2] << (63-(index2 - (64*desloc2)))) >> 63) == 0 
+			|| ((bloom[desloc3] << (63-(index3 - (64*desloc3)))) >> 63) == 0
+			|| ((bloom[desloc4] << (63-(index4 - (64*desloc4)))) >> 63) == 0)
 		{
 			t_result[nResult] = c_customer[j].C_ACCTBAL;
 			nResult++;

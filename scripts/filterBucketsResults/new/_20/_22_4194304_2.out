@@ -1,63 +1,9 @@
 Bloom Join
 -----------------
 4194304 Buckets 2 Hash Functions
-Initialization: 14 ms 
-Bloom Filter Generation: 599 ms 
+Initialization: 0 ms 
+Bloom Filter Generation: 377 ms 
 Join Core: 33 ms 
-29984 linhas
-646 ms 
-
-Bloom Join
------------------
-4194304 Buckets 2 Hash Functions
-Initialization: 14 ms 
-Bloom Filter Generation: 1127 ms 
-Join Core: 30 ms 
-29989 linhas
-1170 ms 
-
-Bloom Join
------------------
-4194304 Buckets 2 Hash Functions
-Initialization: 14 ms 
-Bloom Filter Generation: 1278 ms 
-Join Core: 26 ms 
-29906 linhas
-1319 ms 
-
-Bloom Join
------------------
-4194304 Buckets 2 Hash Functions
-Initialization: 14 ms 
-Bloom Filter Generation: 1496 ms 
-Join Core: 26 ms 
-29910 linhas
-1536 ms 
-
-Bloom Join
------------------
-4194304 Buckets 2 Hash Functions
-Initialization: 16 ms 
-Bloom Filter Generation: 266 ms 
-Join Core: 33 ms 
-29918 linhas
-315 ms 
-
-Bloom Join
------------------
-4194304 Buckets 2 Hash Functions
-Initialization: 15 ms 
-Bloom Filter Generation: 293 ms 
-Join Core: 30 ms 
-29911 linhas
-338 ms 
-
-Bloom Join
------------------
-4194304 Buckets 2 Hash Functions
-Initialization: 14 ms 
-Bloom Filter Generation: 311 ms 
-Join Core: 52 ms 
-29911 linhas
-377 ms 
+29812 linhas
+410 ms 
 

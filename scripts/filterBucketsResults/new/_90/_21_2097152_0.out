@@ -1,63 +1,9 @@
 Bloom Join
 -----------------
 2097152 Buckets 0 Hash Functions
-Initialization: 7 ms 
-Bloom Filter Generation: 416 ms 
-Join Core: 27 ms 
-134046 linhas
-451 ms 
-
-Bloom Join
------------------
-2097152 Buckets 0 Hash Functions
-Initialization: 7 ms 
-Bloom Filter Generation: 804 ms 
-Join Core: 22 ms 
-134001 linhas
-834 ms 
-
-Bloom Join
------------------
-2097152 Buckets 0 Hash Functions
-Initialization: 8 ms 
-Bloom Filter Generation: 905 ms 
-Join Core: 20 ms 
-134079 linhas
-933 ms 
-
-Bloom Join
------------------
-2097152 Buckets 0 Hash Functions
-Initialization: 8 ms 
-Bloom Filter Generation: 1154 ms 
-Join Core: 25 ms 
-134070 linhas
-1187 ms 
-
-Bloom Join
------------------
-2097152 Buckets 0 Hash Functions
-Initialization: 7 ms 
-Bloom Filter Generation: 218 ms 
-Join Core: 23 ms 
-134026 linhas
-249 ms 
-
-Bloom Join
------------------
-2097152 Buckets 0 Hash Functions
-Initialization: 7 ms 
-Bloom Filter Generation: 186 ms 
-Join Core: 21 ms 
-134026 linhas
-215 ms 
-
-Bloom Join
------------------
-2097152 Buckets 0 Hash Functions
-Initialization: 7 ms 
-Bloom Filter Generation: 181 ms 
+Initialization: 0 ms 
+Bloom Filter Generation: 199 ms 
 Join Core: 20 ms 
 134026 linhas
-209 ms 
+219 ms 
 

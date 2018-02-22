@@ -35,10 +35,8 @@ void generateHashTable(column_orders *c_orders, int tamOrders, linkedList ** buc
 	init = clock();
 	for (int i = 0; i<tamOrders; i++)
 	{
+		control = 0;
 
-		if (lookupHashTable(buckets, c_orders[i].O_CUSTKEY) == 0)
-		{
-			control = 0;
 
 			sprintf(str, "%d", c_orders[i].O_CUSTKEY);
 			index = HASH_FUNC;
@@ -67,7 +65,7 @@ void generateHashTable(column_orders *c_orders, int tamOrders, linkedList ** buc
 					node->next->next = NULL;
 				}
 			}
-		}
+		
 	}
 	end = clock();
 

@@ -54,36 +54,35 @@ int main(int argc, char ** argv)
 		/************************************************/
 		//Nested Loop Join
 		/************************************************/
-		// // Load Tables
-		// tamCustomer = countLines("/home/flav/mestrado/BloomJoin/tbl/customer.tbl");
-		// c_customer = malloc(tamCustomer*sizeof(column_customer));
-		// readCustomerColumn("/home/flav/mestrado/BloomJoin/tbl/customer.tbl", c_customer);
+		// Load Tables
+		tamCustomer = countLines("/home/flav/mestrado/BloomJoin/tbl/customer.tbl");
+		c_customer = malloc(tamCustomer*sizeof(column_customer));
+		readCustomerColumn("/home/flav/mestrado/BloomJoin/tbl/customer.tbl", c_customer);
 
-		// tamOrders = countLines(fileName);
-		// c_orders = malloc(tamOrders*sizeof(column_orders));
-		// readOrdersColumn(fileName, c_orders, sel);
+		tamOrders = countLines(fileName);
+		c_orders = malloc(tamOrders*sizeof(column_orders));
+		readOrdersColumn(fileName, c_orders, sel);
 
-		// //Result Table
-		// for (int i=0; i<tamResult; i++)
-		// 	t_result[i] = 0.0;
+		//Result Table
+		for (int i=0; i<tamResult; i++)
+			t_result[i] = 0.0;
 
+		init = clock();
+		nResult=nestedLoopJoin(c_customer, c_orders, tamCustomer, tamOrders, t_result);
+		end = clock();
 
-		// init = clock();
-		// nResult=nestedLoopJoin(c_customer, c_orders, tamCustomer, tamOrders, t_result);
-		// end = clock();
+		printf("Nested Loop Join\n");
+		printf("-----------------\n");
+		printf("%d linhas\n", nResult);
+		printf("%.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 
-		// printf("Nested Loop Join\n");
-		// printf("-----------------\n");
-		// printf("%d linhas\n", nResult);
-		// printf("%.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
-
-		// free(c_orders);
-		// free(c_customer);
+		free(c_orders);
+		free(c_customer);
 
 		/****************************************/
 		//Hash Join
 		/****************************************/
-		// //Load Tables
+		//Load Tables
 		tamCustomer = countLines("/home/flav/mestrado/BloomJoin/tbl/customer.tbl");
 		c_customer = malloc(tamCustomer*sizeof(column_customer));
 		readCustomerColumn("/home/flav/mestrado/BloomJoin/tbl/customer.tbl", c_customer);
@@ -134,32 +133,32 @@ int main(int argc, char ** argv)
 		free(c_orders);
 		free(c_customer);
 
-		// /***************************************/
-		// // Bloom Nested Join
-		// /***************************************/
-		// // Load Tables
-		// tamCustomer = countLines("/home/flav/mestrado/BloomJoin/tbl/customer.tbl");
-		// c_customer = malloc(tamCustomer*sizeof(column_customer));
-		// readCustomerColumn("/home/flav/mestrado/BloomJoin/tbl/customer.tbl", c_customer);
+		/***************************************/
+		// Bloom Nested Join
+		/***************************************/
+		// Load Tables
+		tamCustomer = countLines("/home/flav/mestrado/BloomJoin/tbl/customer.tbl");
+		c_customer = malloc(tamCustomer*sizeof(column_customer));
+		readCustomerColumn("/home/flav/mestrado/BloomJoin/tbl/customer.tbl", c_customer);
 
-		// tamOrders = countLines(fileName);
-		// c_orders = malloc(tamOrders*sizeof(column_orders));
-		// readOrdersColumn(fileName, c_orders, sel);
+		tamOrders = countLines(fileName);
+		c_orders = malloc(tamOrders*sizeof(column_orders));
+		readOrdersColumn(fileName, c_orders, sel);
 
-		// //Result Table
-		// for (int i=0; i<tamResult; i++)
-		// 	t_result[i] = 0.0;
+		//Result Table
+		for (int i=0; i<tamResult; i++)
+			t_result[i] = 0.0;
 
-		// printf("Bloom Nested Join\n");
-		// printf("-----------------\n");
-		// init = clock();
-		// nResult=bloomNested(c_customer, c_orders, tamCustomer, tamOrders, t_result, nBuckets);
-		// end = clock();
-		// printf("%d linhas\n", nResult);
-		// printf("%.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
+		printf("Bloom Nested Join\n");
+		printf("-----------------\n");
+		init = clock();
+		nResult=bloomNested(c_customer, c_orders, tamCustomer, tamOrders, t_result, nBuckets);
+		end = clock();
+		printf("%d linhas\n", nResult);
+		printf("%.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 
-		// free(c_orders);
-		// free(c_customer);
+		free(c_orders);
+		free(c_customer);
 
 		// /*************************************/
 		// // Bloom Hash Join
@@ -241,7 +240,7 @@ int main(int argc, char ** argv)
 		free(c_orders);
 		free(c_customer);
 
-		//Hash testing
+		// Hash testing
 		// char str[10];
 		// for (int i=0; i<tamCustomer; i++)
 		// {

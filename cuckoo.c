@@ -141,7 +141,7 @@ int cuckooHash(column_customer * c_customer, column_orders * c_orders, int tamCu
 	CUCKOO FILTER
 *************************************************/
 
-int cuckooFilterLookUp(int key, uint8_t fingerPrint, uint16_t index1, bucket * nest)
+int cuckooFilterLookUp(int key, uint16_t fingerPrint, uint16_t index1, bucket * nest)
 {
 	uint16_t index2;
 	char str[10];
@@ -150,10 +150,7 @@ int cuckooFilterLookUp(int key, uint8_t fingerPrint, uint16_t index1, bucket * n
 	sprintf(str, "%d", fingerPrint);
 	index2 = index1 ^ CUCKOO_H2;
 
-	// if (((nest[index1] << 24) >> 24 == fingerPrint) || ((nest[index1] << 16) >> 24 == fingerPrint) || ((nest[index1] << 8) >> 24 == fingerPrint) || ((nest[index1] >> 24) == fingerPrint) || ((nest[index2] << 24) >> 24 == fingerPrint) || ((nest[index2] << 16) >> 24 == fingerPrint) || ((nest[index2] << 8) >> 24 == fingerPrint) || ((nest[index2] >> 24) == fingerPrint))
-	// 	printf("fingerPrint: %d, index1 %d %d %d %d index2 %d %d %d %d\n", fingerPrint, (nest[index1] << 24) >> 24 , (nest[index1] << 16) >> 24, (nest[index1] << 8) >> 24, (nest[index1] >> 24), (nest[index2] << 24) >> 24, (nest[index2] << 16) >> 24, (nest[index2] << 8) >> 24, (nest[index2] >> 24));
-
-	return (((nest[index1] << 24) >> 24 == fingerPrint) || ((nest[index1] << 16) >> 24 == fingerPrint) || ((nest[index1] << 8) >> 24 == fingerPrint) || ((nest[index1] >> 24) == fingerPrint) || ((nest[index2] << 24) >> 24 == fingerPrint) || ((nest[index2] << 16) >> 24 == fingerPrint) || ((nest[index2] << 8) >> 24 == fingerPrint) || ((nest[index2] >> 24) == fingerPrint));
+	return (((nest[index1] << 48) >> 48 == fingerPrint) || ((nest[index1] << 32) >> 48 == fingerPrint) || ((nest[index1] << 16) >> 48 == fingerPrint) || ((nest[index1] >> 48) == fingerPrint) || ((nest[index2] << 48) >> 48 == fingerPrint) || ((nest[index2] << 32) >> 48 == fingerPrint) || ((nest[index2] << 16) >> 48 == fingerPrint) || ((nest[index2] >> 48) == fingerPrint));
 
 }
 
@@ -163,13 +160,13 @@ int cuckooFilterInsert(int key, bucket * nest, int nBuckets)
 
 	sprintf(str, "%d", key);
 
-	uint8_t fingerPrint = CUCKOO_FINGERPRINT;
+	uint16_t fingerPrint = CUCKOO_FINGERPRINT;
 	uint16_t index = CUCKOO_H2;
 	uint16_t i;
 
 	unsigned char *ptr;
 
-	uint8_t olderCuckoo;
+	uint16_t olderCuckoo;
 
 	srand(time(NULL));
 
@@ -178,25 +175,24 @@ int cuckooFilterInsert(int key, bucket * nest, int nBuckets)
 
 	for (int n=0; n<CUCKOO_FILTER_MAX_TRY; n++)
 	{
-		if ((nest[index] << 24) >> 24 == 0) //está vazio, entao eh inserido
+		if ((nest[index] << 48) >> 48 == 0) //está vazio, entao eh inserido
 		{
 			nest[index] = nest[index] | fingerPrint;
 			return 1;
 		}
-		if ((nest[index] << 16) >> 24 == 0) //está vazio, entao eh inserido
+		if ((nest[index] << 32) >> 48 == 0) //está vazio, entao eh inserido
 		{
-			nest[index] = nest[index] | (((uint32_t) fingerPrint) << 8);
+			nest[index] = nest[index] | (((uint64_t) fingerPrint) << 16);
 			return 1;
 		}
-		if ((nest[index] << 8) >> 24 == 0) //está vazio, entao eh inserido
+		if ((nest[index] << 16) >> 48 == 0) //está vazio, entao eh inserido
 		{
-			nest[index] = nest[index] | (((uint32_t) fingerPrint) << 16);
-
+			nest[index] = nest[index] | (((uint64_t) fingerPrint) << 32);
 			return 1;
 		}
-		if ((nest[index]) >> 24 == 0) //está vazio, entao eh inserido
+		if ((nest[index]) >> 48 == 0) //está vazio, entao eh inserido
 		{
-			nest[index] = nest[index] | (((uint32_t)fingerPrint) << 24);
+			nest[index] = nest[index] | (((uint64_t)fingerPrint) << 48);
 			return 1;
 		}
 		
@@ -206,10 +202,10 @@ int cuckooFilterInsert(int key, bucket * nest, int nBuckets)
 		ptr = (unsigned char *) &nest[index];
 		ptr += i;
 
-		olderCuckoo = (uint8_t) *ptr;
+		olderCuckoo = (uint16_t) *ptr;
 		*ptr = 0;
 
-		nest[index] = nest[index] & ((uint32_t)(fingerPrint) << 8*(3-i));
+		nest[index] = nest[index] & ((uint64_t)(fingerPrint) << 16*(3-i));
 
 		fingerPrint = olderCuckoo;
 
@@ -248,18 +244,26 @@ int cuckooFilterJoin(column_customer * c_customer, column_orders * c_orders, int
 {
 	int index = 0;
 	uint16_t index1;
-	uint8_t fingerPrint;
+	uint16_t fingerPrint;
 	int ocupation = 0;
 	clock_t init, end;
 	char str[10];
 	int key;
-	bucket * nest = malloc(CUCKOO_FILTER_SIZE*32);
+	bucket * nest = malloc(CUCKOO_FILTER_SIZE*64);
 
 	cuckooFilterGeneration(c_orders, tamOrders, nest);
 
 	for (int j=0; j<nBuckets; j++)
-		if (nest[j] !=0 )
+	{
+		if ((nest[j] << 48) >> 48 != 0) 
 			ocupation++;
+		if ((nest[j] << 32) >> 48 != 0)
+			ocupation++;
+		if ((nest[j] << 16) >> 48 != 0)
+			ocupation++;
+		if ((nest[j] >> 48) != 0)
+			ocupation++;
+	}
 
 	init=clock();
 	for (int i=0; i<tamCustomer; i++)
@@ -279,7 +283,7 @@ int cuckooFilterJoin(column_customer * c_customer, column_orders * c_orders, int
 
 	printf("Join core: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 
-	printf("Cuckoo Ocupation: %.f%% \n", (double)(ocupation*100)/(nBuckets*2));
+	printf("Cuckoo Ocupation: %.f%% \n", (double)(ocupation*100)/(nBuckets*4));
 
 	return index;
 }

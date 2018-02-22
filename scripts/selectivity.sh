@@ -30,17 +30,17 @@ do
 		mkdir "$TEMP_DIR"
 	fi
 
-	# echo "Generation orders table..."
-	# #Generates orders table and prints it to file
-	# psql bloom bloom -c "select * from generate_sample_by_selectivity(${selectivity});" &>> ${TEMP_DIR}/ORDERS_${selectivity}.tbl
+	echo "Generation orders table..."
+	#Generates orders table and prints it to file
+	psql bloom bloom -c "select * from generate_sample_by_selectivity(${selectivity});" &>> ${TEMP_DIR}/ORDERS_${selectivity}.tbl
 
-	# #Transforms file into a real tbl file to be read by the program
-	# cat ${TEMP_DIR}/ORDERS_${selectivity}.tbl | sed '1,2d' | sed '/o_/d' | sed '/function/d' | sed '/^\s*$/d' | sed '/-----/d' | sed '/row/d' | tr -d '\t' | sed -e 's/[ \t]*//' | sed 's/$/|/' &>> /home/flav/mestrado/BloomJoin/tbl/orders_${selectivity}.tbl
+	#Transforms file into a real tbl file to be read by the program
+	cat ${TEMP_DIR}/ORDERS_${selectivity}.tbl | sed '1,2d' | sed '/o_/d' | sed '/function/d' | sed '/^\s*$/d' | sed '/-----/d' | sed '/row/d' | tr -d '\t' | sed -e 's/[ \t]*//' | sed 's/$/|/' &>> /home/flav/mestrado/BloomJoin/tbl/orders_${selectivity}.tbl
 
-	# echo "Running all the joins..."
-	# #Runs the join with no parameter variation 
-	# outputName="${OUT_DIR}/all.out"
-	# /home/flav/mestrado/BloomJoin/BloomFilterx86 ${selectivity} &>> ${outputName}
+	echo "Running all the joins..."
+	#Runs the join with no parameter variation 
+	outputName="${OUT_DIR}/all.out"
+	/home/flav/mestrado/BloomJoin/BloomFilterx86 ${selectivity} &>> ${outputName}
 
 	#Runs the join with variation
 	#Loop over 2^5 to 2^20 varying the number of hash functions to discover the best fit for the selectivity

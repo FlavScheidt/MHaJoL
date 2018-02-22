@@ -1,63 +1,9 @@
 Bloom Join
 -----------------
 4194304 Buckets 3 Hash Functions
-Initialization: 14 ms 
-Bloom Filter Generation: 601 ms 
-Join Core: 24 ms 
-104996 linhas
-639 ms 
-
-Bloom Join
------------------
-4194304 Buckets 3 Hash Functions
-Initialization: 14 ms 
-Bloom Filter Generation: 1167 ms 
-Join Core: 30 ms 
-104998 linhas
-1212 ms 
-
-Bloom Join
------------------
-4194304 Buckets 3 Hash Functions
-Initialization: 14 ms 
-Bloom Filter Generation: 1521 ms 
-Join Core: 25 ms 
-104999 linhas
-1560 ms 
-
-Bloom Join
------------------
-4194304 Buckets 3 Hash Functions
-Initialization: 14 ms 
-Bloom Filter Generation: 1837 ms 
-Join Core: 26 ms 
-104998 linhas
-1878 ms 
-
-Bloom Join
------------------
-4194304 Buckets 3 Hash Functions
-Initialization: 14 ms 
-Bloom Filter Generation: 305 ms 
-Join Core: 25 ms 
-104998 linhas
-344 ms 
-
-Bloom Join
------------------
-4194304 Buckets 3 Hash Functions
-Initialization: 16 ms 
-Bloom Filter Generation: 379 ms 
-Join Core: 28 ms 
-104998 linhas
-423 ms 
-
-Bloom Join
------------------
-4194304 Buckets 3 Hash Functions
-Initialization: 15 ms 
-Bloom Filter Generation: 374 ms 
-Join Core: 28 ms 
-104998 linhas
-417 ms 
+Initialization: 0 ms 
+Bloom Filter Generation: 447 ms 
+Join Core: 41 ms 
+104995 linhas
+488 ms 
 

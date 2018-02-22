@@ -52,6 +52,10 @@ int hashJoin (column_customer *c_customer, column_orders *c_orders, int tamCusto
 	int nResult=0;
 	int nBuckets = HASH_BUCKETS;
 	clock_t init, end;
+	char str[10];
+	int control;
+
+	linkedList *node;
 
 	linkedList ** buckets;
 	buckets = malloc(nBuckets*sizeof(linkedList));
@@ -74,10 +78,27 @@ int hashJoin (column_customer *c_customer, column_orders *c_orders, int tamCusto
 	//Loop on orders to verify the existence of the register
 	for (int i=0; i<tamCustomer; i++)
 	{
-		if (lookupHashTable(buckets, c_customer[i].C_CUSTKEY) == 0)
+		sprintf(str, "%d", c_customer[i].C_CUSTKEY);
+
+		index = HASH_FUNC;
+		
+		control = 0;
+		node = buckets[index];
+
+		if (node->C_CUSTKEY != c_customer[i].C_CUSTKEY)
 		{
-			t_result[index] = c_customer[i].C_ACCTBAL;
-			nResult++;
+			while (node->next != NULL)
+			{
+				node = node->next;
+				if (node->C_CUSTKEY == c_customer[i].C_CUSTKEY)
+					control = 1;
+			}
+
+			if (control == 0)
+			{
+				t_result[nResult] = c_customer[i].C_ACCTBAL;
+				nResult++;
+			}
 		}
 	}
 	end = clock();
