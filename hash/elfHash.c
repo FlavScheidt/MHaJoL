@@ -1,6 +1,6 @@
 #include "hash.h"
 
-unsigned int ElfHash (const char *s)
+inline unsigned int ElfHash (const char *s)
 {
     unsigned int   h = 0, high;
     while ( *s )

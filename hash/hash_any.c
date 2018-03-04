@@ -1,6 +1,6 @@
 #include "hash.h"
 
-int hash_any(char *k, int keylen)
+inline int hash_any(char *k, int keylen)
 {
 	 int a,
 				b,

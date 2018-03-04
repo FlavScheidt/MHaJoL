@@ -1,6 +1,6 @@
 #include "hash.h"
 
-size_t hash_pearson(const char* s)
+inline size_t hash_pearson(const char* s)
 {
    static const unsigned char T[256] = {
        98,  6, 85,150, 36, 23,112,164,135,207,169,  5, 26, 64,165,219, //  1

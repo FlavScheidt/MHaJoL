@@ -1,6 +1,6 @@
 #include "hash.h"
 
-size_t hash_jenkins(const char* s)
+inline size_t hash_jenkins(const char* s)
 {
    size_t hash = 0;
 
