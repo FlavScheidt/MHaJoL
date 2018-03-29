@@ -1,0 +1,1617 @@
+--------------------------------------------------------------------------------
+CPU name:	Intel(R) Core(TM) i7-6500U CPU @ 2.50GHz
+CPU type:	Intel Skylake processor
+CPU clock:	2.59 GHz
+--------------------------------------------------------------------------------
+Bloom Join
+-----------------
+524288 Buckets 1 Hash Functions
+Initialization: 0 ms 
+Bloom Filter Generation: 167573 ms 
+Join Core: 22 ms 
+12560 linhas
+167597 ms 
+
+--------------------------------------------------------------------------------
+Region Initialization, Group 1: L2
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.000042 |
+|     call count    |        1 |
++-------------------+----------+
+
++-----------------------+---------+--------+
+|         Event         | Counter | Core 0 |
++-----------------------+---------+--------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 119530 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  |  86304 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  |  89424 |
+|    L1D_REPLACEMENT    |   PMC0  |    553 |
+|      L1D_M_EVICT      |   PMC1  |    345 |
+| ICACHE_64B_IFTAG_MISS |   PMC2  |    616 |
++-----------------------+---------+--------+
+
++--------------------------------+--------------+
+|             Metric             |    Core 0    |
++--------------------------------+--------------+
+|       Runtime (RDTSC) [s]      | 4.167246e-05 |
+|      Runtime unhalted [s]      | 3.329650e-05 |
+|           Clock [MHz]          |    2501.5502 |
+|               CPI              |       0.7220 |
+|  L2D load bandwidth [MBytes/s] |     849.2899 |
+|  L2D load data volume [GBytes] | 3.539200e-05 |
+| L2D evict bandwidth [MBytes/s] |     529.8463 |
+| L2D evict data volume [GBytes] | 2.208000e-05 |
+|     L2 bandwidth [MBytes/s]    |    2325.1807 |
+|     L2 data volume [GBytes]    |       0.0001 |
++--------------------------------+--------------+
+
+Region Generation, Group 1: L2
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.570266 |
+|     call count    |  3000000 |
++-------------------+----------+
+
++-----------------------+---------+-------------+
+|         Event         | Counter |    Core 0   |
++-----------------------+---------+-------------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 11100980000 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  | 24265260000 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  | 25217580000 |
+|    L1D_REPLACEMENT    |   PMC0  |   556497200 |
+|      L1D_M_EVICT      |   PMC1  |   181840900 |
+| ICACHE_64B_IFTAG_MISS |   PMC2  |  1099136000 |
++-----------------------+---------+-------------+
+
++--------------------------------+-------------+
+|             Metric             |    Core 0   |
++--------------------------------+-------------+
+|       Runtime (RDTSC) [s]      |      0.5703 |
+|      Runtime unhalted [s]      |      9.3617 |
+|           Clock [MHz]          |   2494.1004 |
+|               CPI              |      2.1859 |
+|  L2D load bandwidth [MBytes/s] |  62454.7725 |
+|  L2D load data volume [GBytes] |     35.6158 |
+| L2D evict bandwidth [MBytes/s] |  20407.7074 |
+| L2D evict data volume [GBytes] |     11.6378 |
+|     L2 bandwidth [MBytes/s]    | 206216.7193 |
+|     L2 data volume [GBytes]    |    117.5983 |
++--------------------------------+-------------+
+
+Region Core, Group 1: L2
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.022240 |
+|     call count    |        1 |
++-------------------+----------+
+
++-----------------------+---------+-----------+
+|         Event         | Counter |   Core 0  |
++-----------------------+---------+-----------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 136779600 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  |  54733190 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  |  56879710 |
+|    L1D_REPLACEMENT    |   PMC0  |    211902 |
+|      L1D_M_EVICT      |   PMC1  |      2026 |
+| ICACHE_64B_IFTAG_MISS |   PMC2  |      1135 |
++-----------------------+---------+-----------+
+
++--------------------------------+-----------+
+|             Metric             |   Core 0  |
++--------------------------------+-----------+
+|       Runtime (RDTSC) [s]      |    0.0222 |
+|      Runtime unhalted [s]      |    0.0211 |
+|           Clock [MHz]          | 2494.1684 |
+|               CPI              |    0.4002 |
+|  L2D load bandwidth [MBytes/s] |  609.7809 |
+|  L2D load data volume [GBytes] |    0.0136 |
+| L2D evict bandwidth [MBytes/s] |    5.8301 |
+| L2D evict data volume [GBytes] |    0.0001 |
+|     L2 bandwidth [MBytes/s]    |  618.8771 |
+|     L2 data volume [GBytes]    |    0.0138 |
++--------------------------------+-----------+
+
+--------------------------------------------------------------------------------
+CPU name:	Intel(R) Core(TM) i7-6500U CPU @ 2.50GHz
+CPU type:	Intel Skylake processor
+CPU clock:	2.59 GHz
+--------------------------------------------------------------------------------
+Bloom Join
+-----------------
+524288 Buckets 1 Hash Functions
+Initialization: 0 ms 
+Bloom Filter Generation: 169534 ms 
+Join Core: 22 ms 
+12560 linhas
+169559 ms 
+
+--------------------------------------------------------------------------------
+Region Initialization, Group 1: L2
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.000118 |
+|     call count    |        1 |
++-------------------+----------+
+
++-----------------------+---------+--------+
+|         Event         | Counter | Core 0 |
++-----------------------+---------+--------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 119530 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  |  82742 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  | 268704 |
+|    L1D_REPLACEMENT    |   PMC0  |    541 |
+|      L1D_M_EVICT      |   PMC1  |    337 |
+| ICACHE_64B_IFTAG_MISS |   PMC2  |    632 |
++-----------------------+---------+--------+
+
++--------------------------------+--------------+
+|             Metric             |    Core 0    |
++--------------------------------+--------------+
+|       Runtime (RDTSC) [s]      |       0.0001 |
+|      Runtime unhalted [s]      | 3.192233e-05 |
+|           Clock [MHz]          |     798.1477 |
+|               CPI              |       0.6922 |
+|  L2D load bandwidth [MBytes/s] |     294.2819 |
+|  L2D load data volume [GBytes] | 3.462400e-05 |
+| L2D evict bandwidth [MBytes/s] |     183.3142 |
+| L2D evict data volume [GBytes] | 2.156800e-05 |
+|     L2 bandwidth [MBytes/s]    |     821.3783 |
+|     L2 data volume [GBytes]    |       0.0001 |
++--------------------------------+--------------+
+
+Region Generation, Group 1: L2
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.643954 |
+|     call count    |  3000000 |
++-------------------+----------+
+
++-----------------------+---------+-------------+
+|         Event         | Counter |    Core 0   |
++-----------------------+---------+-------------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 11100980000 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  | 26152990000 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  | 27179950000 |
+|    L1D_REPLACEMENT    |   PMC0  |   589638300 |
+|      L1D_M_EVICT      |   PMC1  |   176031300 |
+| ICACHE_64B_IFTAG_MISS |   PMC2  |  1109318000 |
++-----------------------+---------+-------------+
+
++--------------------------------+-------------+
+|             Metric             |    Core 0   |
++--------------------------------+-------------+
+|       Runtime (RDTSC) [s]      |      0.6440 |
+|      Runtime unhalted [s]      |     10.0900 |
+|           Clock [MHz]          |   2494.0439 |
+|               CPI              |      2.3559 |
+|  L2D load bandwidth [MBytes/s] |  58601.7718 |
+|  L2D load data volume [GBytes] |     37.7369 |
+| L2D evict bandwidth [MBytes/s] |  17495.0407 |
+| L2D evict data volume [GBytes] |     11.2660 |
+|     L2 bandwidth [MBytes/s]    | 186347.4530 |
+|     L2 data volume [GBytes]    |    119.9992 |
++--------------------------------+-------------+
+
+Region Core, Group 1: L2
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.022266 |
+|     call count    |        1 |
++-------------------+----------+
+
++-----------------------+---------+-----------+
+|         Event         | Counter |   Core 0  |
++-----------------------+---------+-----------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 136779600 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  |  54738930 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  |  56885870 |
+|    L1D_REPLACEMENT    |   PMC0  |    211039 |
+|      L1D_M_EVICT      |   PMC1  |      2025 |
+| ICACHE_64B_IFTAG_MISS |   PMC2  |      1155 |
++-----------------------+---------+-----------+
+
++--------------------------------+-----------+
+|             Metric             |   Core 0  |
++--------------------------------+-----------+
+|       Runtime (RDTSC) [s]      |    0.0223 |
+|      Runtime unhalted [s]      |    0.0211 |
+|           Clock [MHz]          | 2494.1542 |
+|               CPI              |    0.4002 |
+|  L2D load bandwidth [MBytes/s] |  606.5949 |
+|  L2D load data volume [GBytes] |    0.0135 |
+| L2D evict bandwidth [MBytes/s] |    5.8205 |
+| L2D evict data volume [GBytes] |    0.0001 |
+|     L2 bandwidth [MBytes/s]    |  615.7352 |
+|     L2 data volume [GBytes]    |    0.0137 |
++--------------------------------+-----------+
+
+--------------------------------------------------------------------------------
+CPU name:	Intel(R) Core(TM) i7-6500U CPU @ 2.50GHz
+CPU type:	Intel Skylake processor
+CPU clock:	2.59 GHz
+--------------------------------------------------------------------------------
+Bloom Join
+-----------------
+524288 Buckets 1 Hash Functions
+Initialization: 0 ms 
+Bloom Filter Generation: 168262 ms 
+Join Core: 22 ms 
+12560 linhas
+168285 ms 
+
+--------------------------------------------------------------------------------
+Region Initialization, Group 1: L2
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.000050 |
+|     call count    |        1 |
++-------------------+----------+
+
++-----------------------+---------+--------+
+|         Event         | Counter | Core 0 |
++-----------------------+---------+--------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 119530 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  |  85371 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  | 111024 |
+|    L1D_REPLACEMENT    |   PMC0  |    527 |
+|      L1D_M_EVICT      |   PMC1  |    336 |
+| ICACHE_64B_IFTAG_MISS |   PMC2  |    649 |
++-----------------------+---------+--------+
+
++--------------------------------+--------------+
+|             Metric             |    Core 0    |
++--------------------------------+--------------+
+|       Runtime (RDTSC) [s]      | 4.969073e-05 |
+|      Runtime unhalted [s]      | 3.293690e-05 |
+|           Clock [MHz]          |    1993.0635 |
+|               CPI              |       0.7142 |
+|  L2D load bandwidth [MBytes/s] |     678.7584 |
+|  L2D load data volume [GBytes] | 3.372800e-05 |
+| L2D evict bandwidth [MBytes/s] |     432.7568 |
+| L2D evict data volume [GBytes] | 2.150400e-05 |
+|     L2 bandwidth [MBytes/s]    |    1947.4055 |
+|     L2 data volume [GBytes]    |       0.0001 |
++--------------------------------+--------------+
+
+Region Generation, Group 1: L2
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.588994 |
+|     call count    |  3000000 |
++-------------------+----------+
+
++-----------------------+---------+-------------+
+|         Event         | Counter |    Core 0   |
++-----------------------+---------+-------------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 11100980000 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  | 25747050000 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  | 26758660000 |
+|    L1D_REPLACEMENT    |   PMC0  |   560393500 |
+|      L1D_M_EVICT      |   PMC1  |   186654900 |
+| ICACHE_64B_IFTAG_MISS |   PMC2  |  1158015000 |
++-----------------------+---------+-------------+
+
++--------------------------------+-------------+
+|             Metric             |    Core 0   |
++--------------------------------+-------------+
+|       Runtime (RDTSC) [s]      |      0.5890 |
+|      Runtime unhalted [s]      |      9.9334 |
+|           Clock [MHz]          |   2493.9673 |
+|               CPI              |      2.3193 |
+|  L2D load bandwidth [MBytes/s] |  60892.2533 |
+|  L2D load data volume [GBytes] |     35.8652 |
+| L2D evict bandwidth [MBytes/s] |  20281.8866 |
+| L2D evict data volume [GBytes] |     11.9459 |
+|     L2 bandwidth [MBytes/s]    | 207003.8340 |
+|     L2 data volume [GBytes]    |    121.9241 |
++--------------------------------+-------------+
+
+Region Core, Group 1: L2
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.022167 |
+|     call count    |        1 |
++-------------------+----------+
+
++-----------------------+---------+-----------+
+|         Event         | Counter |   Core 0  |
++-----------------------+---------+-----------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 136779600 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  |  54708360 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  |  56853900 |
+|    L1D_REPLACEMENT    |   PMC0  |    211092 |
+|      L1D_M_EVICT      |   PMC1  |      2084 |
+| ICACHE_64B_IFTAG_MISS |   PMC2  |      1131 |
++-----------------------+---------+-----------+
+
++--------------------------------+-----------+
+|             Metric             |   Core 0  |
++--------------------------------+-----------+
+|       Runtime (RDTSC) [s]      |    0.0222 |
+|      Runtime unhalted [s]      |    0.0211 |
+|           Clock [MHz]          | 2494.1415 |
+|               CPI              |    0.4000 |
+|  L2D load bandwidth [MBytes/s] |  609.4707 |
+|  L2D load data volume [GBytes] |    0.0135 |
+| L2D evict bandwidth [MBytes/s] |    6.0170 |
+| L2D evict data volume [GBytes] |    0.0001 |
+|     L2 bandwidth [MBytes/s]    |  618.7532 |
+|     L2 data volume [GBytes]    |    0.0137 |
++--------------------------------+-----------+
+
+--------------------------------------------------------------------------------
+CPU name:	Intel(R) Core(TM) i7-6500U CPU @ 2.50GHz
+CPU type:	Intel Skylake processor
+CPU clock:	2.59 GHz
+--------------------------------------------------------------------------------
+Bloom Join
+-----------------
+524288 Buckets 1 Hash Functions
+Initialization: 0 ms 
+Bloom Filter Generation: 166060 ms 
+Join Core: 22 ms 
+12560 linhas
+166085 ms 
+
+--------------------------------------------------------------------------------
+Region Initialization, Group 1: L2
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.000117 |
+|     call count    |        1 |
++-------------------+----------+
+
++-----------------------+---------+--------+
+|         Event         | Counter | Core 0 |
++-----------------------+---------+--------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 119530 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  |  82024 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  | 266544 |
+|    L1D_REPLACEMENT    |   PMC0  |    557 |
+|      L1D_M_EVICT      |   PMC1  |    359 |
+| ICACHE_64B_IFTAG_MISS |   PMC2  |    644 |
++-----------------------+---------+--------+
+
++--------------------------------+--------------+
+|             Metric             |    Core 0    |
++--------------------------------+--------------+
+|       Runtime (RDTSC) [s]      |       0.0001 |
+|      Runtime unhalted [s]      | 3.164514e-05 |
+|           Clock [MHz]          |     797.6382 |
+|               CPI              |       0.6862 |
+|  L2D load bandwidth [MBytes/s] |     305.8515 |
+|  L2D load data volume [GBytes] | 3.564800e-05 |
+| L2D evict bandwidth [MBytes/s] |     197.1287 |
+| L2D evict data volume [GBytes] | 2.297600e-05 |
+|     L2 bandwidth [MBytes/s]    |     856.6038 |
+|     L2 data volume [GBytes]    |       0.0001 |
++--------------------------------+--------------+
+
+Region Generation, Group 1: L2
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.585385 |
+|     call count    |  3000000 |
++-------------------+----------+
+
++-----------------------+---------+-------------+
+|         Event         | Counter |    Core 0   |
++-----------------------+---------+-------------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 11100980000 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  | 25359340000 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  | 26355390000 |
+|    L1D_REPLACEMENT    |   PMC0  |   606869200 |
+|      L1D_M_EVICT      |   PMC1  |   177028200 |
+| ICACHE_64B_IFTAG_MISS |   PMC2  |  1098575000 |
++-----------------------+---------+-------------+
+
++--------------------------------+-------------+
+|             Metric             |    Core 0   |
++--------------------------------+-------------+
+|       Runtime (RDTSC) [s]      |      0.5854 |
+|      Runtime unhalted [s]      |      9.7837 |
+|           Clock [MHz]          |   2494.0344 |
+|               CPI              |      2.2844 |
+|  L2D load bandwidth [MBytes/s] |  66348.8284 |
+|  L2D load data volume [GBytes] |     38.8396 |
+| L2D evict bandwidth [MBytes/s] |  19354.4402 |
+| L2D evict data volume [GBytes] |     11.3298 |
+|     L2 bandwidth [MBytes/s]    | 205810.1452 |
+|     L2 data volume [GBytes]    |    120.4782 |
++--------------------------------+-------------+
+
+Region Core, Group 1: L2
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.022567 |
+|     call count    |        1 |
++-------------------+----------+
+
++-----------------------+---------+-----------+
+|         Event         | Counter |   Core 0  |
++-----------------------+---------+-----------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 136779600 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  |  54898480 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  |  57051430 |
+|    L1D_REPLACEMENT    |   PMC0  |    211769 |
+|      L1D_M_EVICT      |   PMC1  |      2542 |
+| ICACHE_64B_IFTAG_MISS |   PMC2  |      1646 |
++-----------------------+---------+-----------+
+
++--------------------------------+-----------+
+|             Metric             |   Core 0  |
++--------------------------------+-----------+
+|       Runtime (RDTSC) [s]      |    0.0226 |
+|      Runtime unhalted [s]      |    0.0212 |
+|           Clock [MHz]          | 2494.1796 |
+|               CPI              |    0.4014 |
+|  L2D load bandwidth [MBytes/s] |  600.5786 |
+|  L2D load data volume [GBytes] |    0.0136 |
+| L2D evict bandwidth [MBytes/s] |    7.2091 |
+| L2D evict data volume [GBytes] |    0.0002 |
+|     L2 bandwidth [MBytes/s]    |  612.4558 |
+|     L2 data volume [GBytes]    |    0.0138 |
++--------------------------------+-----------+
+
+--------------------------------------------------------------------------------
+CPU name:	Intel(R) Core(TM) i7-6500U CPU @ 2.50GHz
+CPU type:	Intel Skylake processor
+CPU clock:	2.59 GHz
+--------------------------------------------------------------------------------
+Bloom Join
+-----------------
+524288 Buckets 1 Hash Functions
+Initialization: 0 ms 
+Bloom Filter Generation: 138802 ms 
+Join Core: 18 ms 
+12560 linhas
+138822 ms 
+
+--------------------------------------------------------------------------------
+Region Initialization, Group 1: L2
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.000148 |
+|     call count    |        1 |
++-------------------+----------+
+
++-----------------------+---------+--------+
+|         Event         | Counter | Core 0 |
++-----------------------+---------+--------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 119531 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  |  83383 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  | 270756 |
+|    L1D_REPLACEMENT    |   PMC0  |    557 |
+|      L1D_M_EVICT      |   PMC1  |    301 |
+| ICACHE_64B_IFTAG_MISS |   PMC2  |    746 |
++-----------------------+---------+--------+
+
++--------------------------------+--------------+
+|             Metric             |    Core 0    |
++--------------------------------+--------------+
+|       Runtime (RDTSC) [s]      |       0.0001 |
+|      Runtime unhalted [s]      | 3.216956e-05 |
+|           Clock [MHz]          |     798.2368 |
+|               CPI              |       0.6976 |
+|  L2D load bandwidth [MBytes/s] |     240.4564 |
+|  L2D load data volume [GBytes] | 3.564800e-05 |
+| L2D evict bandwidth [MBytes/s] |     129.9414 |
+| L2D evict data volume [GBytes] | 1.926400e-05 |
+|     L2 bandwidth [MBytes/s]    |     692.4454 |
+|     L2 data volume [GBytes]    |       0.0001 |
++--------------------------------+--------------+
+
+Region Generation, Group 1: L2
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.495720 |
+|     call count    |  3000000 |
++-------------------+----------+
+
++-----------------------+---------+-------------+
+|         Event         | Counter |    Core 0   |
++-----------------------+---------+-------------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 11100980000 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  | 25691590000 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  | 21557810000 |
+|    L1D_REPLACEMENT    |   PMC0  |   581327800 |
+|      L1D_M_EVICT      |   PMC1  |   179709100 |
+| ICACHE_64B_IFTAG_MISS |   PMC2  |  1126704000 |
++-----------------------+---------+-------------+
+
++--------------------------------+-------------+
+|             Metric             |    Core 0   |
++--------------------------------+-------------+
+|       Runtime (RDTSC) [s]      |      0.4957 |
+|      Runtime unhalted [s]      |      9.9119 |
+|           Clock [MHz]          |   3089.0055 |
+|               CPI              |      2.3144 |
+|  L2D load bandwidth [MBytes/s] |  75052.3464 |
+|  L2D load data volume [GBytes] |     37.2050 |
+| L2D evict bandwidth [MBytes/s] |  23201.3498 |
+| L2D evict data volume [GBytes] |     11.5014 |
+|     L2 bandwidth [MBytes/s]    | 243716.8565 |
+|     L2 data volume [GBytes]    |    120.8154 |
++--------------------------------+-------------+
+
+Region Core, Group 1: L2
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.018169 |
+|     call count    |        1 |
++-------------------+----------+
+
++-----------------------+---------+-----------+
+|         Event         | Counter |   Core 0  |
++-----------------------+---------+-----------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 136779600 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  |  54780140 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  |  45923540 |
+|    L1D_REPLACEMENT    |   PMC0  |    211788 |
+|      L1D_M_EVICT      |   PMC1  |      1990 |
+| ICACHE_64B_IFTAG_MISS |   PMC2  |      1149 |
++-----------------------+---------+-----------+
+
++--------------------------------+-----------+
+|             Metric             |   Core 0  |
++--------------------------------+-----------+
+|       Runtime (RDTSC) [s]      |    0.0182 |
+|      Runtime unhalted [s]      |    0.0211 |
+|           Clock [MHz]          | 3091.8621 |
+|               CPI              |    0.4005 |
+|  L2D load bandwidth [MBytes/s] |  746.0304 |
+|  L2D load data volume [GBytes] |    0.0136 |
+| L2D evict bandwidth [MBytes/s] |    7.0098 |
+| L2D evict data volume [GBytes] |    0.0001 |
+|     L2 bandwidth [MBytes/s]    |  757.0876 |
+|     L2 data volume [GBytes]    |    0.0138 |
++--------------------------------+-----------+
+
+--------------------------------------------------------------------------------
+CPU name:	Intel(R) Core(TM) i7-6500U CPU @ 2.50GHz
+CPU type:	Intel Skylake processor
+CPU clock:	2.59 GHz
+--------------------------------------------------------------------------------
+Bloom Join
+-----------------
+524288 Buckets 1 Hash Functions
+Initialization: 0 ms 
+Bloom Filter Generation: 166569 ms 
+Join Core: 22 ms 
+12560 linhas
+166593 ms 
+
+--------------------------------------------------------------------------------
+Region Initialization, Group 1: L2
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.000038 |
+|     call count    |        1 |
++-------------------+----------+
+
++-----------------------+---------+--------+
+|         Event         | Counter | Core 0 |
++-----------------------+---------+--------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 119530 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  |  86631 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  |  86508 |
+|    L1D_REPLACEMENT    |   PMC0  |    543 |
+|      L1D_M_EVICT      |   PMC1  |    337 |
+| ICACHE_64B_IFTAG_MISS |   PMC2  |    636 |
++-----------------------+---------+--------+
+
++--------------------------------+--------------+
+|             Metric             |    Core 0    |
++--------------------------------+--------------+
+|       Runtime (RDTSC) [s]      | 3.802868e-05 |
+|      Runtime unhalted [s]      | 3.342259e-05 |
+|           Clock [MHz]          |    2595.6747 |
+|               CPI              |       0.7248 |
+|  L2D load bandwidth [MBytes/s] |     913.8366 |
+|  L2D load data volume [GBytes] | 3.475200e-05 |
+| L2D evict bandwidth [MBytes/s] |     567.1509 |
+| L2D evict data volume [GBytes] | 2.156800e-05 |
+|     L2 bandwidth [MBytes/s]    |    2551.3376 |
+|     L2 data volume [GBytes]    |       0.0001 |
++--------------------------------+--------------+
+
+Region Generation, Group 1: L2
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.562170 |
+|     call count    |  3000000 |
++-------------------+----------+
+
++-----------------------+---------+-------------+
+|         Event         | Counter |    Core 0   |
++-----------------------+---------+-------------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 11100980000 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  | 25525720000 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  | 25304250000 |
+|    L1D_REPLACEMENT    |   PMC0  |   576556100 |
+|      L1D_M_EVICT      |   PMC1  |   192215800 |
+| ICACHE_64B_IFTAG_MISS |   PMC2  |  1102468000 |
++-----------------------+---------+-------------+
+
++--------------------------------+-------------+
+|             Metric             |    Core 0   |
++--------------------------------+-------------+
+|       Runtime (RDTSC) [s]      |      0.5622 |
+|      Runtime unhalted [s]      |      9.8479 |
+|           Clock [MHz]          |   2614.6751 |
+|               CPI              |      2.2994 |
+|  L2D load bandwidth [MBytes/s] |  65637.8027 |
+|  L2D load data volume [GBytes] |     36.8996 |
+| L2D evict bandwidth [MBytes/s] |  21882.7322 |
+| L2D evict data volume [GBytes] |     12.3018 |
+|     L2 bandwidth [MBytes/s]    | 213030.5712 |
+|     L2 data volume [GBytes]    |    119.7594 |
++--------------------------------+-------------+
+
+Region Core, Group 1: L2
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.022247 |
+|     call count    |        1 |
++-------------------+----------+
+
++-----------------------+---------+-----------+
+|         Event         | Counter |   Core 0  |
++-----------------------+---------+-----------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 136779600 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  |  54773660 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  |  56921400 |
+|    L1D_REPLACEMENT    |   PMC0  |    211378 |
+|      L1D_M_EVICT      |   PMC1  |      2197 |
+| ICACHE_64B_IFTAG_MISS |   PMC2  |      1333 |
++-----------------------+---------+-----------+
+
++--------------------------------+-----------+
+|             Metric             |   Core 0  |
++--------------------------------+-----------+
+|       Runtime (RDTSC) [s]      |    0.0222 |
+|      Runtime unhalted [s]      |    0.0211 |
+|           Clock [MHz]          | 2494.1892 |
+|               CPI              |    0.4005 |
+|  L2D load bandwidth [MBytes/s] |  608.0824 |
+|  L2D load data volume [GBytes] |    0.0135 |
+| L2D evict bandwidth [MBytes/s] |    6.3202 |
+| L2D evict data volume [GBytes] |    0.0001 |
+|     L2 bandwidth [MBytes/s]    |  618.2374 |
+|     L2 data volume [GBytes]    |    0.0138 |
++--------------------------------+-----------+
+
+--------------------------------------------------------------------------------
+CPU name:	Intel(R) Core(TM) i7-6500U CPU @ 2.50GHz
+CPU type:	Intel Skylake processor
+CPU clock:	2.59 GHz
+--------------------------------------------------------------------------------
+Bloom Join
+-----------------
+524288 Buckets 1 Hash Functions
+Initialization: 0 ms 
+Bloom Filter Generation: 170048 ms 
+Join Core: 22 ms 
+12560 linhas
+170072 ms 
+
+--------------------------------------------------------------------------------
+Region Initialization, Group 1: L2
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.000041 |
+|     call count    |        1 |
++-------------------+----------+
+
++-----------------------+---------+--------+
+|         Event         | Counter | Core 0 |
++-----------------------+---------+--------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 119530 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  |  84621 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  |  91908 |
+|    L1D_REPLACEMENT    |   PMC0  |    564 |
+|      L1D_M_EVICT      |   PMC1  |    342 |
+| ICACHE_64B_IFTAG_MISS |   PMC2  |    623 |
++-----------------------+---------+--------+
+
++--------------------------------+--------------+
+|             Metric             |    Core 0    |
++--------------------------------+--------------+
+|       Runtime (RDTSC) [s]      | 4.096112e-05 |
+|      Runtime unhalted [s]      | 3.264709e-05 |
+|           Clock [MHz]          |    2386.4842 |
+|               CPI              |       0.7079 |
+|  L2D load bandwidth [MBytes/s] |     881.2259 |
+|  L2D load data volume [GBytes] | 3.609600e-05 |
+| L2D evict bandwidth [MBytes/s] |     534.3604 |
+| L2D evict data volume [GBytes] | 2.188800e-05 |
+|     L2 bandwidth [MBytes/s]    |    2388.9972 |
+|     L2 data volume [GBytes]    |       0.0001 |
++--------------------------------+--------------+
+
+Region Generation, Group 1: L2
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.635846 |
+|     call count    |  3000000 |
++-------------------+----------+
+
++-----------------------+---------+-------------+
+|         Event         | Counter |    Core 0   |
++-----------------------+---------+-------------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 11100980000 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  | 26248270000 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  | 27277810000 |
+|    L1D_REPLACEMENT    |   PMC0  |   621856100 |
+|      L1D_M_EVICT      |   PMC1  |   176605500 |
+| ICACHE_64B_IFTAG_MISS |   PMC2  |  1219544000 |
++-----------------------+---------+-------------+
+
++--------------------------------+-------------+
+|             Metric             |    Core 0   |
++--------------------------------+-------------+
+|       Runtime (RDTSC) [s]      |      0.6358 |
+|      Runtime unhalted [s]      |     10.1267 |
+|           Clock [MHz]          |   2494.1634 |
+|               CPI              |      2.3645 |
+|  L2D load bandwidth [MBytes/s] |  62591.8999 |
+|  L2D load data volume [GBytes] |     39.7988 |
+| L2D evict bandwidth [MBytes/s] |  17775.9353 |
+| L2D evict data volume [GBytes] |     11.3028 |
+|     L2 bandwidth [MBytes/s]    | 203119.0246 |
+|     L2 data volume [GBytes]    |    129.1524 |
++--------------------------------+-------------+
+
+Region Core, Group 1: L2
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.022231 |
+|     call count    |        1 |
++-------------------+----------+
+
++-----------------------+---------+-----------+
+|         Event         | Counter |   Core 0  |
++-----------------------+---------+-----------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 136779600 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  |  54738060 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  |  56885000 |
+|    L1D_REPLACEMENT    |   PMC0  |    211959 |
+|      L1D_M_EVICT      |   PMC1  |      2213 |
+| ICACHE_64B_IFTAG_MISS |   PMC2  |      1308 |
++-----------------------+---------+-----------+
+
++--------------------------------+-----------+
+|             Metric             |   Core 0  |
++--------------------------------+-----------+
+|       Runtime (RDTSC) [s]      |    0.0222 |
+|      Runtime unhalted [s]      |    0.0211 |
+|           Clock [MHz]          | 2494.1661 |
+|               CPI              |    0.4002 |
+|  L2D load bandwidth [MBytes/s] |  610.2080 |
+|  L2D load data volume [GBytes] |    0.0136 |
+| L2D evict bandwidth [MBytes/s] |    6.3710 |
+| L2D evict data volume [GBytes] |    0.0001 |
+|     L2 bandwidth [MBytes/s]    |  620.3446 |
+|     L2 data volume [GBytes]    |    0.0138 |
++--------------------------------+-----------+
+
+--------------------------------------------------------------------------------
+CPU name:	Intel(R) Core(TM) i7-6500U CPU @ 2.50GHz
+CPU type:	Intel Skylake processor
+CPU clock:	2.59 GHz
+--------------------------------------------------------------------------------
+Bloom Join
+-----------------
+524288 Buckets 1 Hash Functions
+Initialization: 0 ms 
+Bloom Filter Generation: 150399 ms 
+Join Core: 22 ms 
+12560 linhas
+150423 ms 
+
+--------------------------------------------------------------------------------
+Region Initialization, Group 1: L3
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.000123 |
+|     call count    |        1 |
++-------------------+----------+
+
++-----------------------+---------+--------+
+|         Event         | Counter | Core 0 |
++-----------------------+---------+--------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 119437 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  |  85810 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  | 278640 |
+|    L2_LINES_IN_ALL    |   PMC0  |    786 |
+|     L2_TRANS_L2_WB    |   PMC1  |    154 |
++-----------------------+---------+--------+
+
++-------------------------------+--------------+
+|             Metric            |    Core 0    |
++-------------------------------+--------------+
+|      Runtime (RDTSC) [s]      |       0.0001 |
+|      Runtime unhalted [s]     | 3.310585e-05 |
+|          Clock [MHz]          |     798.2292 |
+|              CPI              |       0.7185 |
+|  L3 load bandwidth [MBytes/s] |     410.2126 |
+|  L3 load data volume [GBytes] |       0.0001 |
+| L3 evict bandwidth [MBytes/s] |      80.3724 |
+| L3 evict data volume [GBytes] | 9.856000e-06 |
+|    L3 bandwidth [MBytes/s]    |     490.5850 |
+|    L3 data volume [GBytes]    |       0.0001 |
++-------------------------------+--------------+
+
+Region Generation, Group 1: L3
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.610325 |
+|     call count    |  3000000 |
++-------------------+----------+
+
++-----------------------+---------+-------------+
+|         Event         | Counter |    Core 0   |
++-----------------------+---------+-------------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 10827360000 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  | 25599320000 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  | 26604060000 |
+|    L2_LINES_IN_ALL    |   PMC0  |   345883700 |
+|     L2_TRANS_L2_WB    |   PMC1  |    50278700 |
++-----------------------+---------+-------------+
+
++-------------------------------+------------+
+|             Metric            |   Core 0   |
++-------------------------------+------------+
+|      Runtime (RDTSC) [s]      |     0.6103 |
+|      Runtime unhalted [s]     |     9.8763 |
+|          Clock [MHz]          |  2494.0990 |
+|              CPI              |     2.3643 |
+|  L3 load bandwidth [MBytes/s] | 36270.1191 |
+|  L3 load data volume [GBytes] |    22.1366 |
+| L3 evict bandwidth [MBytes/s] |  5272.3341 |
+| L3 evict data volume [GBytes] |     3.2178 |
+|    L3 bandwidth [MBytes/s]    | 41542.4532 |
+|    L3 data volume [GBytes]    |    25.3544 |
++-------------------------------+------------+
+
+Region Core, Group 1: L3
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.022167 |
+|     call count    |        1 |
++-------------------+----------+
+
++-----------------------+---------+-----------+
+|         Event         | Counter |   Core 0  |
++-----------------------+---------+-----------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 136779500 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  |  54758730 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  |  56906390 |
+|    L2_LINES_IN_ALL    |   PMC0  |     35707 |
+|     L2_TRANS_L2_WB    |   PMC1  |     22711 |
++-----------------------+---------+-----------+
+
++-------------------------------+-----------+
+|             Metric            |   Core 0  |
++-------------------------------+-----------+
+|      Runtime (RDTSC) [s]      |    0.0222 |
+|      Runtime unhalted [s]     |    0.0211 |
+|          Clock [MHz]          | 2494.1669 |
+|              CPI              |    0.4003 |
+|  L3 load bandwidth [MBytes/s] |  103.0903 |
+|  L3 load data volume [GBytes] |    0.0023 |
+| L3 evict bandwidth [MBytes/s] |   65.5693 |
+| L3 evict data volume [GBytes] |    0.0015 |
+|    L3 bandwidth [MBytes/s]    |  168.6596 |
+|    L3 data volume [GBytes]    |    0.0037 |
++-------------------------------+-----------+
+
+--------------------------------------------------------------------------------
+CPU name:	Intel(R) Core(TM) i7-6500U CPU @ 2.50GHz
+CPU type:	Intel Skylake processor
+CPU clock:	2.59 GHz
+--------------------------------------------------------------------------------
+Bloom Join
+-----------------
+524288 Buckets 1 Hash Functions
+Initialization: 0 ms 
+Bloom Filter Generation: 152789 ms 
+Join Core: 22 ms 
+12560 linhas
+152814 ms 
+
+--------------------------------------------------------------------------------
+Region Initialization, Group 1: L3
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.000129 |
+|     call count    |        1 |
++-------------------+----------+
+
++-----------------------+---------+--------+
+|         Event         | Counter | Core 0 |
++-----------------------+---------+--------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 119437 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  |  92547 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  | 300780 |
+|    L2_LINES_IN_ALL    |   PMC0  |    876 |
+|     L2_TRANS_L2_WB    |   PMC1  |    136 |
++-----------------------+---------+--------+
+
++-------------------------------+--------------+
+|             Metric            |    Core 0    |
++-------------------------------+--------------+
+|      Runtime (RDTSC) [s]      |       0.0001 |
+|      Runtime unhalted [s]     | 3.570495e-05 |
+|          Clock [MHz]          |     797.5305 |
+|              CPI              |       0.7749 |
+|  L3 load bandwidth [MBytes/s] |     433.0741 |
+|  L3 load data volume [GBytes] |       0.0001 |
+| L3 evict bandwidth [MBytes/s] |      67.2353 |
+| L3 evict data volume [GBytes] | 8.704000e-06 |
+|    L3 bandwidth [MBytes/s]    |     500.3094 |
+|    L3 data volume [GBytes]    |       0.0001 |
++-------------------------------+--------------+
+
+Region Generation, Group 1: L3
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.619392 |
+|     call count    |  3000000 |
++-------------------+----------+
+
++-----------------------+---------+-------------+
+|         Event         | Counter |    Core 0   |
++-----------------------+---------+-------------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 10821980000 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  | 25044560000 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  | 26028340000 |
+|    L2_LINES_IN_ALL    |   PMC0  |   335425600 |
+|     L2_TRANS_L2_WB    |   PMC1  |    59861800 |
++-----------------------+---------+-------------+
+
++-------------------------------+------------+
+|             Metric            |   Core 0   |
++-------------------------------+------------+
+|      Runtime (RDTSC) [s]      |     0.6194 |
+|      Runtime unhalted [s]     |     9.6623 |
+|          Clock [MHz]          |  2494.0251 |
+|              CPI              |     2.3142 |
+|  L3 load bandwidth [MBytes/s] | 34658.5546 |
+|  L3 load data volume [GBytes] |    21.4672 |
+| L3 evict bandwidth [MBytes/s] |  6185.3462 |
+| L3 evict data volume [GBytes] |     3.8312 |
+|    L3 bandwidth [MBytes/s]    | 40843.9008 |
+|    L3 data volume [GBytes]    |    25.2984 |
++-------------------------------+------------+
+
+Region Core, Group 1: L3
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.022285 |
+|     call count    |        1 |
++-------------------+----------+
+
++-----------------------+---------+-----------+
+|         Event         | Counter |   Core 0  |
++-----------------------+---------+-----------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 136779500 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  |  54954380 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  |  57109750 |
+|    L2_LINES_IN_ALL    |   PMC0  |     40275 |
+|     L2_TRANS_L2_WB    |   PMC1  |     21712 |
++-----------------------+---------+-----------+
+
++-------------------------------+-----------+
+|             Metric            |   Core 0  |
++-------------------------------+-----------+
+|      Runtime (RDTSC) [s]      |    0.0223 |
+|      Runtime unhalted [s]     |    0.0212 |
+|          Clock [MHz]          | 2494.1694 |
+|              CPI              |    0.4018 |
+|  L3 load bandwidth [MBytes/s] |  115.6641 |
+|  L3 load data volume [GBytes] |    0.0026 |
+| L3 evict bandwidth [MBytes/s] |   62.3538 |
+| L3 evict data volume [GBytes] |    0.0014 |
+|    L3 bandwidth [MBytes/s]    |  178.0179 |
+|    L3 data volume [GBytes]    |    0.0040 |
++-------------------------------+-----------+
+
+--------------------------------------------------------------------------------
+CPU name:	Intel(R) Core(TM) i7-6500U CPU @ 2.50GHz
+CPU type:	Intel Skylake processor
+CPU clock:	2.59 GHz
+--------------------------------------------------------------------------------
+Bloom Join
+-----------------
+524288 Buckets 1 Hash Functions
+Initialization: 0 ms 
+Bloom Filter Generation: 154095 ms 
+Join Core: 22 ms 
+12560 linhas
+154120 ms 
+
+--------------------------------------------------------------------------------
+Region Initialization, Group 1: L3
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.000127 |
+|     call count    |        1 |
++-------------------+----------+
+
++-----------------------+---------+--------+
+|         Event         | Counter | Core 0 |
++-----------------------+---------+--------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 119437 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  |  88095 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  | 285768 |
+|    L2_LINES_IN_ALL    |   PMC0  |    724 |
+|     L2_TRANS_L2_WB    |   PMC1  |    177 |
++-----------------------+---------+--------+
+
++-------------------------------+--------------+
+|             Metric            |    Core 0    |
++-------------------------------+--------------+
+|      Runtime (RDTSC) [s]      |       0.0001 |
+|      Runtime unhalted [s]     | 3.398758e-05 |
+|          Clock [MHz]          |     799.0404 |
+|              CPI              |       0.7376 |
+|  L3 load bandwidth [MBytes/s] |     365.3633 |
+|  L3 load data volume [GBytes] | 4.633600e-05 |
+| L3 evict bandwidth [MBytes/s] |      89.3223 |
+| L3 evict data volume [GBytes] | 1.132800e-05 |
+|    L3 bandwidth [MBytes/s]    |     454.6856 |
+|    L3 data volume [GBytes]    |       0.0001 |
++-------------------------------+--------------+
+
+Region Generation, Group 1: L3
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.693330 |
+|     call count    |  3000000 |
++-------------------+----------+
+
++-----------------------+---------+-------------+
+|         Event         | Counter |    Core 0   |
++-----------------------+---------+-------------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 10821980000 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  | 26141800000 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  | 27168330000 |
+|    L2_LINES_IN_ALL    |   PMC0  |   480204900 |
+|     L2_TRANS_L2_WB    |   PMC1  |    75908400 |
++-----------------------+---------+-------------+
+
++-------------------------------+------------+
+|             Metric            |   Core 0   |
++-------------------------------+------------+
+|      Runtime (RDTSC) [s]      |     0.6933 |
+|      Runtime unhalted [s]     |    10.0857 |
+|          Clock [MHz]          |  2494.0411 |
+|              CPI              |     2.4156 |
+|  L3 load bandwidth [MBytes/s] | 44326.8193 |
+|  L3 load data volume [GBytes] |    30.7331 |
+| L3 evict bandwidth [MBytes/s] |  7006.9629 |
+| L3 evict data volume [GBytes] |     4.8581 |
+|    L3 bandwidth [MBytes/s]    | 51333.7822 |
+|    L3 data volume [GBytes]    |    35.5913 |
++-------------------------------+------------+
+
+Region Core, Group 1: L3
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.022309 |
+|     call count    |        1 |
++-------------------+----------+
+
++-----------------------+---------+-----------+
+|         Event         | Counter |   Core 0  |
++-----------------------+---------+-----------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 136779500 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  |  54800810 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  |  56950020 |
+|    L2_LINES_IN_ALL    |   PMC0  |     38212 |
+|     L2_TRANS_L2_WB    |   PMC1  |     25399 |
++-----------------------+---------+-----------+
+
++-------------------------------+-----------+
+|             Metric            |   Core 0  |
++-------------------------------+-----------+
+|      Runtime (RDTSC) [s]      |    0.0223 |
+|      Runtime unhalted [s]     |    0.0211 |
+|          Clock [MHz]          | 2494.1591 |
+|              CPI              |    0.4007 |
+|  L3 load bandwidth [MBytes/s] |  109.6211 |
+|  L3 load data volume [GBytes] |    0.0024 |
+| L3 evict bandwidth [MBytes/s] |   72.8636 |
+| L3 evict data volume [GBytes] |    0.0016 |
+|    L3 bandwidth [MBytes/s]    |  182.4847 |
+|    L3 data volume [GBytes]    |    0.0041 |
++-------------------------------+-----------+
+
+--------------------------------------------------------------------------------
+CPU name:	Intel(R) Core(TM) i7-6500U CPU @ 2.50GHz
+CPU type:	Intel Skylake processor
+CPU clock:	2.59 GHz
+--------------------------------------------------------------------------------
+Bloom Join
+-----------------
+524288 Buckets 1 Hash Functions
+Initialization: 0 ms 
+Bloom Filter Generation: 129750 ms 
+Join Core: 19 ms 
+12560 linhas
+129771 ms 
+
+--------------------------------------------------------------------------------
+Region Initialization, Group 1: L3
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.000120 |
+|     call count    |        1 |
++-------------------+----------+
+
++-----------------------+---------+--------+
+|         Event         | Counter | Core 0 |
++-----------------------+---------+--------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 119437 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  |  83499 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  | 271080 |
+|    L2_LINES_IN_ALL    |   PMC0  |    819 |
+|     L2_TRANS_L2_WB    |   PMC1  |    178 |
++-----------------------+---------+--------+
+
++-------------------------------+--------------+
+|             Metric            |    Core 0    |
++-------------------------------+--------------+
+|      Runtime (RDTSC) [s]      |       0.0001 |
+|      Runtime unhalted [s]     | 3.221434e-05 |
+|          Clock [MHz]          |     798.3914 |
+|              CPI              |       0.6991 |
+|  L3 load bandwidth [MBytes/s] |     436.4174 |
+|  L3 load data volume [GBytes] |       0.0001 |
+| L3 evict bandwidth [MBytes/s] |      94.8502 |
+| L3 evict data volume [GBytes] | 1.139200e-05 |
+|    L3 bandwidth [MBytes/s]    |     531.2676 |
+|    L3 data volume [GBytes]    |       0.0001 |
++-------------------------------+--------------+
+
+Region Generation, Group 1: L3
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.646195 |
+|     call count    |  3000000 |
++-------------------+----------+
+
++-----------------------+---------+-------------+
+|         Event         | Counter |    Core 0   |
++-----------------------+---------+-------------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 10821980000 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  | 27303990000 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  | 22999200000 |
+|    L2_LINES_IN_ALL    |   PMC0  |   337714100 |
+|     L2_TRANS_L2_WB    |   PMC1  |    74160260 |
++-----------------------+---------+-------------+
+
++-------------------------------+------------+
+|             Metric            |   Core 0   |
++-------------------------------+------------+
+|      Runtime (RDTSC) [s]      |     0.6462 |
+|      Runtime unhalted [s]     |    10.5340 |
+|          Clock [MHz]          |  3077.1273 |
+|              CPI              |     2.5230 |
+|  L3 load bandwidth [MBytes/s] | 33447.6317 |
+|  L3 load data volume [GBytes] |    21.6137 |
+| L3 evict bandwidth [MBytes/s] |  7344.9260 |
+| L3 evict data volume [GBytes] |     4.7463 |
+|    L3 bandwidth [MBytes/s]    | 40792.5577 |
+|    L3 data volume [GBytes]    |    26.3600 |
++-------------------------------+------------+
+
+Region Core, Group 1: L3
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.018645 |
+|     call count    |        1 |
++-------------------+----------+
+
++-----------------------+---------+-----------+
+|         Event         | Counter |   Core 0  |
++-----------------------+---------+-----------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 136779500 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  |  55038090 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  |  46292040 |
+|    L2_LINES_IN_ALL    |   PMC0  |     38945 |
+|     L2_TRANS_L2_WB    |   PMC1  |     25268 |
++-----------------------+---------+-----------+
+
++-------------------------------+-----------+
+|             Metric            |   Core 0  |
++-------------------------------+-----------+
+|      Runtime (RDTSC) [s]      |    0.0186 |
+|      Runtime unhalted [s]     |    0.0212 |
+|          Clock [MHz]          | 3081.6911 |
+|              CPI              |    0.4024 |
+|  L3 load bandwidth [MBytes/s] |  133.6789 |
+|  L3 load data volume [GBytes] |    0.0025 |
+| L3 evict bandwidth [MBytes/s] |   86.7326 |
+| L3 evict data volume [GBytes] |    0.0016 |
+|    L3 bandwidth [MBytes/s]    |  220.4115 |
+|    L3 data volume [GBytes]    |    0.0041 |
++-------------------------------+-----------+
+
+--------------------------------------------------------------------------------
+CPU name:	Intel(R) Core(TM) i7-6500U CPU @ 2.50GHz
+CPU type:	Intel Skylake processor
+CPU clock:	2.59 GHz
+--------------------------------------------------------------------------------
+Bloom Join
+-----------------
+524288 Buckets 1 Hash Functions
+Initialization: 0 ms 
+Bloom Filter Generation: 129047 ms 
+Join Core: 19 ms 
+12560 linhas
+129068 ms 
+
+--------------------------------------------------------------------------------
+Region Initialization, Group 1: L3
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.000121 |
+|     call count    |        1 |
++-------------------+----------+
+
++-----------------------+---------+--------+
+|         Event         | Counter | Core 0 |
++-----------------------+---------+--------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 119437 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  |  83665 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  | 271620 |
+|    L2_LINES_IN_ALL    |   PMC0  |    898 |
+|     L2_TRANS_L2_WB    |   PMC1  |    192 |
++-----------------------+---------+--------+
+
++-------------------------------+--------------+
+|             Metric            |    Core 0    |
++-------------------------------+--------------+
+|      Runtime (RDTSC) [s]      |       0.0001 |
+|      Runtime unhalted [s]     | 3.227837e-05 |
+|          Clock [MHz]          |     798.3884 |
+|              CPI              |       0.7005 |
+|  L3 load bandwidth [MBytes/s] |     474.3464 |
+|  L3 load data volume [GBytes] |       0.0001 |
+| L3 evict bandwidth [MBytes/s] |     101.4193 |
+| L3 evict data volume [GBytes] | 1.228800e-05 |
+|    L3 bandwidth [MBytes/s]    |     575.7657 |
+|    L3 data volume [GBytes]    |       0.0001 |
++-------------------------------+--------------+
+
+Region Generation, Group 1: L3
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.585527 |
+|     call count    |  3000000 |
++-------------------+----------+
+
++-----------------------+---------+-------------+
+|         Event         | Counter |    Core 0   |
++-----------------------+---------+-------------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 10821980000 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  | 27305910000 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  | 23008260000 |
+|    L2_LINES_IN_ALL    |   PMC0  |   465957200 |
+|     L2_TRANS_L2_WB    |   PMC1  |    82812660 |
++-----------------------+---------+-------------+
+
++-------------------------------+------------+
+|             Metric            |   Core 0   |
++-------------------------------+------------+
+|      Runtime (RDTSC) [s]      |     0.5855 |
+|      Runtime unhalted [s]     |    10.5348 |
+|          Clock [MHz]          |  3076.1325 |
+|              CPI              |     2.5232 |
+|  L3 load bandwidth [MBytes/s] | 50930.5983 |
+|  L3 load data volume [GBytes] |    29.8213 |
+| L3 evict bandwidth [MBytes/s] |  9051.6861 |
+| L3 evict data volume [GBytes] |     5.3000 |
+|    L3 bandwidth [MBytes/s]    | 59982.2844 |
+|    L3 data volume [GBytes]    |    35.1213 |
++-------------------------------+------------+
+
+Region Core, Group 1: L3
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.018647 |
+|     call count    |        1 |
++-------------------+----------+
+
++-----------------------+---------+-----------+
+|         Event         | Counter |   Core 0  |
++-----------------------+---------+-----------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 136779500 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  |  55000470 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  |  46262450 |
+|    L2_LINES_IN_ALL    |   PMC0  |     43825 |
+|     L2_TRANS_L2_WB    |   PMC1  |     24724 |
++-----------------------+---------+-----------+
+
++-------------------------------+-----------+
+|             Metric            |   Core 0  |
++-------------------------------+-----------+
+|      Runtime (RDTSC) [s]      |    0.0186 |
+|      Runtime unhalted [s]     |    0.0212 |
+|          Clock [MHz]          | 3081.5551 |
+|              CPI              |    0.4021 |
+|  L3 load bandwidth [MBytes/s] |  150.4167 |
+|  L3 load data volume [GBytes] |    0.0028 |
+| L3 evict bandwidth [MBytes/s] |   84.8580 |
+| L3 evict data volume [GBytes] |    0.0016 |
+|    L3 bandwidth [MBytes/s]    |  235.2747 |
+|    L3 data volume [GBytes]    |    0.0044 |
++-------------------------------+-----------+
+
+--------------------------------------------------------------------------------
+CPU name:	Intel(R) Core(TM) i7-6500U CPU @ 2.50GHz
+CPU type:	Intel Skylake processor
+CPU clock:	2.59 GHz
+--------------------------------------------------------------------------------
+Bloom Join
+-----------------
+524288 Buckets 1 Hash Functions
+Initialization: 0 ms 
+Bloom Filter Generation: 153929 ms 
+Join Core: 22 ms 
+12560 linhas
+153953 ms 
+
+--------------------------------------------------------------------------------
+Region Initialization, Group 1: L3
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.000122 |
+|     call count    |        1 |
++-------------------+----------+
+
++-----------------------+---------+--------+
+|         Event         | Counter | Core 0 |
++-----------------------+---------+--------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 119437 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  |  85459 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  | 277452 |
+|    L2_LINES_IN_ALL    |   PMC0  |    747 |
+|     L2_TRANS_L2_WB    |   PMC1  |    137 |
++-----------------------+---------+--------+
+
++-------------------------------+--------------+
+|             Metric            |    Core 0    |
++-------------------------------+--------------+
+|      Runtime (RDTSC) [s]      |       0.0001 |
+|      Runtime unhalted [s]     | 3.297074e-05 |
+|          Clock [MHz]          |     798.3606 |
+|              CPI              |       0.7155 |
+|  L3 load bandwidth [MBytes/s] |     391.6066 |
+|  L3 load data volume [GBytes] | 4.780800e-05 |
+| L3 evict bandwidth [MBytes/s] |      71.8208 |
+| L3 evict data volume [GBytes] | 8.768000e-06 |
+|    L3 bandwidth [MBytes/s]    |     463.4274 |
+|    L3 data volume [GBytes]    |       0.0001 |
++-------------------------------+--------------+
+
+Region Generation, Group 1: L3
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.590982 |
+|     call count    |  3000000 |
++-------------------+----------+
+
++-----------------------+---------+-------------+
+|         Event         | Counter |    Core 0   |
++-----------------------+---------+-------------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 10822180000 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  | 26216830000 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  | 27247470000 |
+|    L2_LINES_IN_ALL    |   PMC0  |   277095900 |
+|     L2_TRANS_L2_WB    |   PMC1  |    63413860 |
++-----------------------+---------+-------------+
+
++-------------------------------+------------+
+|             Metric            |   Core 0   |
++-------------------------------+------------+
+|      Runtime (RDTSC) [s]      |     0.5910 |
+|      Runtime unhalted [s]     |    10.1147 |
+|          Clock [MHz]          |  2493.9234 |
+|              CPI              |     2.4225 |
+|  L3 load bandwidth [MBytes/s] | 30007.9353 |
+|  L3 load data volume [GBytes] |    17.7341 |
+| L3 evict bandwidth [MBytes/s] |  6867.3662 |
+| L3 evict data volume [GBytes] |     4.0585 |
+|    L3 bandwidth [MBytes/s]    | 36875.3014 |
+|    L3 data volume [GBytes]    |    21.7926 |
++-------------------------------+------------+
+
+Region Core, Group 1: L3
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.022273 |
+|     call count    |        1 |
++-------------------+----------+
+
++-----------------------+---------+-----------+
+|         Event         | Counter |   Core 0  |
++-----------------------+---------+-----------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 136779500 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  |  54749570 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  |  56896780 |
+|    L2_LINES_IN_ALL    |   PMC0  |     41595 |
+|     L2_TRANS_L2_WB    |   PMC1  |     25551 |
++-----------------------+---------+-----------+
+
++-------------------------------+-----------+
+|             Metric            |   Core 0  |
++-------------------------------+-----------+
+|      Runtime (RDTSC) [s]      |    0.0223 |
+|      Runtime unhalted [s]     |    0.0211 |
+|          Clock [MHz]          | 2494.1476 |
+|              CPI              |    0.4003 |
+|  L3 load bandwidth [MBytes/s] |  119.5182 |
+|  L3 load data volume [GBytes] |    0.0027 |
+| L3 evict bandwidth [MBytes/s] |   73.4177 |
+| L3 evict data volume [GBytes] |    0.0016 |
+|    L3 bandwidth [MBytes/s]    |  192.9360 |
+|    L3 data volume [GBytes]    |    0.0043 |
++-------------------------------+-----------+
+
+--------------------------------------------------------------------------------
+CPU name:	Intel(R) Core(TM) i7-6500U CPU @ 2.50GHz
+CPU type:	Intel Skylake processor
+CPU clock:	2.59 GHz
+--------------------------------------------------------------------------------
+Bloom Join
+-----------------
+524288 Buckets 1 Hash Functions
+Initialization: 0 ms 
+Bloom Filter Generation: 153987 ms 
+Join Core: 22 ms 
+12560 linhas
+154011 ms 
+
+--------------------------------------------------------------------------------
+Region Initialization, Group 1: L3
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.000118 |
+|     call count    |        1 |
++-------------------+----------+
+
++-----------------------+---------+--------+
+|         Event         | Counter | Core 0 |
++-----------------------+---------+--------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 119437 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  |  83349 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  | 270972 |
+|    L2_LINES_IN_ALL    |   PMC0  |    881 |
+|     L2_TRANS_L2_WB    |   PMC1  |    202 |
++-----------------------+---------+--------+
+
++-------------------------------+--------------+
+|             Metric            |    Core 0    |
++-------------------------------+--------------+
+|      Runtime (RDTSC) [s]      |       0.0001 |
+|      Runtime unhalted [s]     | 3.216307e-05 |
+|          Clock [MHz]          |     797.1111 |
+|              CPI              |       0.6978 |
+|  L3 load bandwidth [MBytes/s] |     479.7593 |
+|  L3 load data volume [GBytes] |       0.0001 |
+| L3 evict bandwidth [MBytes/s] |     110.0016 |
+| L3 evict data volume [GBytes] | 1.292800e-05 |
+|    L3 bandwidth [MBytes/s]    |     589.7609 |
+|    L3 data volume [GBytes]    |       0.0001 |
++-------------------------------+--------------+
+
+Region Generation, Group 1: L3
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.698507 |
+|     call count    |  3000000 |
++-------------------+----------+
+
++-----------------------+---------+-------------+
+|         Event         | Counter |    Core 0   |
++-----------------------+---------+-------------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 10821980000 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  | 26771050000 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  | 27822790000 |
+|    L2_LINES_IN_ALL    |   PMC0  |   552591700 |
+|     L2_TRANS_L2_WB    |   PMC1  |    77340510 |
++-----------------------+---------+-------------+
+
++-------------------------------+------------+
+|             Metric            |   Core 0   |
++-------------------------------+------------+
+|      Runtime (RDTSC) [s]      |     0.6985 |
+|      Runtime unhalted [s]     |    10.3305 |
+|          Clock [MHz]          |  2493.4899 |
+|              CPI              |     2.4738 |
+|  L3 load bandwidth [MBytes/s] | 50630.6649 |
+|  L3 load data volume [GBytes] |    35.3659 |
+| L3 evict bandwidth [MBytes/s] |  7086.2473 |
+| L3 evict data volume [GBytes] |     4.9498 |
+|    L3 bandwidth [MBytes/s]    | 57716.9122 |
+|    L3 data volume [GBytes]    |    40.3157 |
++-------------------------------+------------+
+
+Region Core, Group 1: L3
++-------------------+----------+
+|    Region Info    |  Core 0  |
++-------------------+----------+
+| RDTSC Runtime [s] | 0.022307 |
+|     call count    |        1 |
++-------------------+----------+
+
++-----------------------+---------+-----------+
+|         Event         | Counter |   Core 0  |
++-----------------------+---------+-----------+
+|   INSTR_RETIRED_ANY   |  FIXC0  | 136779500 |
+| CPU_CLK_UNHALTED_CORE |  FIXC1  |  55126700 |
+|  CPU_CLK_UNHALTED_REF |  FIXC2  |  57288280 |
+|    L2_LINES_IN_ALL    |   PMC0  |     48103 |
+|     L2_TRANS_L2_WB    |   PMC1  |     23466 |
++-----------------------+---------+-----------+
+
++-------------------------------+-----------+
+|             Metric            |   Core 0  |
++-------------------------------+-----------+
+|      Runtime (RDTSC) [s]      |    0.0223 |
+|      Runtime unhalted [s]     |    0.0213 |
+|          Clock [MHz]          | 2493.6707 |
+|              CPI              |    0.4030 |
+|  L3 load bandwidth [MBytes/s] |  138.0123 |
+|  L3 load data volume [GBytes] |    0.0031 |
+| L3 evict bandwidth [MBytes/s] |   67.3263 |
+| L3 evict data volume [GBytes] |    0.0015 |
+|    L3 bandwidth [MBytes/s]    |  205.3386 |
+|    L3 data volume [GBytes]    |    0.0046 |
++-------------------------------+-----------+
+

@@ -1,4 +1,4 @@
-#include "../../join.h"
+#include "../join.h"
 
 int main(int argc, char ** argv)
 {
@@ -30,7 +30,9 @@ int main(int argc, char ** argv)
 		t_result[i] = 0.0;
 
 	init = clock();
+	likwid_markerInit();
 	nResult=nestedLoopJoin(c_customer, c_orders, tamCustomer, tamOrders, t_result);
+	likwid_markerClose();
 	end = clock();
 
 	printf("Nested Loop Join\n");

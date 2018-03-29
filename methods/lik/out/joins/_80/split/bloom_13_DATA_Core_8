@@ -1,0 +1,5 @@
+,Runtime(RDTSC)[s],0.0315,
+,Runtimeunhalted[s],0.0373,
+,Clock[MHz],3092.2566,
+,CPI,0.4422,
+,Loadtostoreratio,1.3146,

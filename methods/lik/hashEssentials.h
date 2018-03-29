@@ -5,4 +5,4 @@
 
 
 #include "load.h"
-#include "hash/hash.h"
+#include "../../hash/hash.h"

@@ -1,0 +1,6 @@
+,Runtime(RDTSC)[s],0.0557,
+,Runtimeunhalted[s],0.0416,
+,Clock[MHz],1958.5262,
+,CPI,0.8917,
+,LocalLLCfalsesharing[MByte],0,
+,LocalLLCfalsesharingrate,0,

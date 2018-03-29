@@ -15,6 +15,8 @@ inline int nestedLoopJoin (column_customer *c_customer, column_orders *c_orders,
 	int exists = 0;
 	int index = 0;
 
+	likwid_markerStartRegion("Core");
+
 	for (int i=0; i<tamCustomer; i++)
 	{
 		for (int j=0; j<tamOrders && exists == 0; j++)
@@ -30,6 +32,7 @@ inline int nestedLoopJoin (column_customer *c_customer, column_orders *c_orders,
 		else
 			exists = 0;
 	}
+	likwid_markerStopRegion("Core");
 	return index;
 }
                                                               // QUERY PLAN                                                              
@@ -61,6 +64,7 @@ inline int hashJoin (column_customer *c_customer, column_orders *c_orders, int t
 	buckets = malloc(nBuckets*sizeof(linkedList));
 
 	init = clock();
+	likwid_markerStartRegion("Initialization");
 	//Initialize buckets
 	for (int n = 0; n<nBuckets; n++)
 	{
@@ -68,6 +72,7 @@ inline int hashJoin (column_customer *c_customer, column_orders *c_orders, int t
 		buckets[n]->C_CUSTKEY = -1;
 		buckets[n]->next = NULL;
 	}
+	likwid_markerStopRegion("Initialization");
 	end = clock();
 
 	printf("Initialization: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
@@ -75,6 +80,7 @@ inline int hashJoin (column_customer *c_customer, column_orders *c_orders, int t
 	generateHashTable(c_orders, tamOrders, buckets);
 
 	init = clock();
+	likwid_markerStartRegion("Core");
 	//Loop on orders to verify the existence of the register
 	for (int i=0; i<tamCustomer; i++)
 	{
@@ -101,6 +107,7 @@ inline int hashJoin (column_customer *c_customer, column_orders *c_orders, int t
 			}
 		}
 	}
+	likwid_markerStopRegion("Core");
 	end = clock();
 	printf("Join Core: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 

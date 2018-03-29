@@ -1,0 +1,5 @@
+,Runtime(RDTSC)[s],0.0575,
+,Runtimeunhalted[s],0.0397,
+,Clock[MHz],1795.8013,
+,CPI,0.8492,
+,Avg.recoveryduration,5.9824,

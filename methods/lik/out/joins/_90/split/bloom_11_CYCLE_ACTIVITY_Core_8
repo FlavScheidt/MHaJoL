@@ -1,0 +1,8 @@
+,Runtime(RDTSC)[s],0.0315,
+,Runtimeunhalted[s],0.0371,
+,Clock[MHz],3090.3516,
+,CPI,0.4418,
+,Cycleswithoutexecution[%],4.6346,
+,CycleswithoutexecutionduetoL1D[%],0.2281,
+,CycleswithoutexecutionduetoL2[%],0.2215,
+,Cycleswithoutexecutionduetomemory[%],4.1320,

@@ -82,8 +82,7 @@ extern "C" {
  * using the MurmurHash3 algorithm
  */
 
-uint32_t
-murmurhash3 (const char *, uint32_t, uint32_t);
+uint32_t murmurhash3 (const char *, uint32_t, uint32_t);
 uint16_t murmurhash316 (const char *key, uint16_t len, uint16_t seed);
 
 #ifdef __cplusplus
@@ -91,12 +90,6 @@ uint16_t murmurhash316 (const char *key, uint16_t len, uint16_t seed);
 #endif
 
 #endif
-
-/***************************************
-  Multiply Add Shift
-  My implementation, based on the Ditritch Paper
-****************************************/
-int mulAddSh (const char *s, int d);
 
 /***************************************
   FNV1a Hash
