@@ -1,7 +1,0 @@
-,Runtime(RDTSC)[s],0.0010,
-,Runtimeunhalted[s],0.0002,
-,Clock[MHz],797.5894,
-,CPI,0.6427,
-,L2requestrate,0.0034,
-,L2missrate,0.0009,
-,L2missratio,0.2673,

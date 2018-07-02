@@ -1,7 +1,0 @@
-,Runtime(RDTSC)[s],0.0317,
-,Runtimeunhalted[s],0.0375,
-,Clock[MHz],3092.0072,
-,CPI,0.4432,
-,IssuedUOPs,235900700,
-,ExecutedUOPs,286597800,
-,RetiredUOPs,309606400,

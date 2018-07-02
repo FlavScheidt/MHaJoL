@@ -1,7 +1,0 @@
-,Runtime(RDTSC)[s],0.0579,
-,Runtimeunhalted[s],0.0557,
-,Clock[MHz],2494.1548,
-,CPI,0.6131,
-,Usedcyclesratio[%],69.5895,
-,Unusedcyclesratio[%],30.4105,
-,Avgstallduration[cycles],11.1739,

@@ -1,8 +1,0 @@
-,Runtime(RDTSC)[s],0.3146,
-,Runtimeunhalted[s],0.3672,
-,Clock[MHz],3040.2649,
-,CPI,0.4323,
-,Branchrate,0.1252,
-,Branchmispredictionrate,6.572696e-07,
-,Branchmispredictionratio,5.251245e-06,
-,Instructionsperbranch,7.9895,

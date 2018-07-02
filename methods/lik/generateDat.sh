@@ -37,7 +37,7 @@ do
 		for s in `seq 1 3 357`;
 		do
 			#General Metrics
-			RuntimeInit=$(cat ${outDir}/${n}.out | grep -n -m ${s} "RDTSC Runtime [s]" |  sed 's/ //g')
+			RuntimeInit=$(cat ${outDir}/${n}.out | grep -n -m ${s} "RDTSC Runtime [s]" | tail 1 | sed 's/ //g')
 			CallCountInit=$(cat ${outDir}/${n}.out | grep -n -m ${s} "call count" | cut -d "|" -f3 |  sed 's/ //g')
 			InstructionsRetiredInit=$(cat ${outDir}/${n}.out | grep -n -m ${s} "INSTR_RETIRED_ANY" | cut -d "|" -f4 |  sed 's/ //g')
 			ClockUnhaltedInit=$(cat ${outDir}/${n}.out | grep -n -m ${s} "CPU_CLK_UNHALTED_CORE" | cut -d "|" -f4 |  sed 's/ //g')
