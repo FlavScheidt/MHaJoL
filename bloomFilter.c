@@ -10,11 +10,14 @@ inline void generateBloomFilter(column_orders *c_orders, int tamOrders, int nBuc
 	uint64_t desloc0, desloc1, desloc2, desloc3, desloc4;
 	uint64_t one = 1;
 
+	likwid_markerStartRegion("Initialization");
 	for (int b=0; b<(nBuckets/64); b++)
 		bloom[b] = 0;
+	likwid_markerStopRegion("Initialization");
 	end = clock();
 	printf("Initialization: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
-
+    
+	likwid_markerStartRegion("Generation");
 
 	//Generate bitmask
 	init = clock();
@@ -41,6 +44,8 @@ inline void generateBloomFilter(column_orders *c_orders, int tamOrders, int nBuc
 		bloom[desloc3] = (one << (index3-(64*desloc3))) | bloom[desloc3];
 		bloom[desloc4] = (one << (index4-(64*desloc4))) | bloom[desloc4];
 	}
+
+	likwid_markerStopRegion("Generation");
 	end = clock();
 	printf("Bloom Filter Generation: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 }
@@ -62,6 +67,8 @@ inline int bloomFilter(column_customer *c_customer, column_orders *c_orders, int
 
 	//Join
 	init = clock();
+	likwid_markerStartRegion("Core");
+
 	for (int j=0; j<tamCustomer; j++)
 	{
 		key = c_customer[j].C_CUSTKEY;
@@ -89,6 +96,8 @@ inline int bloomFilter(column_customer *c_customer, column_orders *c_orders, int
 			index++;
 		}
 	}
+	likwid_markerStopRegion("Core");
+
 	end = clock();
 	printf("Join Core: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 
@@ -108,8 +117,10 @@ inline int bloomFilterParam(column_customer *c_customer, column_orders *c_orders
 	uint64_t one = 1;
 
 	init = clock();
+	likwid_markerStartRegion("Initialization");
 	for (int b=0; b<(nBuckets/64); b++)
 		bloom[b] = 0;
+	likwid_markerStopRegion("Initialization");
 	end = clock();
 	printf("Initialization: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 
@@ -123,35 +134,46 @@ inline int bloomFilterParam(column_customer *c_customer, column_orders *c_orders
 
 		if (nHash >= 0)
 		{
+			likwid_markerStartRegion("Generation");
 			index0 = HASH_INDEX0;
 			desloc0 = index0/64;
 			bloom[desloc0] = (one << (index0-(64*desloc0))) | bloom[desloc0];
+			likwid_markerStopRegion("Generation");
 		}
 		if (nHash >= 1)
 		{
+			likwid_markerStartRegion("Generation");
 			index1 = HASH_INDEX1;
 			desloc1 = index1/64;
 			bloom[desloc1] = (one << (index1-(64*desloc1))) | bloom[desloc1];
+			likwid_markerStopRegion("Generation");
 		}
 		if (nHash >= 2)
 		{
+			likwid_markerStartRegion("Generation");
 			index2 = HASH_INDEX2;
 			desloc2 = index2/64;
 			bloom[desloc2] = (one << (index2-(64*desloc2))) | bloom[desloc2];
+			likwid_markerStopRegion("Generation");
 		}
 		if (nHash >= 3)
 		{
+			likwid_markerStartRegion("Generation");
 			index3 = HASH_INDEX3;
 			desloc3 = index3/64;
 			bloom[desloc3] = (one << (index3-(64*desloc3))) | bloom[desloc3];
+			likwid_markerStopRegion("Generation");
 		}
 		if (nHash == 4)
 		{
+			likwid_markerStartRegion("Generation");
 			index4 = HASH_INDEX4;
 			desloc4 = index4/64;
 			bloom[desloc4] = (one << (index4-(64*desloc4))) | bloom[desloc4];
+			likwid_markerStopRegion("Generation");
 		}
 	}
+	
 	end = clock();
 	printf("Bloom Filter Generation: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 
@@ -159,6 +181,7 @@ inline int bloomFilterParam(column_customer *c_customer, column_orders *c_orders
 	if (nHash == 0)
 	{
 		init = clock();
+		likwid_markerStartRegion("Core");
 		for (int j=0; j<tamCustomer; j++)
 		{
 			sprintf(str, "%d", c_customer[j].C_CUSTKEY);
@@ -173,12 +196,14 @@ inline int bloomFilterParam(column_customer *c_customer, column_orders *c_orders
 				index++;
 			}
 		}
+		likwid_markerStopRegion("Core");
 		end = clock();
 		printf("Join Core: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 	}
 	if (nHash == 1)
 	{
 		init = clock();
+		likwid_markerStartRegion("Core");
 		for (int j=0; j<tamCustomer; j++)
 		{
 			key = c_orders[j].O_CUSTKEY;
@@ -197,11 +222,13 @@ inline int bloomFilterParam(column_customer *c_customer, column_orders *c_orders
 			}
 		}
 		end = clock();
+		likwid_markerStopRegion("Core");
 		printf("Join Core: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 	}
 	if (nHash == 2)
 	{
 		init = clock();
+		likwid_markerStartRegion("Core");
 		for (int j=0; j<tamCustomer; j++)
 		{
 			key = c_orders[j].O_CUSTKEY;
@@ -222,12 +249,14 @@ inline int bloomFilterParam(column_customer *c_customer, column_orders *c_orders
 				index++;
 			}
 		}
+		likwid_markerStopRegion("Core");
 		end = clock();
 		printf("Join Core: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 	}
 	if (nHash == 3)
 	{
 		init = clock();
+		likwid_markerStartRegion("Core");
 		for (int j=0; j<tamCustomer; j++)
 		{
 			key = c_orders[j].O_CUSTKEY;
@@ -251,12 +280,14 @@ inline int bloomFilterParam(column_customer *c_customer, column_orders *c_orders
 				index++;
 			}
 		}
+		likwid_markerStopRegion("Core");
 		end = clock();
 		printf("Join Core: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 	}
 	else if (nHash == 4)
 	{
 		init = clock();
+		likwid_markerStartRegion("Core");
 		for (int j=0; j<tamCustomer; j++)
 		{
 			key = c_orders[j].O_CUSTKEY;
@@ -283,6 +314,7 @@ inline int bloomFilterParam(column_customer *c_customer, column_orders *c_orders
 				index++;
 			}
 		}
+		likwid_markerStopRegion("Core");
 		end = clock();
 		printf("Join Core: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 	}
@@ -307,6 +339,7 @@ inline int bloomNested(column_customer *c_customer, column_orders *c_orders, int
 
 	//Join
 	init = clock();
+	likwid_markerStartRegion("Core");
 	for (int i=0; i<tamCustomer; i++)
 	{
 		key = c_orders[i].O_CUSTKEY;
@@ -350,6 +383,7 @@ inline int bloomNested(column_customer *c_customer, column_orders *c_orders, int
 				exists = 0;
 		}
 	}
+	likwid_markerStopRegion("Core");
 	end = clock();
 	printf("Join Core: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 
@@ -377,6 +411,7 @@ inline int bloomHash(column_customer *c_customer, column_orders *c_orders, int t
 
 	//Initialize buckets
 	init = clock();
+	likwid_markerStartRegion("Initialization");
 	for (int n = 0; n<HASH_BUCKETS; n++)
 	{
 		buckets[n] = (linkedList *) malloc (sizeof(linkedList));
@@ -386,11 +421,13 @@ inline int bloomHash(column_customer *c_customer, column_orders *c_orders, int t
 
 	for (int b=0; b<(nBuckets/64); b++)
 		bloom[b] = 0;
+	likwid_markerStopRegion("Initialization");
 	end = clock();
 	printf("Initialization: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 
 	//Generates hash table
 	init = clock();
+	likwid_markerStartRegion("Generation");
 	for (int i = 0; i<tamOrders; i++)
 	{
 		control = 0;
@@ -441,11 +478,13 @@ inline int bloomHash(column_customer *c_customer, column_orders *c_orders, int t
 			}
 		}
 	}
+	likwid_markerStopRegion("Generation");
 	end = clock();
 	printf("Bloom Filter and Hash Table Generation: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 
 	//Join
 	init = clock();
+	likwid_markerStartRegion("Core");
 	for (int j=0; j<tamCustomer; j++)
 	{
 		sprintf(str, "%d", c_customer[j].C_CUSTKEY);
@@ -495,6 +534,7 @@ inline int bloomHash(column_customer *c_customer, column_orders *c_orders, int t
 			}
 		}
 	}
+	likwid_markerStopRegion("Core");
 	end = clock();
 	printf("Join core: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 

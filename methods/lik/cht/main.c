@@ -59,14 +59,14 @@ int main(int argc, char ** argv)
 	for (int i=0; i<tamResult; i++)
 		t_result[i] = 0.0;
 
-	printf("Bloom Join \n");
+	printf("CHT Join \n");
 	printf("-----------------\n");
 	printf("selectivity %s\n", selectivity);
 
 	init = clock();
 
 	likwid_markerInit();
-	nResult=bloomFilter(c_customer, c_orders, tamCustomer, tamOrders, t_result, nBuckets);
+	nResult=chtJoin(c_customer, c_orders, tamCustomer, tamOrders, t_result, nBuckets)
 	likwid_markerClose();
 
 	end = clock();

@@ -213,32 +213,6 @@
 // 		free(c_orders);
 // 		free(c_customer);
 
-// 		// /***********************************/
-// 		// // Cuckoo Filter Join
-// 		// /***********************************/
-// 		// Load Tables
-// 		tamCustomer = countLines("/home/flav/mestrado/BloomJoin/tbl/customer.tbl");
-// 		c_customer = malloc(tamCustomer*sizeof(column_customer));
-// 		readCustomerColumn("/home/flav/mestrado/BloomJoin/tbl/customer.tbl", c_customer);
-
-// 		tamOrders = countLines(fileName);
-// 		c_orders = malloc(tamOrders*sizeof(column_orders));
-// 		readOrdersColumn(fileName, c_orders, sel);
-
-// 		//Result Table
-// 		for (int i=0; i<tamResult; i++)
-// 			t_result[i] = 0.0;
-
-// 		printf("Cuckoo Filter Join\n");
-// 		printf("-----------------\n");
-// 		init = clock();
-// 		nResult=cuckooFilterJoin(c_customer, c_orders, tamCustomer, tamOrders, t_result, CUCKOO_FILTER_SIZE);
-// 		end = clock();
-// 		printf("%d linhas\n", nResult);
-// 		printf("%.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
-
-// 		free(c_orders);
-// 		free(c_customer);
 
 // 		// Hash testing
 // 		// char str[10];
