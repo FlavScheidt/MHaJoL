@@ -1,6 +1,6 @@
 CC=gcc
-CFLAGS=-g -Wall -fopenmp -DLIKWID_PERFMON -L$LIKWID_LIB -I$LIKWID_INCLUDE -llikwid
-DEPS = ../../../hash/hash.h ../../../join.h ../../../cht.h
+CFLAGS=-g -Wall -DLIKWID_PERFMON -L$LIKWID_LIB -I$LIKWID_INCLUDE -llikwid
+DEPS = ../../../hash/hash.h ../../../join.h ../../../cct.h
 
 csrc = $(wildcard ../../../hash/*.c) \
 		$(wildcard ../../../*.c) \
@@ -10,12 +10,12 @@ OBJ = $(csrc:.c=.o)
 
 LDFLAGS = -lGL -lglut -lpng -lz -lm
 
-cht: $(OBJ)
+cct: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS)
 
 .PHONY: clean
 
 clean:
 	rm -f hash/*.o ../../../hash/hash
-	rm -f *.o cht
+	rm -f *.o cct
 	rm -f ../../../*.o

@@ -5,13 +5,10 @@ int main(int argc, char ** argv)
 	int tamCustomer, tamOrders;
 	int nResult;
 	clock_t init, end;
-	int nBuckets;
 	int sel =0;
 	char selectivity[4];
 	char fileName[50];
 
-	//nBuckets = 4194304;
-	nBuckets = HASH_BUCKETS;
 
 	//Arguments
 	if (argc > 1)
@@ -46,7 +43,7 @@ int main(int argc, char ** argv)
 	init = clock();
 
 	likwid_markerInit();
-	nResult=chtJoin(c_customer, c_orders, tamCustomer, tamOrders, nBuckets);
+	nResult=cctJoin(c_customer, c_orders, tamCustomer, tamOrders);
 	likwid_markerClose();
 
 	end = clock();

@@ -99,7 +99,7 @@ uint16_t murmurhash316 (const char *key, uint16_t len, uint16_t seed);
 #define PRIME 0x01000193 //   16777619
 #define SEED 0x811C9DC5 // 2166136261
 
-#define PRIME8 0x00000013 //   19
+#define PRIME8 0x0000000D //   13
 #define SEED8 0x000000A1 // 161
 
 #define PRIME16 0x00001DC3 //   7619
@@ -123,3 +123,6 @@ uint16_t fnv1a16(unsigned int fourBytes);
   Wikipedia Implementation
 *************************************/
 unsigned int ElfHash (const char *s);
+
+
+uint32_t multiplicativeHash(uint32_t v);
