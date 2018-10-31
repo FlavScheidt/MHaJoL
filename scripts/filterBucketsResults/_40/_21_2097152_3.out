@@ -1,9 +1,0 @@
-Bloom Join
------------------
-2097152 Buckets 3 Hash Functions
-Initialization: 8 ms 
-Bloom Filter Generation: 287 ms 
-Join Core: 26 ms 
-59553 linhas
-320 ms 
-
