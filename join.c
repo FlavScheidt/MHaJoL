@@ -45,64 +45,66 @@ inline int nestedLoopJoin (column_customer *c_customer, column_orders *c_orders,
 // (8 rows)
 
 
-inline int hashJoin (column_customer *c_customer, column_orders *c_orders, int tamCustomer, int tamOrders, float * t_result)
-{
-	//int exists = 0;
-	int index = 0;
-	int nResult=0;
-	int nBuckets = HASH_BUCKETS;
-	clock_t init, end;
-	char str[10];
-	int control;
+// inline int hashJoin (column_customer *c_customer, column_orders *c_orders, int tamCustomer, int tamOrders, float * t_result)
+// {
+// 	//int exists = 0;
+// 	int index = 0;
+// 	int nResult=0;
+// 	int nBuckets = HASH_BUCKETS;
+// 	clock_t init, end;
+// 	char str[10];
+// 	int control;
 
-	linkedList *node;
+// 	linkedList *node;
 
-	linkedList ** buckets;
-	buckets = malloc(nBuckets*sizeof(linkedList));
+// 	linkedList ** buckets;
+// 	buckets = malloc(nBuckets*sizeof(linkedList));
 
-	init = clock();
-	//Initialize buckets
-	for (int n = 0; n<nBuckets; n++)
-	{
-		buckets[n] = (linkedList *) malloc (sizeof(linkedList));
-		buckets[n]->C_CUSTKEY = -1;
-		buckets[n]->next = NULL;
-	}
-	end = clock();
+// 	init = clock();
+// 	//Initialize buckets
+// 	for (int n = 0; n<nBuckets; n++)
+// 	{
+// 		buckets[n] = (linkedList *) malloc (sizeof(linkedList));
+// 		buckets[n]->C_CUSTKEY = -1;
+// 		buckets[n]->next = NULL;
+// 	}
+// 	end = clock();
 
-	printf("Initialization: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
+// 	printf("Initialization: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 
-	generateHashTable(c_orders, tamOrders, buckets);
+// 	generateHashTable(c_orders, tamOrders, buckets);
 
-	init = clock();
-	//Loop on orders to verify the existence of the register
-	for (int i=0; i<tamCustomer; i++)
-	{
-		sprintf(str, "%d", c_customer[i].C_CUSTKEY);
+// 	init = clock();
+// 	likwid_markerStartRegion("Core");
+// 	//Loop on orders to verify the existence of the register
+// 	for (int i=0; i<tamCustomer; i++)
+// 	{
+// 		sprintf(str, "%d", c_customer[i].C_CUSTKEY);
 
-		index = HASH_FUNC;
+// 		index = HASH_FUNC;
 		
-		control = 0;
-		node = buckets[index];
+// 		control = 0;
+// 		node = buckets[index];
 
-		if (node->C_CUSTKEY != c_customer[i].C_CUSTKEY)
-		{
-			while (node->next != NULL)
-			{
-				node = node->next;
-				if (node->C_CUSTKEY == c_customer[i].C_CUSTKEY)
-					control = 1;
-			}
+// 		if (node->C_CUSTKEY != c_customer[i].C_CUSTKEY)
+// 		{
+// 			while (node->next != NULL)
+// 			{
+// 				node = node->next;
+// 				if (node->C_CUSTKEY == c_customer[i].C_CUSTKEY)
+// 					control = 1;
+// 			}
 
-			if (control == 0)
-			{
-				t_result[nResult] = c_customer[i].C_ACCTBAL;
-				nResult++;
-			}
-		}
-	}
-	end = clock();
-	printf("Join Core: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
+// 			if (control == 0)
+// 			{
+// 				t_result[nResult] = c_customer[i].C_ACCTBAL;
+// 				nResult++;
+// 			}
+// 		}
+// 	}
+// 	likwid_markerStopRegion("Core");
+// 	end = clock();
+// 	printf("Join Core: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 
-	return nResult;
-}
+// 	return nResult;
+// }

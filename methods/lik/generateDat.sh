@@ -1,27 +1,8 @@
 #!/bin/bash
+metrics=("L2" "L3" "TLB_DATA" "L3CACHE" "L2CACHE")
+methods=("cct" "cuckoo" "bloom" "bloomNested" "chained" "bloomChained")
 
-metrics=("L2" 
-		"L3" 
-		"TLB_DATA" 
-		"L3CACHE" 
-		"ENERGY" 
-		"L2CACHE" 
-		"BRANCH" 
-		"CYCLE_ACTIVITY" 
-		"CLOCK" 
-		"DATA" 
-		"ICACHE" 
-		"FALSE_SHARE" 
-		"UOPS_RETIRE" 
-		"RECOVERY" 
-		"UOPS" 
-		"UOPS_ISSUE" 
-		"UOPS_EXEC")
-
-methods=("bloom" "bloomChained" "bloomNested" "chained" "cuckoo")
-region=("Initialization" "Generation" "Core")
-
-
+region=("Generation" "Core")
 
 for i in `seq 1 9`;
 do
@@ -29,7 +10,7 @@ do
 	echo ${selectivity}
 
 	#in directory
-	outDir="/home/flav/mestrado/MHaJoL/methods/lik/out/joins/old/_${selectivity}"
+	outDir="/home/flav/Mestrado/MHaJoL/methods/lik/out/joins/_${selectivity}/"
 	echo "	${outDir}"
 
 	for n in "${methods[@]}";
@@ -37,7 +18,7 @@ do
 		for s in `seq 1 3 357`;
 		do
 			#General Metrics
-			RuntimeInit=$(cat ${outDir}/${n}.out | grep -n -m ${s} "RDTSC Runtime [s]" | tail 1 | sed 's/ //g')
+			RuntimeInit=$(cat ${outDir}/${n}.out | grep -n -m ${s} "RDTSC Runtime [s]" | sed 's/ //g')
 			CallCountInit=$(cat ${outDir}/${n}.out | grep -n -m ${s} "call count" | cut -d "|" -f3 |  sed 's/ //g')
 			InstructionsRetiredInit=$(cat ${outDir}/${n}.out | grep -n -m ${s} "INSTR_RETIRED_ANY" | cut -d "|" -f4 |  sed 's/ //g')
 			ClockUnhaltedInit=$(cat ${outDir}/${n}.out | grep -n -m ${s} "CPU_CLK_UNHALTED_CORE" | cut -d "|" -f4 |  sed 's/ //g')

@@ -1,9 +1,9 @@
 CC=gcc
-CFLAGS=-g -Wall -fopenmp -DLIKWID_PERFMON -L$LIKWID_LIB -I$LIKWID_INCLUDE -llikwid
-DEPS = ../../../hash/hash.h ../join.h ../cuckoo.h
+CFLAGS=-g -Wall -fopenmp -DLIKWID_PERFMON -L$LIKWID_LIB -I$LIKWID_INCLUDE -llikwid  -O2 -ftree-vectorize -fopt-info-vec-missed
+DEPS = ../../../hash/hash.h ../../../join.h ../../../cuckoo.h
 
 csrc = $(wildcard ../../../hash/*.c) \
-		$(wildcard ../*.c) \
+		$(wildcard ../../../*.c) \
        	$(wildcard ./*.c) \
 
 OBJ = $(csrc:.c=.o)
@@ -17,5 +17,5 @@ cuckoo: $(OBJ)
 
 clean:
 	rm -f ../../../hash/*.o ../../../hash/hash
-	rm -f ../*.o ../BloomFilterx86
+	rm -f ../../../*.o 
 	rm -f *.o cuckoo

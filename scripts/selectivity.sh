@@ -10,21 +10,21 @@ do
 
 	echo "Making directories..."
 	#Makes the .dat folder needed for the plots
-	DAT_DIR="/home/flav/mestrado/BloomJoin/gnu/filterBuckets/new/_${selectivity}"
+	DAT_DIR="/home/flav/Mestrado/MHaJoL/gnu/filterBuckets/new/_${selectivity}"
 	if [ ! -d "$DAT_DIR" ]
 	then
 		mkdir "$DAT_DIR"
 	fi
 
 	#Makes the .out folder needed for the plots
-	OUT_DIR="/home/flav/mestrado/BloomJoin/scripts/filterBucketsResults/new/_${selectivity}"
+	OUT_DIR="/home/flav/Mestrado/MHaJoL/scripts/filterBucketsResults/new/_${selectivity}"
 	if [ ! -d "$OUT_DIR" ]
 	then
 		mkdir "$OUT_DIR"
 	fi
 
 	#Makes the folder to hold temporary tbl
-	TEMP_DIR="/home/flav/mestrado/BloomJoin/tbl/temp"
+	TEMP_DIR="/home/flav/Mestrado/MHaJoL/tbl/temp"
 	if [ ! -d "$TEMP_DIR" ]
 	then
 		mkdir "$TEMP_DIR"
@@ -35,27 +35,27 @@ do
 	psql bloom bloom -c "select * from generate_sample_by_selectivity(${selectivity});" &>> ${TEMP_DIR}/ORDERS_${selectivity}.tbl
 
 	#Transforms file into a real tbl file to be read by the program
-	cat ${TEMP_DIR}/ORDERS_${selectivity}.tbl | sed '1,2d' | sed '/o_/d' | sed '/function/d' | sed '/^\s*$/d' | sed '/-----/d' | sed '/row/d' | tr -d '\t' | sed -e 's/[ \t]*//' | sed 's/$/|/' &>> /home/flav/mestrado/BloomJoin/tbl/orders_${selectivity}.tbl
+	cat ${TEMP_DIR}/ORDERS_${selectivity}.tbl | sed '1,2d' | sed '/o_/d' | sed '/function/d' | sed '/^\s*$/d' | sed '/-----/d' | sed '/row/d' | tr -d '\t' | sed -e 's/[ \t]*//' | sed 's/$/|/' &>> /home/flav/Mestrado/MHaJoL/tbl/orders_${selectivity}.tbl
 
 	echo "Running all the joins..."
 	#Runs the join with no parameter variation 
 	outputName="${OUT_DIR}/all.out"
-	/home/flav/mestrado/BloomJoin/BloomFilterx86 ${selectivity} &>> ${outputName}
+	/home/flav/Mestrado/MHaJoL/BloomFilterx86 ${selectivity} &>> ${outputName}
 
 	#Runs the join with variation
 	#Loop over 2^5 to 2^20 varying the number of hash functions to discover the best fit for the selectivity
-	echo "Runs the BloomFilter with buckets and functions variation..."
-	for k in `seq 14 22`;
-	do
-		bucketsSize=$((2**k))
-		for j in `seq 0 4`;
-		do
-			echo "	${bucketsSize} buckets ${k}+1 hash functions"
+	# echo "Runs the BloomFilter with buckets and functions variation..."
+	# for k in `seq 14 22`;
+	# do
+	# 	bucketsSize=$((2**k))
+	# 	for j in `seq 0 4`;
+	# 	do
+	# 		echo "	${bucketsSize} buckets ${k}+1 hash functions"
 
-			outputName="${OUT_DIR}/_${k}_${bucketsSize}_${j}.out"
-			/home/flav/mestrado/BloomJoin/BloomFilterx86 ${selectivity} ${bucketsSize} ${j} &>> ${outputName}
-		done
-	done
+	# 		outputName="${OUT_DIR}/_${k}_${bucketsSize}_${j}.out"
+	# 		/home/flav/Mestrado/MHaJoL/BloomFilterx86 ${selectivity} ${bucketsSize} ${j} &>> ${outputName}
+	# 	done
+	# done
 
 	echo "Generating .dat files to plot the data..."
 	#The number of registers returned by the nested loop join
@@ -92,7 +92,7 @@ do
 			index=$(echo "${index}+0.142857143+0.142857143"| bc -l)
 		fi;
 
-		echo "2${nBucketsNew}	${nHash}	${nRegistersPerc}	${execTime}" &>> ${outputFile}
+		echo "${nBucketsNew}	${nHash}	${nRegistersPerc}	${execTime}" &>> ${outputFile}
 		echo "${index}	${execTime}" &>> ${outputFile2}
 	done
 
@@ -101,4 +101,4 @@ done
 #Clean
 rm -rf ${TEMP_DIR}
 
-/home/flav/mestrado/BloomJoin/scripts/makePlotsSelectivity.sh
+# /home/flav/Mestrado/MHaJoL/scripts/makePlotsSelectivity.sh

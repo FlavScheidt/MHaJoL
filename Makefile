@@ -1,6 +1,6 @@
 CC=gcc
-CFLAGS=-g -Wall
-DEPS = functions.h hashEssentials.h load.h hashTable.h join.h bloomFilter.h hash/hash.h cuckoo.h
+CFLAGS=-g -Wall -DLIKWID_PERFMON -L$LIKWID_LIB -I$LIKWID_INCLUDE -llikwid
+DEPS = functions.h hashEssentials.h load.h join.h hash/hash.h cuckoo.h cht.h
 
 csrc = $(wildcard hash/*.c) \
        $(wildcard ./*.c) \
@@ -9,11 +9,11 @@ OBJ = $(csrc:.c=.o)
 
 LDFLAGS = -lGL -lglut -lpng -lz -lm
 
-BloomFilterx86: $(OBJ)
+MHaJoL: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS)
 
 .PHONY: clean
 
 clean:
 	rm -f hash/*.o hash/hash
-	rm -f *.o BloomFilterx86
+	rm -f *.o MHaJoL

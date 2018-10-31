@@ -1,9 +1,8 @@
 CC=gcc
 CFLAGS=-g -Wall
-DEPS = ../hash/hash.h ../load.h
+DEPS = ../hash/hash.h ../load.h 
 
 csrc = $(wildcard ../hash/*.c) \
-		$(wildcard ../*.c) \
        	$(wildcard ./*.c) \
 
 OBJ = $(csrc:.c=.o)

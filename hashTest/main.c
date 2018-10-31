@@ -1,13 +1,13 @@
 #include "../hash/hash.h"
 #include "../load.h"
 
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
 
-#define HASH_BUCKETS 4194304
-#define CUCKOO_SIZE 262144
+#define HASH_BUCKETS 131072
 
 #define HASH_MURMUR2 MurmurHash2(str, strlen(str), tamCustomer) & (nBuckets-1)
 #define HASH_JENKINS hash_jenkins(str) & (nBuckets-1)
@@ -27,7 +27,7 @@ int main(int argc, char ** argv)
 	int vAny[tamCustomer], vJenkins[tamCustomer], vMurmur3[tamCustomer], vMurmur2[tamCustomer], vFnv1a[tamCustomer];
 
 	//HashAny
-	fAny = fopen("/home/flav/mestrado/MHaJoL/hashTest/fAny.csv", "w+");
+	fAny = fopen("/home/flav/Mestrado/MHaJoL/hashTest/fAny.csv", "w+");
 	nBuckets = HASH_BUCKETS;
 	init = clock();
 	for (int i=0; i<tamCustomer; i++)
@@ -43,7 +43,7 @@ int main(int argc, char ** argv)
 	printf("Hash Any %.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 
 	//Jenkins
-	fJenkins = fopen("/home/flav/mestrado/MHaJoL/hashTest/fJenkins.csv", "w+");
+	fJenkins = fopen("/home/flav/Mestrado/MHaJoL/hashTest/fJenkins.csv", "w+");
 	init = clock();
 	for (int i=0; i<tamCustomer; i++)
 	{
@@ -58,7 +58,7 @@ int main(int argc, char ** argv)
 	printf("Jenkins %.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 
 	//Murmur3
-	fMurmur3 = fopen("/home/flav/mestrado/MHaJoL/hashTest/fMurmur3.csv", "w+");
+	fMurmur3 = fopen("/home/flav/Mestrado/MHaJoL/hashTest/fMurmur3.csv", "w+");
 	init = clock();
 	for (int i=0; i<tamCustomer; i++)
 	{
@@ -73,7 +73,7 @@ int main(int argc, char ** argv)
 	printf("Murmur3 %.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 
 	//Murmur2
-	fMurmur2 = fopen("/home/flav/mestrado/MHaJoL/hashTest/fMurmur2.csv", "w+");
+	fMurmur2 = fopen("/home/flav/Mestrado/MHaJoL/hashTest/fMurmur2.csv", "w+");
 	init = clock();
 	for (int i=0; i<tamCustomer; i++)
 	{
@@ -88,7 +88,7 @@ int main(int argc, char ** argv)
 	printf("Murmur2 %.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 
 	//FNV1a
-	fFnv1a = fopen("/home/flav/mestrado/MHaJoL/hashTest/fFnv1a.csv", "w+");
+	fFnv1a = fopen("/home/flav/Mestrado/MHaJoL/hashTest/fFnv1a.csv", "w+");
 	init = clock();
 	for (int i=0; i<tamCustomer; i++)
 	{

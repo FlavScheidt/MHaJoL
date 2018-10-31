@@ -1,8 +1,8 @@
-#include "../join.h"
+#include "../../../join.h"
 
 int main(int argc, char ** argv)
 {
-	int tamCustomer, tamOrders;
+		int tamCustomer, tamOrders;
 	float *t_result;
 	int nResult;
 	clock_t init, end;
@@ -37,19 +37,19 @@ int main(int argc, char ** argv)
 		strcpy(selectivity, "no\0");
 
 	if (strcmp(selectivity, "no") == 0)
-		strcpy(fileName, "/home/flav/mestrado/MHaJoL/tbl/orders.tbl\0");
+		strcpy(fileName, "/home/flav/Mestrado/MHaJoL/tbl/orders.tbl\0");
 	else
 	{
-		strcpy(fileName, "/home/flav/mestrado/MHaJoL/tbl/orders_");
+		strcpy(fileName, "/home/flav/Mestrado/MHaJoL/tbl/orders_");
 		strcat(fileName, selectivity);
 		strcat(fileName, ".tbl\0");
 	}
 
 	t_result = malloc(tamResult*sizeof(float));
 
-	tamCustomer = countLines("/home/flav/mestrado/MHaJoL/tbl/customer.tbl");
+	tamCustomer = countLines("/home/flav/Mestrado/MHaJoL/tbl/customer.tbl");
 	c_customer = malloc(tamCustomer*sizeof(column_customer));
-	readCustomerColumn("/home/flav/mestrado/MHaJoL/tbl/customer.tbl", c_customer);
+	readCustomerColumn("/home/flav/Mestrado/MHaJoL/tbl/customer.tbl", c_customer);
 
 	tamOrders = countLines(fileName);
 	c_orders = malloc(tamOrders*sizeof(column_orders));
@@ -59,13 +59,13 @@ int main(int argc, char ** argv)
 	for (int i=0; i<tamResult; i++)
 		t_result[i] = 0.0;
 
-	printf("Bloom Nested Join\n");
+
+	printf("Hash Join\n");
 	printf("-----------------\n");
 	printf("selectivity %s\n", selectivity);
-
 	init = clock();
 	likwid_markerInit();
-	nResult=bloomNested(c_customer, c_orders, tamCustomer, tamOrders, t_result, nBuckets);
+	nResult=hashJoin(c_customer, c_orders, tamCustomer, tamOrders, t_result);
 	likwid_markerClose();
 	end = clock();
 	printf("%d linhas\n", nResult);
