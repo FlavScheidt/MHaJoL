@@ -1,6 +1,6 @@
 CC=gcc
 CFLAGS=-g -Wall -DLIKWID_PERFMON -L$LIKWID_LIB -I$LIKWID_INCLUDE -llikwid -lpthread -ftree-vectorize #-fopt-info-vec-missed
-DEPS = ../../lib/hash/hash.h ../lib/../join.h ../../lib/cct.h
+DEPS = ../../lib/hash/hash.h ../lib/../join.h ../../lib/cpct.h
 
 csrc = $(wildcard ../../lib/hash/*.c) \
 		$(wildcard ../../lib/*.c) \
@@ -10,12 +10,12 @@ OBJ = $(csrc:.c=.o)
 
 LDFLAGS = -lGL -lglut -lpng -lz -lm
 
-cct: $(OBJ)
+cpct: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS)
 
 .PHONY: clean
 
 clean:
 	rm -f hash/*.o ../../lib/hash/hash
-	rm -f *.o cct
+	rm -f *.o cpct
 	rm -f ../../lib/*.o

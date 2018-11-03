@@ -289,7 +289,6 @@ inline int cctInsertFilter(unsigned int key, int tamOrders)
 	{
 		filter0[vIndex0] = filter0[vIndex0]
 				| (((uint64_t)olderCuckoo) << ((iIndex0*CCT_FINGERPRINT_SIZE)+24)) ;
-		SUCCFILTER++;
 		return 1;
 	}
 
@@ -297,11 +296,8 @@ inline int cctInsertFilter(unsigned int key, int tamOrders)
 	{
 		filter1[vIndex1] = filter1[vIndex1]
 				| (((uint64_t)olderCuckoo) << ((iIndex1*CCT_FINGERPRINT_SIZE)+24)) ;
-		SUCCFILTER++;
 		return 1;
 	}
-
-	REALOCFILTER++;
 
 	for (int j=0; j<CCT_THRESHOLD; j++)
 	{
@@ -378,31 +374,8 @@ inline uint64_t popCount(uint64_t bits)
 	return count;
 }
 
-inline void * initializeOHT(void * OHT)
-{
-	ptrOHT oht = (ptrOHT) OHT;
-	for (int i=0; i<CCT_OHT_SIZE;i++)
-	{
-		oht->OHT0[i]=0;
-		oht->OHT1[i]=0;
-	}
-	pthread_exit(NULL);
-}
-
-inline void * initializeFilter(void * Filter)
-{
-	ptrFilter filter = (ptrFilter) Filter;
-	for (int i=0; i<CCT_FILTER_SIZE;i++)
-	{
-		filter->filter0[i]=0;
-		filter->filter1[i]=0;
-	}
-	pthread_exit(NULL);
-}
-
 inline void generateCCT(column_orders * c_orders, int tamOrders)
 {
-	pthread_t threads[4];
 	clock_t init, end;
 	uint32_t dup=0;
 	uint32_t dupHT=0;
@@ -420,26 +393,24 @@ inline void generateCCT(column_orders * c_orders, int tamOrders)
 	uint32_t cctHT=0;
 
 	init = clock();
-
-	OHT oht;
-	oht.OHT0 = OHT0;
-	oht.OHT1 = OHT1;
-
-	Filter filter;
-	filter.filter0 = filter0;
-	filter.filter1 = filter1;
-
+	
 	likwid_markerStartRegion("Initialization");
 	//Allocate CHT
 	ctSize0 = 0;
 	ctSize1 = 0;
 
 	//Initialize OHT and bitmap
-	pthread_create(&threads[0], NULL, initializeOHT, &(oht));
-	pthread_create(&threads[1], NULL, initializeFilter, &(filter));
+	for (int i=0; i<CCT_OHT_SIZE;i++)
+	{
+		OHT0[i]=0;
+		OHT1[i]=0;
+	}
 
-	pthread_join(threads[0], NULL);
-	pthread_join(threads[1], NULL);
+	for (int i=0; i<CCT_FILTER_SIZE; i++)
+	{
+		filter0[i]=0;
+		filter1[i]=0;
+	}
 
 	likwid_markerStopRegion("Initialization");
 	end = clock();
@@ -453,7 +424,7 @@ inline void generateCCT(column_orders * c_orders, int tamOrders)
 		switch (cctInsertFilter(c_orders[i].O_CUSTKEY, tamOrders))
 		{
 			case 0:
-				printf("ERROR: Something went wrong while inserting the key %u on the CCT\n", c_orders[i].O_CUSTKEY);
+				printf("ERROR: Something went wrong while inserting the key %u on the CHT\n", c_orders[i].O_CUSTKEY);
 				break;
 			case 1:
 				cctOccFingerprint++;
@@ -518,8 +489,6 @@ inline void generateCCT(column_orders * c_orders, int tamOrders)
 	printf("CHT Generation: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 	printf("OHT has %d occupied buckets and %d on the filter \n", cctOHT, cctOHTFingerprint);
 	printf("CHT has %d occupied buckets and %d on the filter \n", cctHT, cctOccFingerprint);
-	printf("Succesfull insertions on fisrt try Filter %d\n", SUCCFILTER);
-	printf("Succesfull insertions on realocantion Filter %d\n", REALOCFILTER);
 }
 
 inline int cctLookUp(uint32_t key)
@@ -596,9 +565,6 @@ inline int cctJoin(column_customer * c_customer, column_orders * c_orders, int t
 {
 	clock_t init, end;
 	uint32_t index=0;
-
-	SUCCFILTER=0;
-	REALOCFILTER=0;
 
 	generateCCT(c_orders, tamOrders);
 

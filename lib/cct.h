@@ -25,18 +25,6 @@ uint32_t *cuckooTable1;
 uint32_t ctSize0;
 uint32_t ctSize1;
 
-typedef struct OHT
-{
-	uint32_t * OHT0;
-	uint32_t * OHT1;
-}OHT, *ptrOHT;
-
-typedef struct Filter
-{
-	uint64_t * filter0;
-	uint64_t * filter1;
-}Filter, *ptrFilter;
-
 uint16_t SUCCFILTER;
 uint16_t REALOCFILTER;
 
@@ -46,6 +34,3 @@ uint64_t popCount(uint64_t bits);
 void generateCCT(column_orders * c_orders, int tamOrders);
 int cctInsertConciseTable(uint32_t key, int tamOrders);
 int cctLookUp(uint32_t key);
-
-void * initializeOHT(void * OHT);
-void * initializeFilter(void * Filter);

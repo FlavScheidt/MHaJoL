@@ -35,14 +35,14 @@ int main(int argc, char ** argv)
 	c_orders = malloc(tamOrders*sizeof(column_orders));
 	readOrdersColumn(fileName, c_orders, sel);
 
-	printf("CCT Join \n");
+	printf("CPCT Join \n");
 	printf("-----------------\n");
 	printf("selectivity %s\n", selectivity);
 
 	init = clock();
 
 	likwid_markerInit();
-	nResult=cctJoin(c_customer, c_orders, tamCustomer, tamOrders);
+	nResult=cpctJoin(c_customer, c_orders, tamCustomer, tamOrders);
 	likwid_markerClose();
 
 	end = clock();
