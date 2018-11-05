@@ -1,2 +1,5 @@
 GOAL: THIS TEST AIMS TO VERIFY IF THE PARALLEZIATION OF THE FILTER BRINGS ANY IMPROVEMENT
+
+FUNCTIONAL COMMIT: 01827a96aaf77c510ba72b9dbb26f5e907df7a8c
+
 CONCLUSION: It does not, it just adds more replacements at L1. The data gather by a thread influences other threads, since we have only a unique L1 for the 4 (logical) cores. No improvements on using 2 threads either.
