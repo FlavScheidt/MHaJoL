@@ -75,3 +75,9 @@ inline int findSeparator(int init, size_t len, char *line)
 	}
 	return -1;
 }
+
+// inline void handle_error (int retval)
+// {
+//      printf("PAPI error %d: %s\n", retval, PAPI_strerror(retval));
+//      exit(1);
+// }

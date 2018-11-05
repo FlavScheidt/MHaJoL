@@ -1,4 +1,4 @@
-#include "../../../join.h"
+#include "join.h"
 
 int main(int argc, char ** argv)
 {
@@ -13,6 +13,7 @@ int main(int argc, char ** argv)
 	int tamResult = 150000;
 
 	//nBuckets = 4194304;
+	char fileName2[50];
 
 	//Arguments
 	if (argc > 1)
@@ -24,19 +25,23 @@ int main(int argc, char ** argv)
 		strcpy(selectivity, "no\0");
 
 	if (strcmp(selectivity, "no") == 0)
-		strcpy(fileName, "/home/flav/Mestrado/MHaJoL/tbl/orders.tbl\0");
+	{
+		strcpy(fileName, PATH_MAIN);
+		strcat(fileName, "tbl/orders.tbl\0");
+	}
 	else
 	{
-		strcpy(fileName, "/home/flav/Mestrado/MHaJoL/tbl/orders_");
+		strcpy(fileName, PATH_MAIN);
+		strcat(fileName, "tbl/orders_");
 		strcat(fileName, selectivity);
 		strcat(fileName, ".tbl\0");
 	}
 
-	t_result = malloc(tamResult*sizeof(float));
-
-	tamCustomer = countLines("/home/flav/Mestrado/MHaJoL/tbl/customer.tbl");
+	strcpy(fileName2, PATH_MAIN);
+	strcat(fileName2, "tbl/customer.tbl");
+	tamCustomer = countLines(fileName2);
 	c_customer = malloc(tamCustomer*sizeof(column_customer));
-	readCustomerColumn("/home/flav/Mestrado/MHaJoL/tbl/customer.tbl", c_customer);
+	readCustomerColumn(fileName2, c_customer);
 
 	tamOrders = countLines(fileName);
 	c_orders = malloc(tamOrders*sizeof(column_orders));

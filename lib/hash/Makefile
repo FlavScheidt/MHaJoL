@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-g -Wall 
+CFLAGS=-c -g -Wall -lpthread -ftree-vectorize
 DEPS = hash.h
 OBJ = murmur2.o murmur3.o hash_any.o jenkins.o pearson.o fnv1a.o elfHash.o multiplicativeHash.o
 

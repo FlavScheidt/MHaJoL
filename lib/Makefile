@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-g -Wall -DLIKWID_PERFMON -L$LIKWID_LIB -I$LIKWID_INCLUDE -llikwid
+CFLAGS=-g -Wall -DLIKWID_PERFMON -L$LIKWID_LIB -I$LIKWID_INCLUDE -llikwid -lpthread -ftree-vectorize
 DEPS = functions.h hashEssentials.h load.h join.h hash/hash.h cuckoo.h cht.h
 
 csrc = $(wildcard hash/*.c) \
@@ -7,10 +7,8 @@ csrc = $(wildcard hash/*.c) \
 
 OBJ = $(csrc:.c=.o)
 
-LDFLAGS = -lGL -lglut -lpng -lz -lm
-
 MHaJoL: $(OBJ)
-	$(CC) -o $@ $^ $(CFLAGS)
+	$(CC) -c -o $@ $^ $(CFLAGS)
 
 .PHONY: clean
 
