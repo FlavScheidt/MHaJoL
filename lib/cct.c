@@ -440,49 +440,49 @@ inline void generateCCT(column_orders * c_orders, int tamOrders)
 	}
 
 	//count Population
-	// actualPopCounter0 = 0;
-	// actualPopCounter1 = 0;
-	// for (int i=0; i<CCT_FILTER_SIZE;i++)
-	// {
-	// 	oldPopCounter0 = popCount(filter0[i]);
-	// 	actualPopCounter0 = actualPopCounter0 + oldPopCounter0;
-	// 	filter0[i] = ((filter0[i]>>24)<<24) | actualPopCounter0;
+	actualPopCounter0 = 0;
+	actualPopCounter1 = 0;
+	for (int i=0; i<CCT_FILTER_SIZE;i++)
+	{
+		oldPopCounter0 = popCount(filter0[i]);
+		actualPopCounter0 = actualPopCounter0 + oldPopCounter0;
+		filter0[i] = ((filter0[i]>>24)<<24) | actualPopCounter0;
 
-	// 	oldPopCounter1 = popCount(filter1[i]);
-	// 	actualPopCounter1 = actualPopCounter1 + oldPopCounter1;
-	// 	filter1[i] = ((filter1[i]>>24)<<24) | actualPopCounter1;
-	// }
+		oldPopCounter1 = popCount(filter1[i]);
+		actualPopCounter1 = actualPopCounter1 + oldPopCounter1;
+		filter1[i] = ((filter1[i]>>24)<<24) | actualPopCounter1;
+	}
 
-	// ctSize0 = actualPopCounter0;
-	// ctSize1 = actualPopCounter1;
+	ctSize0 = actualPopCounter0;
+	ctSize1 = actualPopCounter1;
 
-	// cuckooTable0 = malloc(sizeof(uint32_t)*ctSize0);
-	// cuckooTable1 = malloc(sizeof(uint32_t)*ctSize1);
+	cuckooTable0 = malloc(sizeof(uint32_t)*ctSize0);
+	cuckooTable1 = malloc(sizeof(uint32_t)*ctSize1);
 
-	// for (int i=0; i<ctSize0; i++)
-	// 	cuckooTable0[i] = 0;
+	for (int i=0; i<ctSize0; i++)
+		cuckooTable0[i] = 0;
 
-	// for (int i=0; i<ctSize1; i++)
-	// 	cuckooTable1[i] = 0;
+	for (int i=0; i<ctSize1; i++)
+		cuckooTable1[i] = 0;
 
-	// for (int i=0; i<tamOrders; i++)
-	// {
-	// 	switch (cctInsertConciseTable(c_orders[i].O_CUSTKEY, tamOrders))
-	// 	{
-	// 		case 0:
-	// 			printf("ERROR: Something went wrong while inserting the key %u on the CHT\n", c_orders[i].O_CUSTKEY);
-	// 			break;
-	// 		case 1:
-	// 			cctHT++;
-	// 			break;
-	// 		case 2:
-	// 			cctOHT++;
-	// 			break;
-	// 		case 3:
-	// 			dupHT++;
-	// 			break;
-	// 	}
-	// }
+	for (int i=0; i<tamOrders; i++)
+	{
+		switch (cctInsertConciseTable(c_orders[i].O_CUSTKEY, tamOrders))
+		{
+			case 0:
+				printf("ERROR: Something went wrong while inserting the key %u on the CHT\n", c_orders[i].O_CUSTKEY);
+				break;
+			case 1:
+				cctHT++;
+				break;
+			case 2:
+				cctOHT++;
+				break;
+			case 3:
+				dupHT++;
+				break;
+		}
+	}
 
 	likwid_markerStopRegion("Generation");
 	end = clock();
@@ -568,15 +568,15 @@ inline int cctJoin(column_customer * c_customer, column_orders * c_orders, int t
 
 	generateCCT(c_orders, tamOrders);
 
-	// init=clock();
-	// likwid_markerStartRegion("Core");
-	// for (int i=0; i<tamCustomer; i++)
-	// {
-	// 	if (cctLookUp(c_customer[i].C_CUSTKEY) == 0)
-	// 		index++;
-	// }
-	// likwid_markerStopRegion("Core");
-	// end=clock();
+	init=clock();
+	likwid_markerStartRegion("Core");
+	for (int i=0; i<tamCustomer; i++)
+	{
+		if (cctLookUp(c_customer[i].C_CUSTKEY) == 0)
+			index++;
+	}
+	likwid_markerStopRegion("Core");
+	end=clock();
 
 	printf("Join core: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 

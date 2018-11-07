@@ -9,6 +9,8 @@
 #define CPCT_THRESHOLD 2
 #define CPCT_OHT_THRESHOLD 2
 
+#define NUM_THREADS 2
+
 // #define HASH_FINGERPRINT fnv1a8(key)
 // #define HASH_FILTER0 (fnv1a(key) & ((CPCT_FILTER_SIZE*5)-1))
 // #define HASH_FILTER1 (index0 ^ (hash_jenkins(str) & ((CPCT_FILTER_SIZE*5)-1)))
@@ -25,37 +27,33 @@ uint32_t *cuckooTable1;
 uint32_t ctSize0;
 uint32_t ctSize1;
 
-typedef struct OHT
-{
-	uint32_t * OHT0;
-	uint32_t * OHT1;
-}OHT, *ptrOHT;
-
-typedef struct Filter
-{
-	uint64_t * filter0;
-	uint64_t * filter1;
-}Filter, *ptrFilter;
-
-typedef struct Customer 
-{
-	column_customer * c_customer;
-	int tamCustomer;
-}Customer, *ptrCustomer;
-
 typedef struct Orders 
 {
 	column_orders * c_orders;
 	int tamOrders;
 	int init;
+	int cpctHT;
+	int cpctOHT;
+	int dupHT;
 }Orders, *ptrOrders;
+
+typedef struct BucketArray
+{
+	uint32_t olderKey;
+	int status; //return status
+}BucketArray, *ptrBucketArray;
 
 uint16_t SUCCFILTER;
 uint16_t REALOCFILTER;
 uint32_t cpctOccFingerprint;
 uint32_t cpctOHTFingerprint;
+uint32_t dup;
 
-pthread_mutex_t mutexFilter;
+pthread_mutex_t mutexOHT0;
+pthread_mutex_t mutexOHT1;
+
+pthread_mutex_t mutexArray0;
+pthread_mutex_t mutexArray1;
 
 int cpctJoin(column_customer * c_customer, column_orders * c_orders, int tamCustomer, int tamOrders);
 int cpctInsertFilter(unsigned int key, int tamOrders);
@@ -64,9 +62,8 @@ void generateCPCT(column_orders * c_orders, int tamOrders);
 int cpctInsertConciseTable(uint32_t key, int tamOrders);
 int cpctLookUp(uint32_t key);
 
-void * initializeOHT(void * OHT);
-void * initializeFilter(void * Filter);
-void * insertFilterRoutine(void * orders);
+void * insertArrayRoutine(void * orders);
+void * cpctInsertOHT(void * bucketArray);
 
 void freeLock(uint64_t * bucket);
 int getLock(uint64_t * bucket);
