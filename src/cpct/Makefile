@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-g -Wall -I../../lib -I../../lib/hash -DLIKWID_PERFMON -L$LIKWID_LIB -I$LIKWID_INCLUDE -llikwid -lpthread -ftree-vectorize #-fopt-info-vec-missed
+CFLAGS=-g -Wall -I../../lib -I../../lib/hash -DLIKWID_PERFMON -L$LIKWID_LIB -I$LIKWID_INCLUDE -llikwid -lpthread -mavx -O0 -ftree-vectorize -fopt-info-vec-missed
 DEPS = ../../lib/hash/hash.h ../lib/../join.h ../../lib/cpct.h
 
 csrc = $(wildcard ../../lib/hash/*.c) \

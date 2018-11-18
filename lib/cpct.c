@@ -2,8 +2,8 @@
 
 inline void * cpctInsertOHT(void * bktArray)
 {
-	uint32_t index0, index01, index02;
-	uint32_t index1, index11, index12;
+	uint32_t index0[3];
+	uint32_t index1[3];
 	uint32_t olderCuckoo, aux;
 
 	char str[10];
@@ -11,183 +11,116 @@ inline void * cpctInsertOHT(void * bktArray)
 	ptrBucketArray bucketArray = (ptrBucketArray) bktArray;
 
 	sprintf(str, "%d", bucketArray->olderKey);
-	index0 = HASH_OHT_CPCT0;
-	if (index0 == CPCT_OHT_SIZE)
-		index01 = 0;
-	else
-		index01 = index0+1;
-	if (index01 == CPCT_OHT_SIZE)
-		index02 = 0;
-	else
-		index02 = index01+1;
+	index0[0] = HASH_OHT_CPCT0;
 
-	index1 = HASH_OHT_CPCT1;
-	if (index1 == CPCT_OHT_SIZE)
-		index11 = 0;
-	else
-		index11 = index1+1;
-	if (index11 == CPCT_OHT_SIZE)
-		index12 = 0;
-	else
-		index12 = index11+1;
+	for (int i=1; i<3; i++)
+	{
+		if (index0[i-1] == CPCT_OHT_SIZE)
+			index0[i] = 0;
+		else
+			index0[i] = index0[i-1]+1;
+	}
+
+	index1[0] = HASH_OHT_CPCT1;
+	for (int i=1; i<3; i++)
+	{
+		if (index1[i-1] == CPCT_OHT_SIZE)
+			index1[i] = 0;
+		else
+			index1[i] = index1[i-1]+1;
+	}
+
 	olderCuckoo = bucketArray->olderKey;
 
-	if (OHT0[index0] == bucketArray->olderKey || OHT1[index1] == bucketArray->olderKey || 
-		OHT0[index01] == bucketArray->olderKey || OHT1[index11] == bucketArray->olderKey ||
-		OHT0[index02] == bucketArray->olderKey || OHT1[index12] == bucketArray->olderKey)
+	if (OHT0[index0[0]] == bucketArray->olderKey || OHT1[index1[0]] == bucketArray->olderKey || 
+		OHT0[index0[1]] == bucketArray->olderKey || OHT1[index1[1]] == bucketArray->olderKey ||
+		OHT0[index0[2]] == bucketArray->olderKey || OHT1[index1[2]] == bucketArray->olderKey)
 	{
 		bucketArray->status = 3;
 		return NULL;
 	}
 
-	
-	if (OHT0[index0] == 0)
+	for (int i=0; i<3; i++)
 	{
-		OHT0[index0] = olderCuckoo;
-		
-		bucketArray->status = 2;
-		return NULL;
-	}
+		if (OHT0[index0[i]] == 0)
+		{
+			OHT0[index0[i]] = olderCuckoo;
+			bucketArray->status = 2;
+			return NULL;
+		}
 
-	if (OHT0[index01] == 0)
-	{
-		OHT0[index01] = olderCuckoo;
-		
-		bucketArray->status = 2;
-		return NULL;
+		if (OHT1[index1[i]] == 0)
+		{
+			OHT1[index1[i]] = olderCuckoo;
+			bucketArray->status = 2;
+			return NULL;
+		}
 	}
-
-	if (OHT0[index02] == 0)
-	{
-		OHT0[index02] = olderCuckoo;
-		
-		bucketArray->status = 2;
-		return NULL;
-	}
-	
-
-	
-	if (OHT1[index1] == 0)
-	{
-		OHT1[index1] = olderCuckoo;
-		
-		bucketArray->status = 2;
-		return NULL;
-	}
-
-	if (OHT1[index11] == 0)
-	{
-		OHT1[index11] = olderCuckoo;
-		
-		bucketArray->status = 2;
-		return NULL;
-	}
-
-	if (OHT1[index12] == 0)
-	{
-		OHT1[index12] = olderCuckoo;
-		
-		bucketArray->status = 2;
-		return NULL;
-	}
-	
 
 	for (int j=0; j<CPCT_OHT_THRESHOLD-1; j++)
 	{
 		//Table 1
-		
-		aux = OHT0[index0];
-		OHT0[index0] = olderCuckoo;
+		aux = OHT0[index0[0]];
+		OHT0[index0[0]] = olderCuckoo;
 		olderCuckoo = aux;
 		
-
 		//Table 2
 		sprintf(str, "%d", olderCuckoo);
-		index1 = HASH_OHT_CPCT1;
-		if (index1 == CPCT_OHT_SIZE)
-			index11 = 0;
-		else
-			index11 = index1+1;
-		if (index11 == CPCT_OHT_SIZE)
-			index12 = 0;
-		else
-			index12 = index11+1;
+		index1[0] = HASH_OHT_CPCT1;
+		for (int i=1; i<3; i++)
+		{
+			if (index1[i-1] == CPCT_OHT_SIZE)
+				index1[i] = 0;
+			else
+				index1[i] = index1[i-1]+1;
+		}
 
-		if ((OHT1[index1] == olderCuckoo) || (OHT1[index11] == olderCuckoo) || (OHT1[index12] == olderCuckoo))
+		if ((OHT1[index1[0]] == olderCuckoo) || (OHT1[index1[1]] == olderCuckoo) || (OHT1[index1[2]] == olderCuckoo))
 		{
 			bucketArray->status = 3;
 			return NULL;
 		}
 
-		
-		if (OHT1[index1] == 0)
+		for (int i=0; i<3; i++)
 		{
-			OHT1[index1] = olderCuckoo;
-			
-			bucketArray->status = 2;
-			return NULL;
+			if (OHT1[index1[i]] == 0)
+			{
+				OHT1[index1[i]] = olderCuckoo;
+				bucketArray->status = 2;
+				return NULL;
+			}
 		}
 
-		if (OHT1[index11] == 0)
-		{
-			OHT1[index11] = olderCuckoo;
-			
-			bucketArray->status = 2;
-			return NULL;		}
-
-		if (OHT1[index12] == 0)
-		{
-			OHT1[index12] = olderCuckoo;
-			
-			bucketArray->status = 2;
-			return NULL;		
-		}
-
-		aux = OHT1[index1];
-		OHT0[index1] = olderCuckoo;
+		aux = OHT1[index1[0]];
+		OHT0[index1[0]] = olderCuckoo;
 		olderCuckoo = aux;
 		
-
 		sprintf(str, "%d", olderCuckoo);
-		index0 = HASH_OHT_CPCT0;
-		if (index0 == CPCT_OHT_SIZE)
-			index01 = 0;
-		else
-			index01 = index0+1;
-		if (index01 == CPCT_OHT_SIZE)
-			index02 = 0;
-		else
-			index02 = index01+1;
+		index0[0] = HASH_OHT_CPCT0;
 
-		if ((OHT0[index0] == olderCuckoo) || (OHT0[index01] == olderCuckoo) || (OHT0[index02] == olderCuckoo))
+		for (int i=1; i<3; i++)
+		{
+			if (index0[i-1] == CPCT_OHT_SIZE)
+				index0[i] = 0;
+			else
+				index0[i] = index0[i-1]+1;
+		}
+
+		if ((OHT0[index0[0]] == olderCuckoo) || (OHT0[index0[1]] == olderCuckoo) || (OHT0[index0[2]] == olderCuckoo))
 		{
 			bucketArray->status = 3;
 			return NULL;
 		}
 
-		
-		if (OHT0[index0] == 0)
+		for (int i=0; i<3; i++)
 		{
-			OHT0[index0] = olderCuckoo;
-			
-			bucketArray->status = 2;
-			return NULL;	
-		}
+			if (OHT0[index0[i]] == 0)
+			{
+				OHT0[index0[i]] = olderCuckoo;
+				bucketArray->status = 2;
+				return NULL;
+			}
 
-		if (OHT0[index01] == 0)
-		{
-			OHT0[index01] = olderCuckoo;
-			
-			bucketArray->status = 2;
-			return NULL;	
-		}
-
-		if (OHT0[index02] == 0)
-		{
-			OHT0[index02] = olderCuckoo;
-			
-			bucketArray->status = 2;
-			return NULL;	
 		}
 	}
 	bucketArray->status = 0;
@@ -343,10 +276,14 @@ inline int cpctInsertFilter(unsigned int key, int tamOrders)
 	vIndex1 = (uint32_t) index1/5; //vector index
 	iIndex1 = index1%5; //bucket index inside 32 bits word
 
-	if ((((filter0[vIndex0] << ((4-iIndex0)*CCT_FINGERPRINT_SIZE) >> 56)) == ((uint64_t)olderCuckoo)) ||
-			(((filter1[vIndex1] << ((4-iIndex1)*CCT_FINGERPRINT_SIZE) >> 56)) == ((uint64_t)olderCuckoo)))
+	for (int i=0; i<5; i++)
+	{
+		if ((((filter0[vIndex0] << ((4-i)*CCT_FINGERPRINT_SIZE) >> 56)) == ((uint64_t)olderCuckoo)) ||
+			(((filter1[vIndex1] << ((4-i)*CCT_FINGERPRINT_SIZE) >> 56)) == ((uint64_t)olderCuckoo)))
 		return 3;
+	}
 
+	//Procura Entry vazia
 	if ((((filter0[vIndex0] << ((4-iIndex0)*CCT_FINGERPRINT_SIZE) >> 56)) == 0))
 	{
 		filter0[vIndex0] = filter0[vIndex0]
