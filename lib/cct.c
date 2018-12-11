@@ -35,8 +35,8 @@ inline int cctInsertConciseTable(uint32_t key, int tamOrders)
 	vIndex1 = (uint32_t) index1/5; //vector index
 	iIndex1 = index1%5; //bucket index inside 32 bits word
 
-	tIndex0 = ((filter0[vIndex0]<<40)>>40) - (popCount((filter0[vIndex0]<<((5-iIndex0)*CCT_FINGERPRINT_SIZE))>>((5-iIndex0)*CCT_FINGERPRINT_SIZE)));
-	tIndex1 = ((filter1[vIndex1]<<40)>>40) - (popCount((filter1[vIndex1]<<((5-iIndex1)*CCT_FINGERPRINT_SIZE))>>((5-iIndex1)*CCT_FINGERPRINT_SIZE)));
+	tIndex0 = ((filter0CCT[vIndex0]<<40)>>40) - (popCount((filter0CCT[vIndex0]<<((5-iIndex0)*CCT_FINGERPRINT_SIZE))>>((5-iIndex0)*CCT_FINGERPRINT_SIZE)));
+	tIndex1 = ((filter1CCT[vIndex1]<<40)>>40) - (popCount((filter1CCT[vIndex1]<<((5-iIndex1)*CCT_FINGERPRINT_SIZE))>>((5-iIndex1)*CCT_FINGERPRINT_SIZE)));
 
 	if ((cuckooTable0[tIndex0] == olderKey) || (cuckooTable1[tIndex1] == olderKey))
 		return 3;
@@ -44,7 +44,7 @@ inline int cctInsertConciseTable(uint32_t key, int tamOrders)
 	olderCuckoo = olderKey;
 	for (int i=0; i<CCT_THRESHOLD; i++)
 	{ 
-		if ((((filter0[vIndex0] << ((4-iIndex0)*CCT_FINGERPRINT_SIZE) >> 56)) == ((uint64_t)fingerPrint)))
+		if ((((filter0CCT[vIndex0] << ((4-iIndex0)*CCT_FINGERPRINT_SIZE) >> 56)) == ((uint64_t)fingerPrint)))
 		{
 			if (cuckooTable0[tIndex0] == olderCuckoo)
 				return 3;
@@ -66,11 +66,11 @@ inline int cctInsertConciseTable(uint32_t key, int tamOrders)
 			vIndex1 = (uint32_t) index1/5; //vector index
 			iIndex1 = index1%5; //bucket index inside 32 bits word
 
-			tIndex1 = ((filter1[vIndex1]<<40)>>40) - (popCount((filter1[vIndex1]<<((5-iIndex1)*CCT_FINGERPRINT_SIZE))>>((5-iIndex1)*CCT_FINGERPRINT_SIZE)));
+			tIndex1 = ((filter1CCT[vIndex1]<<40)>>40) - (popCount((filter1CCT[vIndex1]<<((5-iIndex1)*CCT_FINGERPRINT_SIZE))>>((5-iIndex1)*CCT_FINGERPRINT_SIZE)));
 
 		}
 
-		if ((((filter1[vIndex1] << ((4-iIndex1)*CCT_FINGERPRINT_SIZE) >> 56)) == ((uint64_t)fingerPrint)))
+		if ((((filter1CCT[vIndex1] << ((4-iIndex1)*CCT_FINGERPRINT_SIZE) >> 56)) == ((uint64_t)fingerPrint)))
 		{
 			if (cuckooTable1[tIndex1] == olderCuckoo)
 				return 3;
@@ -92,7 +92,7 @@ inline int cctInsertConciseTable(uint32_t key, int tamOrders)
 				
 			vIndex0 = (uint32_t) index0/5; //vector index
 			iIndex0 = index0%5; //bucket index inside 32 bits word
-			tIndex0 = ((filter0[vIndex0]<<40)>>40) - (popCount((filter0[vIndex0]<<((5-iIndex0)*CCT_FINGERPRINT_SIZE))>>((5-iIndex0)*CCT_FINGERPRINT_SIZE)));
+			tIndex0 = ((filter0CCT[vIndex0]<<40)>>40) - (popCount((filter0CCT[vIndex0]<<((5-iIndex0)*CCT_FINGERPRINT_SIZE))>>((5-iIndex0)*CCT_FINGERPRINT_SIZE)));
 		}
 	}
 
@@ -118,52 +118,52 @@ inline int cctInsertConciseTable(uint32_t key, int tamOrders)
 		index12 = index11+1;
 	olderCuckoo = olderKey;
 
-	if (OHT0[index0] == olderKey || OHT1[index1] == olderKey || 
-		OHT0[index01] == olderKey || OHT1[index11] == olderKey ||
-		OHT0[index02] == olderKey || OHT1[index12] == olderKey)
+	if (OHT0CCT[index0] == olderKey || OHT1CCT[index1] == olderKey || 
+		OHT0CCT[index01] == olderKey || OHT1CCT[index11] == olderKey ||
+		OHT0CCT[index02] == olderKey || OHT1CCT[index12] == olderKey)
 		return 3;
 
-	if (OHT0[index0] == 0)
+	if (OHT0CCT[index0] == 0)
 	{
-		OHT0[index0] = olderCuckoo;
+		OHT0CCT[index0] = olderCuckoo;
 		return 2;
 	}
 
-	if (OHT0[index01] == 0)
+	if (OHT0CCT[index01] == 0)
 	{
-		OHT0[index01] = olderCuckoo;
+		OHT0CCT[index01] = olderCuckoo;
 		return 2;
 	}
 
-	if (OHT0[index02] == 0)
+	if (OHT0CCT[index02] == 0)
 	{
-		OHT0[index02] = olderCuckoo;
+		OHT0CCT[index02] = olderCuckoo;
 		return 2;
 	}
 
-	if (OHT1[index1] == 0)
+	if (OHT1CCT[index1] == 0)
 	{
-		OHT1[index1] = olderCuckoo;
+		OHT1CCT[index1] = olderCuckoo;
 		return 2;
 	}
 
-	if (OHT1[index11] == 0)
+	if (OHT1CCT[index11] == 0)
 	{
-		OHT1[index11] = olderCuckoo;
+		OHT1CCT[index11] = olderCuckoo;
 		return 2;
 	}
 
-	if (OHT1[index12] == 0)
+	if (OHT1CCT[index12] == 0)
 	{
-		OHT1[index12] = olderCuckoo;
+		OHT1CCT[index12] = olderCuckoo;
 		return 2;
 	}
 
 	for (int j=0; j<CCT_OHT_THRESHOLD-1; j++)
 	{
 		//Table 1
-		aux = OHT0[index0];
-		OHT0[index0] = olderCuckoo;
+		aux = OHT0CCT[index0];
+		OHT0CCT[index0] = olderCuckoo;
 		olderCuckoo = aux;
 
 		//Table 2
@@ -178,35 +178,35 @@ inline int cctInsertConciseTable(uint32_t key, int tamOrders)
 		else
 			index12 = index11+1;
 
-		if (OHT1[index1] == olderCuckoo)
+		if (OHT1CCT[index1] == olderCuckoo)
 			return 3;
 
-		if (OHT1[index11] == olderCuckoo)
+		if (OHT1CCT[index11] == olderCuckoo)
 			return 3;
 
-		if (OHT1[index12] == olderCuckoo)
+		if (OHT1CCT[index12] == olderCuckoo)
 			return 3;
 
-		if (OHT1[index1] == 0)
+		if (OHT1CCT[index1] == 0)
 		{
-			OHT1[index1] = olderCuckoo;
+			OHT1CCT[index1] = olderCuckoo;
 			return 2;
 		}
 
-		if (OHT1[index11] == 0)
+		if (OHT1CCT[index11] == 0)
 		{
-			OHT1[index11] = olderCuckoo;
+			OHT1CCT[index11] = olderCuckoo;
 			return 2;
 		}
 
-		if (OHT1[index12] == 0)
+		if (OHT1CCT[index12] == 0)
 		{
-			OHT1[index12] = olderCuckoo;
+			OHT1CCT[index12] = olderCuckoo;
 			return 2;
 		}
 
-		aux = OHT1[index1];
-		OHT0[index1] = olderCuckoo;
+		aux = OHT1CCT[index1];
+		OHT0CCT[index1] = olderCuckoo;
 		olderCuckoo = aux;
 
 		sprintf(str, "%d", olderCuckoo);
@@ -220,30 +220,30 @@ inline int cctInsertConciseTable(uint32_t key, int tamOrders)
 		else
 			index02 = index01+1;
 
-		if (OHT0[index0] == olderCuckoo)
+		if (OHT0CCT[index0] == olderCuckoo)
 			return 3;
 
-		if (OHT0[index01] == olderCuckoo)
+		if (OHT0CCT[index01] == olderCuckoo)
 			return 3;
 
-		if (OHT0[index02] == olderCuckoo)
+		if (OHT0CCT[index02] == olderCuckoo)
 			return 3;
 
-		if (OHT0[index0] == 0)
+		if (OHT0CCT[index0] == 0)
 		{
-			OHT0[index0] = olderCuckoo;
+			OHT0CCT[index0] = olderCuckoo;
 			return 2;
 		}
 
-		if (OHT0[index01] == 0)
+		if (OHT0CCT[index01] == 0)
 		{
-			OHT0[index01] = olderCuckoo;
+			OHT0CCT[index01] = olderCuckoo;
 			return 2;
 		}
 
-		if (OHT0[index02] == 0)
+		if (OHT0CCT[index02] == 0)
 		{
-			OHT0[index02] = olderCuckoo;
+			OHT0CCT[index02] = olderCuckoo;
 			return 2;
 		}
 	}
@@ -281,20 +281,20 @@ inline int cctInsertFilter(unsigned int key, int tamOrders)
 	vIndex1 = (uint32_t) index1/5; //vector index
 	iIndex1 = index1%5; //bucket index inside 32 bits word
 
-	if ((((filter0[vIndex0] << ((4-iIndex0)*CCT_FINGERPRINT_SIZE) >> 56)) == ((uint64_t)olderCuckoo)) ||
-			(((filter1[vIndex1] << ((4-iIndex1)*CCT_FINGERPRINT_SIZE) >> 56)) == ((uint64_t)olderCuckoo)))
+	if ((((filter0CCT[vIndex0] << ((4-iIndex0)*CCT_FINGERPRINT_SIZE) >> 56)) == ((uint64_t)olderCuckoo)) ||
+			(((filter1CCT[vIndex1] << ((4-iIndex1)*CCT_FINGERPRINT_SIZE) >> 56)) == ((uint64_t)olderCuckoo)))
 		return 3;
 
-	if ((((filter0[vIndex0] << ((4-iIndex0)*CCT_FINGERPRINT_SIZE) >> 56)) == 0))
+	if ((((filter0CCT[vIndex0] << ((4-iIndex0)*CCT_FINGERPRINT_SIZE) >> 56)) == 0))
 	{
-		filter0[vIndex0] = filter0[vIndex0]
+		filter0CCT[vIndex0] = filter0CCT[vIndex0]
 				| (((uint64_t)olderCuckoo) << ((iIndex0*CCT_FINGERPRINT_SIZE)+24)) ;
 		return 1;
 	}
 
-	if ((((filter1[vIndex1] << ((4-iIndex1)*CCT_FINGERPRINT_SIZE) >> 56)) == 0))
+	if ((((filter1CCT[vIndex1] << ((4-iIndex1)*CCT_FINGERPRINT_SIZE) >> 56)) == 0))
 	{
-		filter1[vIndex1] = filter1[vIndex1]
+		filter1CCT[vIndex1] = filter1CCT[vIndex1]
 				| (((uint64_t)olderCuckoo) << ((iIndex1*CCT_FINGERPRINT_SIZE)+24)) ;
 		return 1;
 	}
@@ -302,17 +302,17 @@ inline int cctInsertFilter(unsigned int key, int tamOrders)
 	for (int j=0; j<CCT_THRESHOLD; j++)
 	{
 		//Always insert on the first table
-		aux = (filter0[vIndex0] << ((4-iIndex0)*CCT_FINGERPRINT_SIZE)) >> 56;
+		aux = (filter0CCT[vIndex0] << ((4-iIndex0)*CCT_FINGERPRINT_SIZE)) >> 56;
 		bigDesloc = (4+iIndex0)*CCT_FINGERPRINT_SIZE;
 		littleDesloc = (5-iIndex0)*CCT_FINGERPRINT_SIZE;
 		if (iIndex0 == 4)
-			filter0[vIndex0] = ((filter0[vIndex0] << littleDesloc) >> littleDesloc) 
+			filter0CCT[vIndex0] = ((filter0CCT[vIndex0] << littleDesloc) >> littleDesloc) 
 				| (((uint64_t)olderCuckoo) << ((iIndex0*CCT_FINGERPRINT_SIZE)+24)) 
-				| ((filter0[vIndex0] >> bigDesloc) << bigDesloc);
+				| ((filter0CCT[vIndex0] >> bigDesloc) << bigDesloc);
 		else
-			filter0[vIndex0] = ((filter0[vIndex0] << littleDesloc) >> littleDesloc) 
+			filter0CCT[vIndex0] = ((filter0CCT[vIndex0] << littleDesloc) >> littleDesloc) 
 				| (((uint64_t)olderCuckoo) << ((iIndex0*CCT_FINGERPRINT_SIZE)+24)) 
-				| ((filter0[vIndex0] >> bigDesloc) << bigDesloc);
+				| ((filter0CCT[vIndex0] >> bigDesloc) << bigDesloc);
 		olderCuckoo = aux;
 
 		sprintf(str, "%d", olderCuckoo);
@@ -321,27 +321,27 @@ inline int cctInsertFilter(unsigned int key, int tamOrders)
 		vIndex1 = (uint32_t) index1/5; //vector index
 		iIndex1 = index1%5; //bucket index inside 32 bits word	
 
-		if ((((filter1[vIndex1] << ((4-iIndex1)*CCT_FINGERPRINT_SIZE) >> 56)) == olderCuckoo))
+		if ((((filter1CCT[vIndex1] << ((4-iIndex1)*CCT_FINGERPRINT_SIZE) >> 56)) == olderCuckoo))
 			return 3;
 
-		if ((((filter1[vIndex1] << ((4-iIndex1)*CCT_FINGERPRINT_SIZE) >> 56)) == 0))
+		if ((((filter1CCT[vIndex1] << ((4-iIndex1)*CCT_FINGERPRINT_SIZE) >> 56)) == 0))
 		{
-			filter1[vIndex1] = filter1[vIndex1]
+			filter1CCT[vIndex1] = filter1CCT[vIndex1]
 					| (((uint64_t)olderCuckoo) << ((iIndex1*CCT_FINGERPRINT_SIZE)+24)) ;
 			return 1;
 		}
 
-		aux = (filter1[vIndex1] << ((4-iIndex1)*CCT_FINGERPRINT_SIZE)) >> 56;
+		aux = (filter1CCT[vIndex1] << ((4-iIndex1)*CCT_FINGERPRINT_SIZE)) >> 56;
 		bigDesloc = (4+iIndex1)*CCT_FINGERPRINT_SIZE;
 		littleDesloc = (5-iIndex1)*CCT_FINGERPRINT_SIZE;
 		if (iIndex1 == 4)
-			filter1[vIndex1] = ((filter1[vIndex1] << littleDesloc) >> littleDesloc) 
+			filter1CCT[vIndex1] = ((filter1CCT[vIndex1] << littleDesloc) >> littleDesloc) 
 				| (((uint64_t)olderCuckoo) << ((iIndex1*CCT_FINGERPRINT_SIZE)+24)) 
-				| ((filter1[vIndex1] >> bigDesloc) << bigDesloc);
+				| ((filter1CCT[vIndex1] >> bigDesloc) << bigDesloc);
 		else
-			filter1[vIndex1] = ((filter1[vIndex1] << littleDesloc) >> littleDesloc) 
+			filter1CCT[vIndex1] = ((filter1CCT[vIndex1] << littleDesloc) >> littleDesloc) 
 				| (((uint64_t)olderCuckoo) << ((iIndex1*CCT_FINGERPRINT_SIZE)+24)) 
-				| ((filter0[vIndex1] >> bigDesloc) << bigDesloc);
+				| ((filter0CCT[vIndex1] >> bigDesloc) << bigDesloc);
 		olderCuckoo = aux;
 
 		sprintf(str, "%d", olderCuckoo);
@@ -351,12 +351,12 @@ inline int cctInsertFilter(unsigned int key, int tamOrders)
 		vIndex0 = (uint32_t) index0/5; //vector index
 		iIndex0 = index0%5; //bucket index inside 32 bits word
 
-		if ((((filter0[vIndex0] << ((4-iIndex0)*CCT_FINGERPRINT_SIZE) >> 56)) == olderCuckoo))
+		if ((((filter0CCT[vIndex0] << ((4-iIndex0)*CCT_FINGERPRINT_SIZE) >> 56)) == olderCuckoo))
 			return 3;
 
-		if ((((filter1[vIndex1] << ((4-iIndex1)*CCT_FINGERPRINT_SIZE) >> 56)) == 0))
+		if ((((filter1CCT[vIndex1] << ((4-iIndex1)*CCT_FINGERPRINT_SIZE) >> 56)) == 0))
 		{
-			filter0[vIndex0] = filter0[vIndex0]
+			filter0CCT[vIndex0] = filter0CCT[vIndex0]
 					| (((uint64_t)olderCuckoo) << ((iIndex0*CCT_FINGERPRINT_SIZE)+24)) ;
 			return 1;
 		}
@@ -402,14 +402,14 @@ inline void generateCCT(column_orders * c_orders, int tamOrders)
 	//Initialize OHT and bitmap
 	for (int i=0; i<CCT_OHT_SIZE;i++)
 	{
-		OHT0[i]=0;
-		OHT1[i]=0;
+		OHT0CCT[i]=0;
+		OHT1CCT[i]=0;
 	}
 
 	for (int i=0; i<CCT_FILTER_SIZE; i++)
 	{
-		filter0[i]=0;
-		filter1[i]=0;
+		filter0CCT[i]=0;
+		filter1CCT[i]=0;
 	}
 
 	likwid_markerStopRegion("Initialization");
@@ -444,13 +444,13 @@ inline void generateCCT(column_orders * c_orders, int tamOrders)
 	actualPopCounter1 = 0;
 	for (int i=0; i<CCT_FILTER_SIZE;i++)
 	{
-		oldPopCounter0 = popCount(filter0[i]);
+		oldPopCounter0 = popCount(filter0CCT[i]);
 		actualPopCounter0 = actualPopCounter0 + oldPopCounter0;
-		filter0[i] = ((filter0[i]>>24)<<24) | actualPopCounter0;
+		filter0CCT[i] = ((filter0CCT[i]>>24)<<24) | actualPopCounter0;
 
-		oldPopCounter1 = popCount(filter1[i]);
+		oldPopCounter1 = popCount(filter1CCT[i]);
 		actualPopCounter1 = actualPopCounter1 + oldPopCounter1;
-		filter1[i] = ((filter1[i]>>24)<<24) | actualPopCounter1;
+		filter1CCT[i] = ((filter1CCT[i]>>24)<<24) | actualPopCounter1;
 	}
 
 	ctSize0 = actualPopCounter0;
@@ -521,11 +521,11 @@ inline int cctLookUp(uint32_t key)
 	vIndex1 = (uint32_t) index1/5; //vector index
 	iIndex1 = index1%5; //bucket index inside 32 bits word
 
-	if ((((filter0[vIndex0] << ((4-iIndex0)*CCT_FINGERPRINT_SIZE) >> 56)) == ((uint64_t)fingerPrint)) ||
-		(((filter1[vIndex1] << ((4-iIndex1)*CCT_FINGERPRINT_SIZE) >> 56)) == ((uint64_t)fingerPrint)))
+	if ((((filter0CCT[vIndex0] << ((4-iIndex0)*CCT_FINGERPRINT_SIZE) >> 56)) == ((uint64_t)fingerPrint)) ||
+		(((filter1CCT[vIndex1] << ((4-iIndex1)*CCT_FINGERPRINT_SIZE) >> 56)) == ((uint64_t)fingerPrint)))
 	{
-		tIndex0 = ((filter0[vIndex0]<<40)>>40) - (popCount((filter0[vIndex0]<<((5-iIndex0)*CCT_FINGERPRINT_SIZE))>>((5-iIndex0)*CCT_FINGERPRINT_SIZE)));
-		tIndex1 = ((filter1[vIndex1]<<40)>>40) - (popCount((filter1[vIndex1]<<((5-iIndex1)*CCT_FINGERPRINT_SIZE))>>((5-iIndex1)*CCT_FINGERPRINT_SIZE)));
+		tIndex0 = ((filter0CCT[vIndex0]<<40)>>40) - (popCount((filter0CCT[vIndex0]<<((5-iIndex0)*CCT_FINGERPRINT_SIZE))>>((5-iIndex0)*CCT_FINGERPRINT_SIZE)));
+		tIndex1 = ((filter1CCT[vIndex1]<<40)>>40) - (popCount((filter1CCT[vIndex1]<<((5-iIndex1)*CCT_FINGERPRINT_SIZE))>>((5-iIndex1)*CCT_FINGERPRINT_SIZE)));
 
 		if ((cuckooTable0[tIndex0] == key) || (cuckooTable1[tIndex1] == key))
 			return 1;
@@ -553,9 +553,9 @@ inline int cctLookUp(uint32_t key)
 	else
 		index12 = index11+1;
 
-	if (OHT0[index0] == key || OHT1[index1] == key || 
-		OHT0[index01] == key || OHT1[index11] == key ||
-		OHT0[index02] == key || OHT1[index12] == key)
+	if (OHT0CCT[index0] == key || OHT1CCT[index1] == key || 
+		OHT0CCT[index01] == key || OHT1CCT[index11] == key ||
+		OHT0CCT[index02] == key || OHT1CCT[index12] == key)
 			return 1;
 
 	return 0;

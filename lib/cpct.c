@@ -124,131 +124,141 @@ inline void * cpctInsertOHT(void * bktArray)
 		}
 	}
 	bucketArray->status = 0;
+	pthread_exit(NULL);
 	return NULL;
 }
 
-inline int cpctInsertConciseTable(uint32_t key, int tamOrders)
+inline int cpctInsertConciseTable(unsigned int key)
 {
 	char str[10];
 	sprintf(str, "%d", key);
 
-	uint32_t olderKey = key;
+	// uint32_t olderKey = key;
 
 	uint32_t fingerPrint;
-	uint32_t aux;
+	uint32_t found;
 
 	pthread_t thread;
-
-	uint32_t olderCuckoo;
+	// uint32_t olderCuckoo, aux;
 
 	//Filter Phase
-	uint32_t vIndex0;
+	uint32_t index0;
 	uint32_t iIndex0;
 	uint32_t tIndex0;
 	
-	uint32_t vIndex1;
+	uint32_t index1;
 	uint32_t iIndex1;
 	uint32_t tIndex1;
 
-	uint32_t index0;
-	uint32_t index1;
-
-	ptrBucketArray bucketArray = malloc(sizeof(BucketArray));
-
-	index0 = HASH_FILTER0;
+	index0 = HASH_FILTER0_CPCT;
 	fingerPrint = HASH_FINGERPRINT;
 	sprintf(str, "%d", fingerPrint);
-	index1 = HASH_FILTER1;
+	index1 = HASH_FILTER1_CPCT;
 
-	vIndex0 = (uint32_t) index0/5; //vector index
-	iIndex0 = index0%5; //bucket index inside 32 bits word
-		
-	vIndex1 = (uint32_t) index1/5; //vector index
-	iIndex1 = index1%5; //bucket index inside 32 bits word
-
-	tIndex0 = ((filter0[vIndex0]<<40)>>40) - (popCount((filter0[vIndex0]<<((5-iIndex0)*CPCT_FINGERPRINT_SIZE))>>((5-iIndex0)*CPCT_FINGERPRINT_SIZE)));
-	tIndex1 = ((filter1[vIndex1]<<40)>>40) - (popCount((filter1[vIndex1]<<((5-iIndex1)*CPCT_FINGERPRINT_SIZE))>>((5-iIndex1)*CPCT_FINGERPRINT_SIZE)));
-
-	if ((cuckooTable0[tIndex0] == olderKey) || (cuckooTable1[tIndex1] == olderKey))
-		return 3;
-
-	olderCuckoo = olderKey;
-	for (int i=0; i<CPCT_THRESHOLD; i++)
-	{ 
-		if ((((filter0[vIndex0] << ((4-iIndex0)*CPCT_FINGERPRINT_SIZE) >> 56)) == ((uint64_t)fingerPrint)))
+	found = 0;
+	for (iIndex0=0; iIndex0<5 && found==0; iIndex0++)
+	{
+		if (((filter0[index0] << ((4-iIndex0)*CPCT_FINGERPRINT_SIZE) >> 56)) == fingerPrint)
 		{
-			
-			if (cuckooTable0[tIndex0] == olderCuckoo)
-			{
-				
+			found=1;
+			tIndex0 = ((filter0[index0]<<40)>>40) - (popCount((filter0[index0]<<((5-iIndex0)*CPCT_FINGERPRINT_SIZE))>>((5-iIndex0)*CPCT_FINGERPRINT_SIZE)));
+			if (cuckooTable0[tIndex0] == key)
 				return 3;
-			}
-
 			if (cuckooTable0[tIndex0] == 0)
 			{
-				cuckooTable0[tIndex0] = olderCuckoo;
-				
+				cuckooTable0[tIndex0] = key;
 				return 1;
 			}
-		
-			aux = cuckooTable0[tIndex0];
-			cuckooTable0[tIndex0] = olderCuckoo;
-			olderCuckoo = aux;
-			
-
-			key = olderCuckoo;
-			fingerPrint = HASH_FINGERPRINT;
-			sprintf(str, "%d", fingerPrint);
-			index1 = HASH_FILTER1;
-
-			vIndex1 = (uint32_t) index1/5; //vector index
-			iIndex1 = index1%5; //bucket index inside 32 bits word
-
-			tIndex1 = ((filter1[vIndex1]<<40)>>40) - (popCount((filter1[vIndex1]<<((5-iIndex1)*CPCT_FINGERPRINT_SIZE))>>((5-iIndex1)*CPCT_FINGERPRINT_SIZE)));
 		}
-
-		if ((((filter1[vIndex1] << ((4-iIndex1)*CPCT_FINGERPRINT_SIZE) >> 56)) == ((uint64_t)fingerPrint)))
+	}
+	found = 0;
+	for (iIndex1=0; iIndex1<5 && found==0; iIndex1++)
+	{
+		if (((filter1[index1] << ((4-iIndex1)*CPCT_FINGERPRINT_SIZE) >> 56)) == fingerPrint)
 		{
-			
-			if (cuckooTable1[tIndex1] == olderCuckoo)
-			{
-				
+			found=1;
+			tIndex1 = ((filter1[index1]<<40)>>40) - (popCount((filter1[index1]<<((5-iIndex1)*CPCT_FINGERPRINT_SIZE))>>((5-iIndex1)*CPCT_FINGERPRINT_SIZE)));
+			if (cuckooTable1[tIndex1] == key)
 				return 3;
-			}
 			if (cuckooTable1[tIndex1] == 0)
 			{
-				cuckooTable1[tIndex1] = olderCuckoo;
-				
+				cuckooTable1[tIndex1] = key;
 				return 1;
 			}
-			
-			aux = cuckooTable1[tIndex1];
-			cuckooTable1[tIndex1] = olderCuckoo;
-			olderCuckoo = aux;
-			
-			
-			key = olderCuckoo;
-			fingerPrint = HASH_FINGERPRINT;
-			sprintf(str, "%d", fingerPrint);
-			index0 = index1;
-			index0 = HASH_FILTER1;
-				
-			vIndex0 = (uint32_t) index0/5; //vector index
-			iIndex0 = index0%5; //bucket index inside 32 bits word
-			tIndex0 = ((filter0[vIndex0]<<40)>>40) - (popCount((filter0[vIndex0]<<((5-iIndex0)*CPCT_FINGERPRINT_SIZE))>>((5-iIndex0)*CPCT_FINGERPRINT_SIZE)));
 		}
 	}
 
-	bucketArray->olderKey = olderKey;
+	// olderCuckoo = olderKey;
+	// for (int i=0; i<CPCT_THRESHOLD; i++)
+	// { 
+	// 	if ((((filter0[index0] << ((4-iIndex0)*CPCT_FINGERPRINT_SIZE) >> 56)) == ((uint64_t)fingerPrint)))
+	// 	{
+	// 		if (cuckooTable0[tIndex0] == olderCuckoo)
+	// 			return 3;
+
+	// 		if (cuckooTable0[tIndex0] == 0)
+	// 		{
+	// 			cuckooTable0[tIndex0] = olderCuckoo;
+	// 			return 1;
+	// 		}
+		
+	// 		aux = cuckooTable0[tIndex0];
+	// 		cuckooTable0[tIndex0] = olderCuckoo;
+	// 		olderCuckoo = aux;
+			
+	// 		key = olderCuckoo;
+	// 		fingerPrint = HASH_FINGERPRINT;
+	// 		sprintf(str, "%d", fingerPrint);
+	// 		index1 = HASH_FILTER1_CPCT;
+
+	// 		found = 0;
+	// 		for (iIndex1=0; iIndex1<5 && found==0; iIndex1++)
+	// 			if (((filter0[index0] << ((4-iIndex1)*CPCT_FINGERPRINT_SIZE) >> 56)) == fingerPrint)
+	// 		tIndex1 = ((filter1[index1]<<40)>>40) - (popCount((filter1[index1]<<((5-iIndex1)*CPCT_FINGERPRINT_SIZE))>>((5-iIndex1)*CPCT_FINGERPRINT_SIZE)));
+	// 	}
+
+	// 	if ((((filter1[index1] << ((4-iIndex1)*CPCT_FINGERPRINT_SIZE) >> 56)) == ((uint64_t)fingerPrint)))
+	// 	{
+			
+	// 		if (cuckooTable1[tIndex1] == olderCuckoo)
+	// 			return 3;
+
+	// 		if (cuckooTable1[tIndex1] == 0)
+	// 		{
+	// 			cuckooTable1[tIndex1] = olderCuckoo;
+	// 			return 1;
+	// 		}
+			
+	// 		aux = cuckooTable1[tIndex1];
+	// 		cuckooTable1[tIndex1] = olderCuckoo;
+	// 		olderCuckoo = aux;
+			
+	// 		key = olderCuckoo;
+	// 		fingerPrint = HASH_FINGERPRINT;
+	// 		sprintf(str, "%d", fingerPrint);
+	// 		index0 = index1;
+	// 		index0 = HASH_FILTER1_CPCT;
+				
+	// 		found = 0;
+	// 		for (iIndex0=0; iIndex0<5 && found==0; iIndex0++)
+	// 			if (((filter0[index0] << ((4-iIndex0)*CPCT_FINGERPRINT_SIZE) >> 56)) == fingerPrint)
+	// 				found=1;
+	// 		tIndex0 = ((filter0[index0]<<40)>>40) - (popCount((filter0[index0]<<((5-iIndex0)*CPCT_FINGERPRINT_SIZE))>>((5-iIndex0)*CPCT_FINGERPRINT_SIZE)));
+	// 	}
+	// }
+
+	ptrBucketArray bucketArray = (ptrBucketArray) malloc(sizeof(BucketArray));
+	bucketArray->olderKey = key;
 	bucketArray->status = 3;
 	pthread_create(&thread, NULL, cpctInsertOHT, (void *) bucketArray);
 
 	return bucketArray->status;
 }
 
-inline int cpctInsertFilter(unsigned int key, int tamOrders)
+inline int cpctInsertFilter(unsigned int key)
 {
 	char str[10];
+	sprintf(str, "%d", key);
 
 	uint32_t olderCuckoo;
 	uint32_t aux;
@@ -259,111 +269,116 @@ inline int cpctInsertFilter(unsigned int key, int tamOrders)
 	uint32_t index1;
 
 	//Filter Phase
-	uint32_t vIndex0;
+	// uint32_t index0;
 	uint32_t iIndex0;
 	
-	uint32_t vIndex1;
+	// uint32_t index1;
 	uint32_t iIndex1;
 
-	index0 = HASH_FILTER0;
-	olderCuckoo = HASH_FINGERPRINT;
+	index0 = HASH_FILTER0_CPCT;
+	olderCuckoo = HASH_FINGERPRINT_CPCT;
 	sprintf(str, "%d", olderCuckoo);
-	index1 = HASH_FILTER1;
-
-	vIndex0 = (uint32_t) index0/5; //vector index
-	iIndex0 = index0%5; //bucket index inside 32 bits word
-		
-	vIndex1 = (uint32_t) index1/5; //vector index
-	iIndex1 = index1%5; //bucket index inside 32 bits word
+	index1 = HASH_FILTER1_CPCT;
 
 	for (int i=0; i<5; i++)
+		if ((((filter0[index0] << ((4-i)*CPCT_FINGERPRINT_SIZE) >> 56)) == ((uint64_t)olderCuckoo) ||
+			(((filter1[index1] << ((4-i)*CPCT_FINGERPRINT_SIZE) >> 56)) == ((uint64_t)olderCuckoo))))
+			return 3;
+
+	//Possui entry vazia?
+	iIndex0 = (uint32_t)((filter0[index0] << 61) >> 61);
+	if (iIndex0 < 5)
 	{
-		if ((((filter0[vIndex0] << ((4-i)*CCT_FINGERPRINT_SIZE) >> 56)) == ((uint64_t)olderCuckoo)) ||
-			(((filter1[vIndex1] << ((4-i)*CCT_FINGERPRINT_SIZE) >> 56)) == ((uint64_t)olderCuckoo)))
-		return 3;
+		iIndex0--;
+		if ((((filter0[index0] << ((4-iIndex0)*CCT_FINGERPRINT_SIZE) >> 56)) == 0))
+		{
+			filter0[index0] = filter0[index0]
+						| (((uint64_t)olderCuckoo) << ((iIndex0*CCT_FINGERPRINT_SIZE)+24));
+			filter0[index0] = filter0[index0] + 1;
+		}
 	}
 
-	//Procura Entry vazia
-	if ((((filter0[vIndex0] << ((4-iIndex0)*CCT_FINGERPRINT_SIZE) >> 56)) == 0))
+	iIndex1 = (uint32_t)((filter1[index1] << 61) >> 61);
+	if (iIndex1 < 5)
 	{
-		filter0[vIndex0] = filter0[vIndex0]
-				| (((uint64_t)olderCuckoo) << ((iIndex0*CCT_FINGERPRINT_SIZE)+24)) ;
-		return 1;
+		iIndex1--;
+		if ((((filter1[index1] << ((4-iIndex1)*CCT_FINGERPRINT_SIZE) >> 56)) == 0))
+		{
+			filter1[index1] = filter1[index1]
+					| (((uint64_t)olderCuckoo) << ((iIndex1*CCT_FINGERPRINT_SIZE)+24));
+			filter1[index1] = filter1[index1] + 1;
+			return 1;
+		}
 	}
 
-	if ((((filter1[vIndex1] << ((4-iIndex1)*CCT_FINGERPRINT_SIZE) >> 56)) == 0))
-	{
-		filter1[vIndex1] = filter1[vIndex1]
-				| (((uint64_t)olderCuckoo) << ((iIndex1*CCT_FINGERPRINT_SIZE)+24)) ;
-		return 1;
-	}
-
+	//Laço de realocações (renesting)
 	for (int j=0; j<CCT_THRESHOLD; j++)
 	{
 		//Always insert on the first table
-		aux = (filter0[vIndex0] << ((4-iIndex0)*CCT_FINGERPRINT_SIZE)) >> 56;
+		iIndex0 = ((uint32_t) clock()) % 5;
+
+		aux = (filter0[index0] << ((4-iIndex0)*CCT_FINGERPRINT_SIZE)) >> 56;
 		bigDesloc = (4+iIndex0)*CCT_FINGERPRINT_SIZE;
 		littleDesloc = (5-iIndex0)*CCT_FINGERPRINT_SIZE;
 		if (iIndex0 == 4)
-			filter0[vIndex0] = ((filter0[vIndex0] << littleDesloc) >> littleDesloc) 
+			filter0[index0] = ((filter0[index0] << littleDesloc) >> littleDesloc) 
 				| (((uint64_t)olderCuckoo) << ((iIndex0*CCT_FINGERPRINT_SIZE)+24)) 
-				| ((filter0[vIndex0] >> bigDesloc) << bigDesloc);
+				| ((filter0[index0] >> bigDesloc) << bigDesloc);
 		else
-			filter0[vIndex0] = ((filter0[vIndex0] << littleDesloc) >> littleDesloc) 
+			filter0[index0] = ((filter0[index0] << littleDesloc) >> littleDesloc) 
 				| (((uint64_t)olderCuckoo) << ((iIndex0*CCT_FINGERPRINT_SIZE)+24)) 
-				| ((filter0[vIndex0] >> bigDesloc) << bigDesloc);
+				| ((filter0[index0] >> bigDesloc) << bigDesloc);
 		olderCuckoo = aux;
 
 		sprintf(str, "%d", olderCuckoo);
-		index1 = HASH_FILTER1;
-		
-		vIndex1 = (uint32_t) index1/5; //vector index
-		iIndex1 = index1%5; //bucket index inside 32 bits word	
+		index1 = HASH_FILTER1_CPCT;
 
-		if ((((filter1[vIndex1] << ((4-iIndex1)*CCT_FINGERPRINT_SIZE) >> 56)) == olderCuckoo))
-			return 3;
-
-		if ((((filter1[vIndex1] << ((4-iIndex1)*CCT_FINGERPRINT_SIZE) >> 56)) == 0))
+		iIndex1 = ((filter1[index1] << 61) >> 61)-1;
+		if (iIndex1 < 5)
 		{
-			filter1[vIndex1] = filter1[vIndex1]
-					| (((uint64_t)olderCuckoo) << ((iIndex1*CCT_FINGERPRINT_SIZE)+24)) ;
-			return 1;
+			if ((((filter1[index1] << ((5-iIndex1)*CCT_FINGERPRINT_SIZE) >> 56)) == 0))
+			{
+				filter1[index1] = filter1[index1]
+						| (((uint64_t)olderCuckoo) << ((iIndex1*CCT_FINGERPRINT_SIZE)+24));
+				filter1[index1] = filter1[index1] + 1;
+				return 1;
+			}
 		}
 
-		aux = (filter1[vIndex1] << ((4-iIndex1)*CCT_FINGERPRINT_SIZE)) >> 56;
+		iIndex1 = ((uint32_t) clock()) % 5;//bucket index inside 32 bits word	
+		aux = (filter1[index1] << ((4-iIndex1)*CCT_FINGERPRINT_SIZE)) >> 56;
 		bigDesloc = (4+iIndex1)*CCT_FINGERPRINT_SIZE;
 		littleDesloc = (5-iIndex1)*CCT_FINGERPRINT_SIZE;
 		if (iIndex1 == 4)
-			filter1[vIndex1] = ((filter1[vIndex1] << littleDesloc) >> littleDesloc) 
+			filter1[index1] = ((filter1[index1] << littleDesloc) >> littleDesloc) 
 				| (((uint64_t)olderCuckoo) << ((iIndex1*CCT_FINGERPRINT_SIZE)+24)) 
-				| ((filter1[vIndex1] >> bigDesloc) << bigDesloc);
+				| ((filter1[index1] >> bigDesloc) << bigDesloc);
 		else
-			filter1[vIndex1] = ((filter1[vIndex1] << littleDesloc) >> littleDesloc) 
+			filter1[index1] = ((filter1[index1] << littleDesloc) >> littleDesloc) 
 				| (((uint64_t)olderCuckoo) << ((iIndex1*CCT_FINGERPRINT_SIZE)+24)) 
-				| ((filter0[vIndex1] >> bigDesloc) << bigDesloc);
+				| ((filter1[index1] >> bigDesloc) << bigDesloc);
 		olderCuckoo = aux;
 
 		sprintf(str, "%d", olderCuckoo);
 		index0 = index1;
-		index0 = HASH_FILTER1;
-		
-		vIndex0 = (uint32_t) index0/5; //vector index
-		iIndex0 = index0%5; //bucket index inside 32 bits word
+		index0 = HASH_FILTER1_CPCT;
 
-		if ((((filter0[vIndex0] << ((4-iIndex0)*CCT_FINGERPRINT_SIZE) >> 56)) == olderCuckoo))
-			return 3;
-
-		if ((((filter1[vIndex1] << ((4-iIndex1)*CCT_FINGERPRINT_SIZE) >> 56)) == 0))
+		iIndex0 = ((filter0[index0] << 61) >> 61)-1;
+		if (iIndex0 < 5)
 		{
-			filter0[vIndex0] = filter0[vIndex0]
-					| (((uint64_t)olderCuckoo) << ((iIndex0*CCT_FINGERPRINT_SIZE)+24)) ;
-			return 1;
+			if ((((filter0[index0] << ((5-iIndex0)*CCT_FINGERPRINT_SIZE) >> 56)) == 0))
+			{
+					filter0[index0] = filter0[index0]
+							| (((uint64_t)olderCuckoo) << ((iIndex0*CCT_FINGERPRINT_SIZE)+24));
+					filter0[index0] = filter0[index0] + 1;
+					return 1;
+			}
 		}
 	}
 	return 2;
 }
 
-// inline uint64_t popCount(uint64_t bits)
+// inline uint64_t popCountCPCT(uint64_t bits)
 // {
 // 	uint64_t count;
 // 	bits = bits>>24;
@@ -378,7 +393,7 @@ inline void * insertArrayRoutine(void * orders)
 	ptrOrders c_orders = (ptrOrders) orders;
 	for (int i=c_orders->init; i<c_orders->tamOrders+c_orders->init; i++)
 	{
-		switch (cctInsertConciseTable(c_orders->c_orders[i].O_CUSTKEY, c_orders->tamOrders))
+		switch (cpctInsertConciseTable(c_orders->c_orders[i].O_CUSTKEY))
 		{
 			case 0:
 				printf("ERROR: Something went wrong while inserting the key %u on the Array\n", c_orders->c_orders[i].O_CUSTKEY);
@@ -397,7 +412,7 @@ inline void * insertArrayRoutine(void * orders)
 	pthread_exit(NULL);
 }
 
-inline void generateCPCT(column_orders * c_orders, int tamOrders)
+inline void generateCPCT(column_orders * c_orders)
 {
 	pthread_t threads[NUM_THREADS];
 	clock_t init, end;
@@ -450,7 +465,7 @@ inline void generateCPCT(column_orders * c_orders, int tamOrders)
 
 	for (int i=0; i<tamOrders; i++)
 	{
-		switch (cctInsertFilter(c_orders[i].O_CUSTKEY, tamOrders))
+		switch (cpctInsertFilter(c_orders[i].O_CUSTKEY))
 		{
 			case 0:
 				printf("ERROR: Something went wrong while inserting the key %u on the filter\n", c_orders[i].O_CUSTKEY);
@@ -473,18 +488,17 @@ inline void generateCPCT(column_orders * c_orders, int tamOrders)
 	actualPopCounter1 = 0;
 	for (int i=0; i<CCT_FILTER_SIZE;i++)
 	{
-		oldPopCounter0 = popCount(filter0[i]);
+		oldPopCounter0 = (filter0[i] << 61) >> 61;
 		actualPopCounter0 = actualPopCounter0 + oldPopCounter0;
 		filter0[i] = ((filter0[i]>>24)<<24) | actualPopCounter0;
 
-		oldPopCounter1 = popCount(filter1[i]);
+		oldPopCounter1 = (filter1[i] << 61) >> 61;
 		actualPopCounter1 = actualPopCounter1 + oldPopCounter1;
 		filter1[i] = ((filter1[i]>>24)<<24) | actualPopCounter1;
 	}
 
 	ctSize0 = actualPopCounter0;
 	ctSize1 = actualPopCounter1;
-
 	cuckooTable0 = malloc(sizeof(uint32_t)*ctSize0);
 	cuckooTable1 = malloc(sizeof(uint32_t)*ctSize1);
 
@@ -524,77 +538,72 @@ inline void generateCPCT(column_orders * c_orders, int tamOrders)
 	// printf("Succesfull insertions on realocantion Filter %d\n", REALOCFILTER);
 }
 
-inline int cpctLookUp(uint32_t key)
+inline int cpctLookUp(unsigned int key)
 {
 	char str[10];
 	sprintf(str, "%d", key);
 
 	uint32_t fingerPrint;
 
-	uint32_t index0, index01, index02;
-	uint32_t index1, index11, index12;
+	uint32_t oIndex0[3];
+	uint32_t oIndex1[3];
+	uint32_t index0;
+	uint32_t index1;
 
 	//Filter Phase
-	uint32_t vIndex0;
-	uint32_t iIndex0;
+	// uint32_t iIndex0;
+	// uint32_t iIndex1;
+
 	uint32_t tIndex0;
-	
-	uint32_t vIndex1;
-	uint32_t iIndex1;
 	uint32_t tIndex1;
 
-	index0 = HASH_FILTER0;
+	index0 = HASH_FILTER0_CPCT;
 	fingerPrint = HASH_FINGERPRINT;
 	sprintf(str, "%d", fingerPrint);
-	index1 = HASH_FILTER1;
+	index1 = HASH_FILTER1_CPCT;
 
-	vIndex0 = (uint32_t) index0/5; //vector index
-	iIndex0 = index0%5; //bucket index inside 32 bits word
-		
-	vIndex1 = (uint32_t) index1/5; //vector index
-	iIndex1 = index1%5; //bucket index inside 32 bits word
-
-	if ((((filter0[vIndex0] << ((4-iIndex0)*CPCT_FINGERPRINT_SIZE) >> 56)) == ((uint64_t)fingerPrint)) ||
-		(((filter1[vIndex1] << ((4-iIndex1)*CPCT_FINGERPRINT_SIZE) >> 56)) == ((uint64_t)fingerPrint)))
+	for (int i=0; i<5; i++)
 	{
-		tIndex0 = ((filter0[vIndex0]<<40)>>40) - (popCount((filter0[vIndex0]<<((5-iIndex0)*CPCT_FINGERPRINT_SIZE))>>((5-iIndex0)*CPCT_FINGERPRINT_SIZE)));
-		tIndex1 = ((filter1[vIndex1]<<40)>>40) - (popCount((filter1[vIndex1]<<((5-iIndex1)*CPCT_FINGERPRINT_SIZE))>>((5-iIndex1)*CPCT_FINGERPRINT_SIZE)));
+		if ((((filter0[index0] << ((4-i)*CPCT_FINGERPRINT_SIZE) >> 56)) == ((uint64_t)fingerPrint)) ||
+		(((filter1[index1] << ((4-i)*CPCT_FINGERPRINT_SIZE) >> 56)) == ((uint64_t)fingerPrint)))
+		{
+			tIndex0 = ((filter0[index0]<<40)>>40) - (popCount((filter0[index0]<<((5-i)*CPCT_FINGERPRINT_SIZE))>>((5-i)*CPCT_FINGERPRINT_SIZE)));
+			tIndex1 = ((filter1[index1]<<40)>>40) - (popCount((filter1[index1]<<((5-i)*CPCT_FINGERPRINT_SIZE))>>((5-i)*CPCT_FINGERPRINT_SIZE)));
 
-		if ((cuckooTable0[tIndex0] == key) || (cuckooTable1[tIndex1] == key))
-			return 1;
+			if ((cuckooTable0[tIndex0] == key) || (cuckooTable1[tIndex1] == key))
+				return 1;
+		}
 	}
 
 	//Search OHT
 	sprintf(str, "%d", key);
-	index0 = HASH_OHT_CPCT0;
-	if (index0+1 >= CPCT_OHT_SIZE)
-		index01 = 0;
-	else
-		index01 = index0+1;
-	if (index01+1 >= CPCT_OHT_SIZE)
-		index02 = 0;
-	else
-		index02 = index01+1;
+	oIndex0[0] = HASH_OHT_CPCT0;
+	for (int i=1; i<3; i++)
+	{
+		if (oIndex0[i-1] == CPCT_OHT_SIZE)
+			oIndex0[i] = 0;
+		else
+			oIndex0[i] = oIndex0[i-1]+1;
+	}
 
-	index1 = HASH_OHT_CPCT1;
-	if (index1+1 >= CPCT_OHT_SIZE)
-		index11 = 0;
-	else
-		index11 = index1+1;
-	if (index11+1 >= CPCT_OHT_SIZE)
-		index12 = 0;
-	else
-		index12 = index11+1;
+	oIndex1[0] = HASH_OHT_CPCT1;
+	for (int i=1; i<3; i++)
+	{
+		if (oIndex1[i-1] == CPCT_OHT_SIZE)
+			oIndex1[i] = 0;
+		else
+			oIndex1[i] = oIndex1[i-1]+1;
+	}
 
-	if (OHT0[index0] == key || OHT1[index1] == key || 
-		OHT0[index01] == key || OHT1[index11] == key ||
-		OHT0[index02] == key || OHT1[index12] == key)
+	if (OHT0[oIndex0[0]] == key || OHT1[oIndex1[0]] == key || 
+		OHT0[oIndex0[1]] == key || OHT1[oIndex1[1]] == key ||
+		OHT0[oIndex0[2]] == key || OHT1[oIndex1[2]] == key)
 			return 1;
 
 	return 0;
 }
 
-inline int cpctJoin(column_customer * c_customer, column_orders * c_orders, int tamCustomer, int tamOrders)
+inline int cpctJoin(column_customer * c_customer, column_orders * c_orders)
 {
 	clock_t init, end;
 	uint32_t index=0;
@@ -602,7 +611,7 @@ inline int cpctJoin(column_customer * c_customer, column_orders * c_orders, int 
 	SUCCFILTER=0;
 	REALOCFILTER=0;
 
-	generateCPCT(c_orders, tamOrders);
+	generateCPCT(c_orders);
 
 	init=clock();
 	likwid_markerStartRegion("Core");

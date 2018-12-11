@@ -2,7 +2,6 @@
 
 int main(int argc, char ** argv)
 {
-	int tamCustomer, tamOrders;
 	int nResult;
 	clock_t init, end;
 	int sel =0;
@@ -49,7 +48,7 @@ int main(int argc, char ** argv)
 	init = clock();
 
 	likwid_markerInit();
-	nResult=cpctJoin(c_customer, c_orders, tamCustomer, tamOrders);
+	nResult=cpctJoin(c_customer, c_orders);
 	likwid_markerClose();
 
 	end = clock();

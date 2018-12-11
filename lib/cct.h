@@ -16,10 +16,10 @@
 #define HASH_OHT_CCT1 (murmurhash3(str, strlen(str), 0x0D50064F7) & (CCT_OHT_SIZE-1))
 
 
-uint64_t filter0[CCT_FILTER_SIZE];
-uint64_t filter1[CCT_FILTER_SIZE];
-uint32_t OHT0[CCT_OHT_SIZE];
-uint32_t OHT1[CCT_OHT_SIZE];
+uint64_t filter0CCT[CCT_FILTER_SIZE];
+uint64_t filter1CCT[CCT_FILTER_SIZE];
+uint32_t OHT0CCT[CCT_OHT_SIZE];
+uint32_t OHT1CCT[CCT_OHT_SIZE];
 uint32_t *cuckooTable0;
 uint32_t *cuckooTable1;
 uint32_t ctSize0;
