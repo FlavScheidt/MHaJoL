@@ -23,7 +23,7 @@
 /****************************
 	PARAMETERS
 ****************************/
-#define CUCKOO_MAX_TRY 200
+#define VCUCKOO_MAX_TRY 200
 
 /***************************
 	DATA TYPES AND STRUCTURES
