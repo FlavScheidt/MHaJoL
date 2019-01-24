@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-c -g -Wall -lpthread -ftree-vectorize
+CFLAGS=-c -g -Wall -lpthread -mavx2 -march=skylake
 DEPS = hash.h
 OBJ = murmur2.o murmur3.o hash_any.o jenkins.o pearson.o fnv1a.o elfHash.o multiplicativeHash.o
 

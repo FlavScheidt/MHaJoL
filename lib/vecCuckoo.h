@@ -12,8 +12,8 @@
 *****************************/
 //NEED TO IMPLEMENT THE VECTORIZED VERSIONS OF THIS FUNCTIONS
 //THE SECOND ONE MUST BE ADD BY 65535 ON THE END
-#define H1 (fnv1a(key) & (TAB_SIZE-1)
-#define H2 (murmurhash3(str, strlen(str), seed) & (TAB_SIZE-1))
+#define H1 (_mm256_fnv1a_epi32(key) & (TAB_SIZE-1)
+#define H2 (_mm256_murmur3_epi32(key, seed) & (TAB_SIZE-1))
 
 /****************************
 	PARAMETERS

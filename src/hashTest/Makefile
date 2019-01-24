@@ -1,8 +1,8 @@
 CC=gcc
-CFLAGS=-g -Wall
-DEPS = ../hash/hash.h ../load.h 
+CFLAGS=-g -Wall -mavx2 -march=skylake
+DEPS = ../../lib/hash/hash.h ../../lib/load.h 
 
-csrc = $(wildcard ../hash/*.c) \
+csrc = $(wildcard ../../lib/hash/*.c) \
        	$(wildcard ./*.c) \
 
 OBJ = $(csrc:.c=.o)
@@ -15,5 +15,5 @@ hashTest: $(OBJ)
 .PHONY: clean
 
 clean:
-	rm -f hash/*.o ../hash/hash
+	rm -f hash/*.o ../../lib/hash/hash
 	rm -f *.o hashTest

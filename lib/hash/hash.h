@@ -12,6 +12,8 @@
 #include <stdint.h>
 #include <math.h>
 
+#include <immintrin.h>
+
 /***************************************************
   Hash Any
   Postgres default
@@ -83,7 +85,8 @@ extern "C" {
  */
 
 uint32_t murmurhash3 (const char *, uint32_t, uint32_t);
-uint16_t murmurhash316 (const char *key, uint16_t len, uint16_t seed);
+
+__m256i _mm256_murmur3_epi32(__m256i keys, const uint32_t seed);
 
 #ifdef __cplusplus
 }
@@ -116,6 +119,8 @@ uint8_t fnv1a8(unsigned int fourBytes);
 uint16_t fnv1aByte16(unsigned char oneByte, uint16_t hash);
 uint16_t fnv1aShort16(unsigned short twoBytes, uint16_t hash);
 uint16_t fnv1a16(unsigned int fourBytes);
+
+__m256i _mm256_fnv1a_epi32(__m256i data);
 
 
 /*************************************

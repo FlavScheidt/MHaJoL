@@ -1,5 +1,14 @@
 #include "vecCuckoo.h"
 
+inline __m256i _mm256_mod_ps2(const __m256i& a, const __m256i& aDiv){
+    __m256 c = _mm256_div_ps(a,aDiv);
+    __m256i i = _mm256_cvttps_epi32(c);
+    __m256 cTrunc = _mm256_cvtepi32_ps(i);
+    __m256 base = _mm256_mul_ps(cTrunc, aDiv);
+    __m256 r = _mm256_sub_ps(a, base);
+    return r;
+}
+
 inline void vecCuckooGenerate(column_orders * c_orders)
 {
 	//Vectors and masks
@@ -10,10 +19,15 @@ inline void vecCuckooGenerate(column_orders * c_orders)
 	__m256i hashedVector; //Hashed keys
 	__m256i table1Mask; //Keys to be inserted on table1
 	__m256i table2Mask; //Keys to be inserted on table2
+	__m256i duplicateMask; //Mask to set duplicated keys
 
 	//Auxiliary Masks
 	__m256i mask_1 = _mm256_set1_epi32(1);
 	__m256i mask_0 = _mm256_set1_epi32(0);
+
+	__m128i permMask;
+
+	__m256i tableSizeVector = _mm256_set1_epi32(TAB_SIZE-1);
 
 	//Initiate vectors and masks
 	loadMask, keysVector, newKeysVector, permutationMask, hashedVector, table1Mask, table2Mask = _mm256_cmpeq_epi32(mask_1, mask_1);
@@ -23,6 +37,7 @@ inline void vecCuckooGenerate(column_orders * c_orders)
 
 	//Other variables
 	size_t tuples = 0;
+	size_t shiftIndex;
 
 	//Start Occupation Mask
 	do 
@@ -39,16 +54,56 @@ inline void vecCuckooGenerate(column_orders * c_orders)
 		table1Mask = _mm256_or_si256(table1Mask, mask_1);
 
 		//Hash the keys
-		hashedVector = H1; //First hash using mask with function1
-		hashedVector = H2; //Second hash using mask with function2
+		hashedVector = _mm256_and_si256(keysVector, table1Mask);
+		hashedVector = _mm256_fnv1a_epi32(hashedVector);
+		hashedVector = _mm256_and_si256(hashedVector, tableSizeVector);
 
-		//Load the cuckoo table values - Check for zeros
+		newKeysVector = _mm256_and_si256(keysVector, table2Mask);
+		newKeysVector = _mm256_murmur3_epi32(newKeysVector, 0x0D50064F7);
+		newKeysVector = _mm256_and_si256(newKeysVector, tableSizeVector);
+		newKeysVector = _mm256_add_epi32(newKeysVector, tableSizeVector);
+
+		hashedVector = _mm256_or_si256(hashedVector, newKeysVector);
+
+		//Load the cuckoo table values and check for duplicated values
 		newKeysVector = _mm256_i32gather_epi32(cuckoo, hashedVector, 4);
+		duplicateMask = _mm256_cmpeq_epi32(keysVector, newKeysVector);
 
+		//Remove duplicates
+		duplicateMask = _mm256_andnot_si256(duplicateMask, mask_1);
 
+		//Check for zeros and generate mask removing duplicates
+		loadMask = _mm256_cmpeq_epi32(newKeysVector, mask_0);
+		loadMask = _mm256_and_si256(loadMask, duplicateMask);
+		loadMask = _mm256_andnot_si256(loadMask, mask_1);
 
+		table1Mask = _mm256_and_si256(table1Mask, loadMask);
+		table1Mask = _mm256_and_si256(table1Mask, duplicateMask);
+		table1Mask = _mm256_andnot_si256(table1Mask, mask_1);
 
+		table2Mask = _mm256_and_si256(table1Mask, loadMask);
+		table2Mask = _mm256_and_si256(table2Mask, duplicateMask);
+		table2Mask = _mm256_andnot_si256(table2Mask, mask_1);
 
+		//IMPLEMENT ROUTINE TO INSERT ON BOTH TABLES USING THREADS
+		
+		
+
+		//Invert values on the tables mask's
+		table1Mask = _mm256_andnot_si256(table1Mask, mask_1);
+		table2Mask = _mm256_andnot_si256(table2Mask, mask_1);
+
+		//Move new keys to keys vector
+		keysVector = _mm256_or_si256(keysVector, newKeysVector);
+
+		//Shuffle vector
+		shiftIndex = _mm256_movemask_ps(_mm256_castsi256_ps(inv));
+		permMask = _mm_loadl_epi64((__m128i*) &perm[m ^ 255]);
+		permutationMask = mm256_cvtepi8_epi32(permMask);
+		loadMask = _mm256_permutevar8x32_epi32(loadMask, permutationMask);
+		keysVector = _mm256_permutevar8x32_epi32(keysVector, permutationMask);
+		table1Mask = _mm256_permutevar8x32_epi32(table1Mask, permutationMask);
+		table2Mask = _mm256_permutevar8x32_epi32(table2Mask, permutationMask);
 	} while (tuples <= tamOrders-8)
 	
 }
