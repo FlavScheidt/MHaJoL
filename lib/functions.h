@@ -4,6 +4,8 @@
 
 #include <immintrin.h>
 
+#include <stdalign.h>
+
 // #include <papi.h>
 
 //PATH DEFINITIONS

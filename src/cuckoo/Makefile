@@ -1,9 +1,9 @@
 CC=gcc
 CFLAGS=-g -Wall -fopenmp -DLIKWID_PERFMON -L$LIKWID_LIB -I$LIKWID_INCLUDE -llikwid  -O2 -ftree-vectorize -fopt-info-vec-missed
-DEPS = ../../../hash/hash.h ../../../join.h ../../../cuckoo.h
+DEPS = ../../lib/hash/hash.h ../../lib/join.h ../../lib/cuckoo.h
 
-csrc = $(wildcard ../../../hash/*.c) \
-		$(wildcard ../../../*.c) \
+csrc = $(wildcard ../../lib/hash/*.c) \
+		$(wildcard ../../lib/*.c) \
        	$(wildcard ./*.c) \
 
 OBJ = $(csrc:.c=.o)
@@ -16,6 +16,6 @@ cuckoo: $(OBJ)
 .PHONY: clean
 
 clean:
-	rm -f ../../../hash/*.o ../../../hash/hash
-	rm -f ../../../*.o 
+	rm -f ../../lib/hash/*.o ../../lib/hash/hash
+	rm -f ../../lib/*.o 
 	rm -f *.o cuckoo

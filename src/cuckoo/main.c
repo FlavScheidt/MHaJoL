@@ -1,9 +1,9 @@
-#include "join.h"
+#include "../../lib/join.h"
 
 int main(int argc, char ** argv)
 {
 	int tamCustomer, tamOrders;
-	float *t_result;
+	float t_result[150000];
 	int nResult;
 	clock_t init, end;
 	int sel =0;
@@ -48,6 +48,7 @@ int main(int argc, char ** argv)
 	readOrdersColumn(fileName, c_orders, sel);
 
 	//Result Table
+	tamResult = 150000;
 	for (int i=0; i<tamResult; i++)
 		t_result[i] = 0.0;
 
