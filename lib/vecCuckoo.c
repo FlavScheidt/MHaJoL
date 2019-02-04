@@ -284,45 +284,6 @@ inline void vecCuckooGenerate(column_orders * c_orders)
 		    exit(1);
 		}
 
-
-		// _mm256_maskstore_epi32 (keysArrayCT->hashed, remotionMask, hashedVector);
-		// _mm256_maskstore_epi32 (keysArrayCT->keys, loadMask, keysVector);
-		// _mm256_maskstore_epi32 (insertKeys, loadMask, hashedVector);
-		// _mm256_maskstore_epi32 (insertValues, loadMask, keysVector);
-
-		// for (int i=0; i<8; i++)
-		// {
-		// 	if (insertValues[i] != 0)
-		// 		cuckoo[insertKeys[i]] = insertValues[i];
-		// }
-
-		// // pthread_create(&thread, NULL, vecCuckooInsert, (void *) keysArrayCT);
-
-		// remotionMask = _mm256_andnot_si256(remotionMask, mask_1);
-		// if (_mm256_testz_si256(remotionMask, mask_1))
-		// {
-		// 	_mm256_maskstore_epi32 (insertValues, remotionMask, hashedVector);
-		// 	// _mm256_maskstore_epi32 (keysOHT->keys, remotionMask, hashedVector);
-		// 	// pthread_create(&thread, NULL, vecCuckooInsertOHT, (void *) keysOHT);
-		// }
-		// end = clock();
-		// printf("Iteration %.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
-
-		// table1Mask = _mm256__si256(table1Mask, loadMask);
-		// // table1Mask = _mm256_and_si256(table1Mask, remotionMask);
-		// // table1Mask = _mm256_andnot_si256(table1Mask, mask_1);
-
-		// table2Mask = _mm256_xor_si256(table2Mask, loadMask);
-		// // table2Mask = _mm256_and_si256(table2Mask, remotionMask);
-		// table2Mask = _mm256_andnot_si256(table2Mask, mask_1);
-		
-		// Invert values on the tables mask's
-		// table1Mask = _mm256_andnot_si256(table1Mask, mask_1);
-		// table2Mask = _mm256_andnot_si256(table2Mask, mask_1);
-
-		// //Move new keys to keys vector
-		// keysVector = _mm256_or_si256(keysVector, temporaryVector);
-
 		/*******************************************
 			PHASE 4 - THE SHUFFLE
 		*******************************************/
