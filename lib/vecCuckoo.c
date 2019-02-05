@@ -2,29 +2,33 @@
 
 inline void * vecCuckooInsert(void * keys)
 {
-	int key[8];
-	int hashed[8];
+	alignas(32) int key[8];
+	alignas(32) int hashed[8];
+
+	for (int i=0; i<8; i++)
+	{
+		key[i] = 0;
+		hashed[i] = 0;
+	}
 
 	ptrKeysArray keysArrayCT = (ptrKeysArray) keys;
-	_mm256_maskstore_epi32 (&key[0], keysArrayCT->mask, keysArrayCT->keys);
-	_mm256_maskstore_epi32 (&hashed[0], keysArrayCT->mask, keysArrayCT->hashed);
 
-	pthread_mutex_lock(&lockCuckoo);
+	_mm256_maskstore_epi32(&key[0], keysArrayCT->mask, keysArrayCT->keys);
+	_mm256_maskstore_epi32(&hashed[0], keysArrayCT->mask, keysArrayCT->hashed);
+
 	for (int i=0; i<8; i++)
 	{
 		if (((uint32_t)key[i]) != 0)
 			cuckoo[(uint32_t)hashed[i]] = (uint32_t) key[i];
 	}
-	for (int i = 0; i<8; i++)
-		printf("%d %d %d\n", hashed[i], key[i], cuckoo[(uint32_t)hashed[i]]);
-	pthread_mutex_unlock(&lockCuckoo);
-
 	pthread_exit(NULL);
 }
 
 inline void * vecCuckooInsertOHT(void * keys)
 {
 	// ptrkeysArraOHT keysArraOHT = (ptrkeysArraOHT) keys;
+	// printf("OHT\n");
+	OHTOCC++;
 
 	// for (int i=0; i<8; i++)
 	// {
@@ -125,8 +129,8 @@ const uint64_t perm[256] = {0x0706050403020100ull,
 inline void vecCuckooGenerate(column_orders * c_orders)
 {
 	pthread_t thread[MAX_THREADS];
+
 	void *status;
-	int threadIndex=-1;
 
 	int key[tamOrders];
 	int shiftIndex;
@@ -153,7 +157,7 @@ inline void vecCuckooGenerate(column_orders * c_orders)
 	__m128i permMask;
 
 	__m256i tableSizeVector = _mm256_set1_epi32(TAB_SIZE-1);
-	__m256i thresholdVector = _mm256_set1_epi32(VCUCKOO_MAX_TRY);
+	__m256i thresholdVector = _mm256_set1_epi32(VCUCKOO_MAX_TRY-1);
 
 	//Initiate vectors 4and masks
 	loadMask = _mm256_cmpeq_epi32(mask_1, mask_1);
@@ -176,12 +180,6 @@ inline void vecCuckooGenerate(column_orders * c_orders)
 	for (int i=0; i<tamOrders;i++)
 		key[i] = c_orders[i].O_CUSTKEY;
 
-	if (pthread_mutex_init(&lockCuckoo, NULL) != 0)
-	{
- 		fprintf(stderr, "Mutex not created.\n");
- 		exit(EXIT_FAILURE);
- 	}
-
 	init = clock();
 
 	keysVector = _mm256_maskload_epi32(&key[tuples], loadMask);
@@ -189,10 +187,6 @@ inline void vecCuckooGenerate(column_orders * c_orders)
 
 	hashedVector = _mm256_fnv1a_epi32(keysVector);
 	hashedVector = _mm256_and_si256(hashedVector, tableSizeVector);
-
-	hopsVector = _mm256_andnot_si256(hopsVector, mask_1);
-	table1Mask = _mm256_andnot_si256(table1Mask, mask_1);
-	table2Mask = _mm256_andnot_si256(table1Mask, mask_1);
 
 	keysArrayCT.keys = _mm256_or_si256(keysVector, mask_0);
 	keysArrayCT.hashed = _mm256_or_si256(hashedVector, mask_0);
@@ -210,6 +204,7 @@ inline void vecCuckooGenerate(column_orders * c_orders)
 			PHASE 1 - THE LOAD
 			Load the new items using the loadMask
 		******************************************/
+		// printf("%d\n", tuples);
 		temporaryVector = _mm256_maskload_epi32(&key[tuples], loadMask);
 		
 		keysVector = _mm256_andnot_si256(loadMask, keysVector);
@@ -229,6 +224,7 @@ inline void vecCuckooGenerate(column_orders * c_orders)
 
 		temporaryVector = _mm256_murmur3_epi32(keysVector, 0x0D50064F7);
 		temporaryVector = _mm256_and_si256(temporaryVector, tableSizeVector);
+		temporaryVector = _mm256_add_epi32(temporaryVector, tableSizeVector);
 		temporaryVector = _mm256_and_si256(temporaryVector, table2Mask);
 
 		hashedVector = _mm256_or_si256(hashedVector, temporaryVector);
@@ -237,37 +233,42 @@ inline void vecCuckooGenerate(column_orders * c_orders)
 			PHASE 3 - THE RETRIEVAL
 			Load the cuckoo table values and check for zeros and duplicated values
 		*******************************************/
-		if (pthread_join(thread[0], &status) != 0) 
-		{
-		    perror("pthread_join() error");
-		    exit(3);
-		}
-
 		temporaryVector = _mm256_i32gather_epi32(cuckoo, hashedVector, 4);
 		remotionMask = _mm256_cmpeq_epi32(keysVector, temporaryVector);
+
 		loadMask = _mm256_cmpeq_epi32(temporaryVector, mask_0);
-		loadMask = _mm256_xor_si256(loadMask, remotionMask);
+		loadMask = _mm256_castps_si256(_mm256_or_ps(_mm256_castsi256_ps(loadMask), _mm256_castsi256_ps(remotionMask)));
 
 		/*******************************************
 			PHASE 4 - THE HOPS CALCULATION
 			Calculates the hops, who's gonna be stored on the OHT and who goes to each table
 		*******************************************/
-		remotionMask = _mm256_cmpeq_epi32(hopsVector, thresholdVector);
-		remotionMask = _mm256_andnot_si256(remotionMask, mask_1);
-		hopsVector = _mm256_and_si256(hopsVector, remotionMask);
-		hopsVector = _mm256_andnot_si256(loadMask, hopsVector);
+		remotionMask = _mm256_cmpgt_epi32(hopsVector, thresholdVector);
+		hopsVector = _mm256_castps_si256(_mm256_andnot_ps(_mm256_castsi256_ps(remotionMask), _mm256_castsi256_ps(hopsVector)));
+		hopsVector = _mm256_castps_si256(_mm256_andnot_ps(_mm256_castsi256_ps(loadMask), _mm256_castsi256_ps(hopsVector)));
 		hopsVector = _mm256_add_epi32(hopsVector, mask_1);
 		table1Mask = _mm256_slli_epi32(hopsVector, 31);
 		table1Mask = _mm256_srli_epi32(table1Mask, 31);
-		table2Mask = _mm256_andnot_si256(table1Mask, mask_1);
+		table1Mask = _mm256_cmpeq_epi32(table1Mask, mask_1);
+		table2Mask = _mm256_cmpeq_epi32(table1Mask, mask_0);
+
+		loadMask = _mm256_castps_si256(_mm256_or_ps(_mm256_castsi256_ps(remotionMask), _mm256_castsi256_ps(loadMask)));
+		table1Mask = _mm256_castps_si256(_mm256_or_ps(_mm256_castsi256_ps(remotionMask), _mm256_castsi256_ps(table1Mask)));
+		table2Mask = _mm256_castps_si256(_mm256_andnot_ps(_mm256_castsi256_ps(remotionMask), _mm256_castsi256_ps(table2Mask)));
 
 		/*******************************************
 			PHASE 4 - THE STORE
 			Almost everyone goes to the cuckoo table... except the ones that reached the threshold, those must be stored on the OHT
 		*******************************************/
-		keysArrayCT.keys = _mm256_or_si256(keysVector, mask_0);
+		keysArrayCT.keys = _mm256_andnot_si256(remotionMask, keysVector);
 		keysArrayCT.hashed = _mm256_or_si256(hashedVector, mask_0);
-		keysArrayCT.mask = _mm256_or_si256(loadMask, mask_0);
+		keysArrayCT.mask = _mm256_or_si256(remotionMask, mask_0);
+
+		if (pthread_join(thread[0], &status) != 0) 
+		{
+		    perror("pthread_join() error");
+		    exit(3);
+		}
 
 		if(pthread_create(&thread[0],NULL,vecCuckooInsert,(void *)ptrArray)!=0)
 		{
@@ -275,13 +276,16 @@ inline void vecCuckooGenerate(column_orders * c_orders)
 		    exit(1);
 		}
 
-		keysArrayOHT.keys = _mm256_or_si256(keysVector, mask_0);
-		keysArrayOHT.mask = _mm256_or_si256(loadMask, mask_0);
+		keysArrayOHT.keys = _mm256_and_si256(remotionMask, keysVector);
 
-		if (pthread_create(&thread[1], NULL, vecCuckooInsertOHT, (void *) ptrArrayOHT)!= 0) 
+		pthread_join(thread[1], &status);
+		if (_mm256_testz_si256(keysArrayOHT.keys, mask_1) == 0)
 		{
-		    perror("pthread_create() error");
-		    exit(1);
+			if (pthread_create(&thread[1], NULL, vecCuckooInsertOHT, (void *) ptrArrayOHT)!= 0) 
+			{
+			    perror("pthread_create() error");
+			    exit(1);
+			}
 		}
 
 		/*******************************************
@@ -299,9 +303,7 @@ inline void vecCuckooGenerate(column_orders * c_orders)
 	end = clock();
 	printf("Generation %.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 
-	pthread_mutex_destroy(&lockCuckoo);
-	return;
-	
+	return;	
 }
 
 inline int vecCuckooLookUpOHT(__m256i key, __m256i hash1)
@@ -365,14 +367,12 @@ int vecCuckooJoin(column_customer * c_customer, column_orders * c_orders)
 	DUP = 0;			//duplicated keys
 	SUC = 0; 			//successfull insertion on the first try
 	HOPED = 0;			//Succesfull insertion with hops
+	OHTOCC = 0;
 
 	for (int i=0; i<REAL_TAB_SIZE; i++)
 		cuckoo[i]=0;
 
 	vecCuckooGenerate(c_orders);
-
-	// for (int i=0; i<REAL_TAB_SIZE; i++)
-	// 	printf("%d\n", cuckoo[i]);
 
 	for (int i=0; i<tamCustomer;i++)
 		customer[i] = c_customer[i].C_CUSTKEY;
@@ -388,6 +388,7 @@ int vecCuckooJoin(column_customer * c_customer, column_orders * c_orders)
 	end=clock();
 
 	printf("Join core: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
+	printf("%d\n", OHTOCC);
 
     return index; 
 }

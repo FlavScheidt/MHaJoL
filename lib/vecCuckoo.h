@@ -36,7 +36,8 @@ double   HOPSGENERAL;	//general hops in average
 uint32_t OCC;			//occupation	
 uint32_t DUP;			//duplicated keys
 uint32_t SUC; 			//successfull insertion on the first try
-uint32_t HOPED;			//Succesfull insertion with hops
+uint32_t HOPED;		//Succesfull insertion with hops
+uint32_t OHTOCC;    
 
 typedef struct keysArray
 {
@@ -55,7 +56,7 @@ typedef struct keysArrayOHT
 
 typedef keysArrayOHT *ptrKeysArrayOHT;
 
-pthread_mutex_t lockCuckoo;
+// pthread_mutex_t lockCuckoo;
 
 /***************************
 	FUNCTIONS
