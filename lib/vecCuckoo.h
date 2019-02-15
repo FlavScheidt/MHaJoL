@@ -24,7 +24,7 @@
 /****************************
 	PARAMETERS
 ****************************/
-#define VCUCKOO_MAX_TRY 100
+#define VCUCKOO_MAX_TRY 300
 #define MAX_THREADS 2
 #define OHT_THRESHOLD 8
 

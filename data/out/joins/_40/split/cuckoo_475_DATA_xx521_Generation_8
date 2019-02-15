@@ -1,0 +1,5 @@
+Generation,40,cuckoo,DATA,Runtime(RDTSC)[s],0.2146,
+Generation,40,cuckoo,DATA,Runtimeunhalted[s],0.2375,
+Generation,40,cuckoo,DATA,Clock[MHz],2884.5185,
+Generation,40,cuckoo,DATA,CPI,0.4146,
+Generation,40,cuckoo,DATA,Loadtostoreratio,1.2251,

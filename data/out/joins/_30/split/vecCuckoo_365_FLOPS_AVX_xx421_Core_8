@@ -1,0 +1,6 @@
+Core,30,vecCuckoo,FLOPS_AVX,Runtime(RDTSC)[s],0.0037,
+Core,30,vecCuckoo,FLOPS_AVX,Runtimeunhalted[s],0.0043,
+Core,30,vecCuckoo,FLOPS_AVX,Clock[MHz],3037.7258,
+Core,30,vecCuckoo,FLOPS_AVX,CPI,1.1471,
+Core,30,vecCuckoo,FLOPS_AVX,PackedSPMFLOP/s,0,
+Core,30,vecCuckoo,FLOPS_AVX,PackedDPMFLOP/s,0,

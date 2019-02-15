@@ -1,0 +1,2 @@
+Initialization,90,cuckoo,FLOPS_AVX,RDTSCRuntime[s],0.004797,
+Initialization,90,cuckoo,FLOPS_AVX,callcount,1,

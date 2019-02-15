@@ -43,9 +43,11 @@ int main(int argc, char ** argv)
 	c_customer = malloc(tamCustomer*sizeof(column_customer));
 	readCustomerColumn(fileName2, c_customer);
 
+	printf("%s buu\n", fileName);
 	tamOrders = countLines(fileName);
 	c_orders = malloc(tamOrders*sizeof(column_orders));
 	readOrdersColumn(fileName, c_orders, sel);
+
 
 	//Result Table
 	tamResult = 150000;

@@ -113,14 +113,14 @@ inline void vecCuckooGenerate(column_orders * c_orders)
 	__m256i table1Values;
 	__m256i table2Values;
 	__m256i storeMask;
-	__m256i ohtMask;
+	// __m256i ohtMask;
 	__m256i mask_1 = _mm256_set1_epi32(1);
 	__m256i mask_0 = _mm256_set1_epi32(0);
 
 	__m128i permMask;
 
 	__m256i tableSizeVector = _mm256_set1_epi32(TAB_SIZE-1);
-	__m256i thresholdVector = _mm256_set1_epi32(VCUCKOO_MAX_TRY);
+	// __m256i thresholdVector = _mm256_set1_epi32(VCUCKOO_MAX_TRY);
 
 	//Initiate vectors 4and masks
 	loadMask = _mm256_cmpeq_epi32(mask_1, mask_1);
@@ -132,7 +132,7 @@ inline void vecCuckooGenerate(column_orders * c_orders)
 	table2Mask =_mm256_cmpeq_epi32(mask_0, mask_1);
 	hopsVector = _mm256_cmpeq_epi32(mask_1, mask_1);
 	remotionMask = _mm256_cmpeq_epi32(mask_0, mask_1);
-	ohtMask = _mm256_cmpeq_epi32(mask_0, mask_1);
+	// ohtMask = _mm256_cmpeq_epi32(mask_0, mask_1);
 	table1Values =_mm256_cmpeq_epi32(mask_0, mask_1);
 	table2Values =_mm256_cmpeq_epi32(mask_0, mask_1);
 	storeMask = _mm256_cmpeq_epi32(mask_1, mask_1);
@@ -143,6 +143,7 @@ inline void vecCuckooGenerate(column_orders * c_orders)
 	//Other variables
 	size_t tuples = 0;
 	size_t index;
+	int threshold = 0;
 
 	for (int i=0; i<tamOrders;i++)
 		key[i] = c_orders[i].O_CUSTKEY;
@@ -172,6 +173,7 @@ inline void vecCuckooGenerate(column_orders * c_orders)
 
 	while (tuples <= tamOrders-8)
 	{
+		threshold++;
 		/******************************************
 			PHASE 1 - THE LOAD
 			Load the new items using the loadMask
@@ -184,7 +186,7 @@ inline void vecCuckooGenerate(column_orders * c_orders)
 
 		//Number of keys loaded to set the new tuples value
 		index = _mm256_movemask_ps(_mm256_castsi256_ps(loadMask));
-		tuples +=  _mm_popcnt_u64(index);
+		tuples += _mm_popcnt_u64(index);
 
 		/*******************************************
 			PHASE 2 - THE HASH
@@ -237,9 +239,9 @@ inline void vecCuckooGenerate(column_orders * c_orders)
 		//Calculates the hops removing the ones who reached the threshold
 
 		//Did someone reach the threshold?
-		ohtMask = _mm256_cmpgt_epi32(hopsVector, thresholdVector);
+		// ohtMask = _mm256_cmpgt_epi32(hopsVector, thresholdVector);
 		//Set zero where the threshold has been reached 
-		hopsVector = _mm256_castps_si256(_mm256_andnot_ps(_mm256_castsi256_ps(ohtMask), _mm256_castsi256_ps(hopsVector)));
+		// hopsVector = _mm256_castps_si256(_mm256_andnot_ps(_mm256_castsi256_ps(ohtMask), _mm256_castsi256_ps(hopsVector)));
 		//Set zero where a new key must be load
 		hopsVector = _mm256_castps_si256(_mm256_andnot_ps(_mm256_castsi256_ps(loadMask), _mm256_castsi256_ps(hopsVector))); 
 		//Adds 1 to the hops counter
@@ -257,23 +259,10 @@ inline void vecCuckooGenerate(column_orders * c_orders)
 			PHASE 6 - THE NEW MASKS 
 		*******************************************/
 		//If the key goes to the OHT, the position is free to hold a new key from the relation
-		loadMask = _mm256_or_si256(ohtMask, loadMask);
 
 		//Same as the load, but respecting the positions that must be stored on the t1 on the next iteration
 		table1Mask = _mm256_or_si256(remotionMask, table1Mask);
 		table2Mask = _mm256_andnot_si256(remotionMask, table2Mask);
-
-		//Needs to invert the OHT mask, cause those keys must NOT be stored on the cuckoo table
-		// remotionMask = _mm256_cmpeq_epi32(ohtMask, mask_0);
-		remotionMask = _mm256_or_si256(storeMask, mask_0);
-		storeMask = _mm256_cmpeq_epi32(storeMask, mask_0);
-
-		//Here we have the keys that are not duplicated and didn't reach the threshold. Those are the keys that must be stored on the cuckoo table
-		storeMask = _mm256_or_si256(ohtMask, storeMask);
-		storeMask = _mm256_cmpeq_epi32(storeMask, mask_0);
-
-		//Remove duplicates from the OHT mask
-		ohtMask = _mm256_and_si256(ohtMask, remotionMask);
 
 		/*******************************************
 			PHASE 7 - THE STORE
@@ -294,9 +283,6 @@ inline void vecCuckooGenerate(column_orders * c_orders)
 				cuckoo[(uint32_t)cuckooHashed[i]] = (uint32_t) cuckooKey[i];
 		}
 
-		if (!_mm256_testz_si256(mask_1, ohtMask))
-			OHTOCC = OHTOCC + _mm256_insertOHT_epi32(keysVector, ohtMask);
-
 		/*******************************************
 			PHASE 8 - THE SHUFFLE
 		*******************************************/
@@ -311,47 +297,8 @@ inline void vecCuckooGenerate(column_orders * c_orders)
 
 	end = clock();
 	printf("Generation %.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
-	printf("%ld\n", tuples);
-
-	loadMask = _mm256_cmpeq_epi32(loadMask, mask_0);
-	if (!_mm256_testz_si256(mask_1, loadMask))
-		OHTOCC = OHTOCC + _mm256_insertOHT_epi32(keysVector, loadMask);
 
 	return;	
-}
-
-inline int vecCuckooLookUpOHT(__m256i key, __m256i mask)
-{
-	int cuckooKey[8];
-	int result = 0;
-
-	uint32_t olderCuckoo;
-	uint32_t index0, index01, index02;
-	uint32_t index1, index11, index12;
-
-	for (int i=0; i<8; i++)
-		cuckooKey[i] = 0;
-
-	_mm256_maskstore_epi32(&cuckooKey[0], mask, key);
-
-	for (int i=0; i<8; i++)
-	{
-		olderCuckoo = cuckooKey[i];
-		index0= OHT_HASH % (VEC_OHT-1);
-		index01 = (OHT_HASH+1) % (VEC_OHT-1);
-		index02 = (OHT_HASH+2) % (VEC_OHT-1);	
-
-		index1 = OHT_HASH1 % (VEC_OHT-1);
-		index11 = (OHT_HASH1+1) % (VEC_OHT-1);
-		index12 = (OHT_HASH1+2) % (VEC_OHT-1);	
-
-		if (OHT0CCT[index0] == cuckooKey[i] || OHT1CCT[index1] == cuckooKey[i] || 
-			OHT0CCT[index01] == cuckooKey[i] || OHT1CCT[index11] == cuckooKey[i] ||
-			OHT0CCT[index02] == cuckooKey[i] || OHT1CCT[index12] == cuckooKey[i])
-				result++;
-	}
-
-	return 0;
 }
 
 inline int vecCuckooLookUp(__m256i key)
@@ -361,15 +308,12 @@ inline int vecCuckooLookUp(__m256i key)
 	__m256i table1;
 	__m256i table2;
 
-	__m256i ohtMask;
-
 	__m256i tableSizeVector = _mm256_set1_epi32(TAB_SIZE-1);
 	__m256i mask_1 = _mm256_set1_epi32(0);
 	__m256i mask_0 = _mm256_set1_epi32(0);
 	mask_1 = _mm256_cmpeq_epi32(mask_1, mask_0);
 
 	uint32_t found = 0;
-	int ohtFound = 0;
 
 	hash1 = _mm256_fnv1a_epi32(key);
 	hash1 = _mm256_and_si256(hash1, tableSizeVector);
@@ -386,17 +330,14 @@ inline int vecCuckooLookUp(__m256i key)
 
 	hash1 = _mm256_or_si256(hash1, hash2);
 
-	ohtMask = _mm256_cmpeq_epi32(hash1, mask_0);
-	ohtMask = _mm256_cmpeq_epi32(ohtMask, mask_0);
-
-	if (!_mm256_testz_si256(mask_1, ohtMask))
-		ohtFound = vecCuckooLookUpOHT(key, ohtMask);
+	// ohtMask = _mm256_cmpeq_epi32(hash1, mask_0);
+	// ohtMask = _mm256_cmpeq_epi32(ohtMask, mask_0);
 
 	hash1 = _mm256_cmpeq_epi32(hash1, mask_0);
 
 	found = _mm256_movemask_ps(_mm256_castsi256_ps(hash1));
 
-	return (((found<<31)>>31)+((found<<30)>>31)+((found<<29)>>31)+((found<<28)>>31)+((found<<27)>>31)+((found<<26)>>31)+((found<<25)>>31)+((found<<24)>>31))-ohtFound;
+	return (((found<<31)>>31)+((found<<30)>>31)+((found<<29)>>31)+((found<<28)>>31)+((found<<27)>>31)+((found<<26)>>31)+((found<<25)>>31)+((found<<24)>>31));
 
 }
 
@@ -449,7 +390,7 @@ int vecCuckooJoin(column_customer * c_customer, column_orders * c_orders)
 	end=clock();
 
 	printf("Join core: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
-	printf("\n 	Cuckoo Occupation %d\n 	OHT Occupation %d\n 	Duplicates %d\n	Total %d\n", OCC, OHTOCC, DUP, (OHTOCC+OCC));
+	printf("Cuckoo Occupation %d\n", OCC);
 
     return index; 
 }

@@ -1,6 +1,6 @@
 CC=gcc
-CFLAGS=-g -Wall -fopenmp -DLIKWID_PERFMON -L$LIKWID_LIB -I$LIKWID_INCLUDE -llikwid  -O2 -ftree-vectorize -fopt-info-vec-missed
-DEPS = ../../lib/hash/hash.h ../../lib/join.h ../../lib/cuckoo.h
+CFLAGS=-g -Wall -DLIKWID_PERFMON -L$LIKWID_LIB -I$LIKWID_INCLUDE -llikwid -lpthread -mavx2 -march=skylake
+DEPS = ../../lib/hash/hash.h ../lib/../join.h ../../lib/cuckoo.h
 
 csrc = $(wildcard ../../lib/hash/*.c) \
 		$(wildcard ../../lib/*.c) \
@@ -8,14 +8,12 @@ csrc = $(wildcard ../../lib/hash/*.c) \
 
 OBJ = $(csrc:.c=.o)
 
-LDFLAGS = -lGL -lglut -lpng -lz -lm
-
 cuckoo: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS)
 
 .PHONY: clean
 
 clean:
-	rm -f ../../lib/hash/*.o ../../lib/hash/hash
-	rm -f ../../lib/*.o 
+	rm -f hash/*.o ../../lib/hash/hash
 	rm -f *.o cuckoo
+	rm -f ../../lib/*.o

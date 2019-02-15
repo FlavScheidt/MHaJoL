@@ -1,0 +1,2 @@
+Core,30,cuckoo,FLOPS_AVX,RDTSCRuntime[s],0.018845,
+Core,30,cuckoo,FLOPS_AVX,callcount,1,

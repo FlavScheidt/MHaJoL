@@ -1,0 +1,7 @@
+Generation,70,cuckoo,L2CACHE,Runtime(RDTSC)[s],0.2751,
+Generation,70,cuckoo,L2CACHE,Runtimeunhalted[s],0.2606,
+Generation,70,cuckoo,L2CACHE,Clock[MHz],2470.3379,
+Generation,70,cuckoo,L2CACHE,CPI,0.4653,
+Generation,70,cuckoo,L2CACHE,L2requestrate,0.0066,
+Generation,70,cuckoo,L2CACHE,L2missrate,0.0022,
+Generation,70,cuckoo,L2CACHE,L2missratio,0.3378,

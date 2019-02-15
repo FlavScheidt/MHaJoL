@@ -1,8 +1,8 @@
 #!/bin/bash
 
-metrics=("TLB_DATA" "L3CACHE" "L2CACHE")
+metrics=("L3CACHE" "L2CACHE" "L2" "L3" "FLOPS_AVX" "DATA" "BRANCH")
 
-methods=("cct" "cuckoo" "bloom" "bloomNested" "chained" "bloomChained")
+methods=("cuckoo" "vecCuckoo")
 
 #Selectivity from 0 to 1.0, by 0.1
 for i in `seq 1 9`;
@@ -14,14 +14,14 @@ do
 
 	echo "Making directories..."
 	#Makes the .dat folder needed for the plots
-	DAT_DIR="/home/flav/Mestrado/MHaJoL/methods/lik/gnu/joins/_${selectivity}"
+	DAT_DIR="/home/flav/Mestrado/MHaJoL/data/gnu/joins/_${selectivity}"
 	if [ ! -d "$DAT_DIR" ]
 	then
 		mkdir "$DAT_DIR"
 	fi
 
 	#Makes the .out folder needed for the plots
-	OUT_DIR="/home/flav/Mestrado/MHaJoL/methods/lik/out/joins/_${selectivity}"
+	OUT_DIR="/home/flav/Mestrado/MHaJoL/data/out/joins/_${selectivity}"
 	if [ ! -d "$OUT_DIR" ]
 	then
 		mkdir "$OUT_DIR"
@@ -37,6 +37,7 @@ do
 	# echo "Generation orders table..."
 	# #Generates orders table and prints it to file
 	psql bloom bloom -c "select * from generate_sample_by_selectivity(${selectivity});" &>> ${TEMP_DIR}/ORDERS_${selectivity}.tbl
+	chmod 777 ${TEMP_DIR}/ORDERS_${selectivity}.tbl
 
 	#Transforms file into a real tbl file to be read by the program
 	cat ${TEMP_DIR}/ORDERS_${selectivity}.tbl | sed '1,2d' | sed '/o_/d' | sed '/function/d' | sed '/^\s*$/d' | sed '/-----/d' | sed '/row/d' | tr -d '\t' | sed -e 's/[ \t]*//' | sed 's/$/|/' &>> /home/flav/Mestrado/MHaJoL/tbl/orders_${selectivity}.tbl
@@ -54,7 +55,7 @@ do
 				echo "		test $s of 101"
 				#Runs the join with no parameter variation 
 				outputName="${OUT_DIR}/${n}.out"
-				likwid-perfctr -m -C S0:0 -g  ${m} /home/flav/Mestrado/MHaJoL/methods/lik/${n}/${n} ${selectivity} &>> ${outputName}
+				likwid-perfctr -m -C S0:0 -g  ${m} /home/flav/Mestrado/MHaJoL/src/${n}/${n} ${selectivity} &>> ${outputName}
 			done
 		done
 	done

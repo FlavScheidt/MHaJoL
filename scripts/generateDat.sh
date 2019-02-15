@@ -1,16 +1,14 @@
 #!/bin/bash
-metrics=("L2" "L3" "TLB_DATA" "L3CACHE" "L2CACHE")
-methods=("cct" "cuckoo" "bloom" "bloomNested" "chained" "bloomChained")
+metrics=("L3CACHE" "L2CACHE" "L2" "L3" "FLOPS_AVX" "DATA" "BRANCH")
 
-region=("Generation" "Core")
-
+methods=("cuckoo" "vecCuckoo")
 for i in `seq 1 9`;
 do
 	selectivity=$((i*10))
 	echo ${selectivity}
 
 	#in directory
-	outDir="/home/flav/Mestrado/MHaJoL/methods/lik/out/joins/_${selectivity}/"
+	outDir="/home/flav/Mestrado/MHaJoL/data/out/joins/_${selectivity}/"
 	echo "	${outDir}"
 
 	for n in "${methods[@]}";

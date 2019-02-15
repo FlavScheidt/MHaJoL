@@ -1,0 +1,8 @@
+Core,90,cuckoo,BRANCH,Runtime(RDTSC)[s],0.0321,
+Core,90,cuckoo,BRANCH,Runtimeunhalted[s],0.0307,
+Core,90,cuckoo,BRANCH,Clock[MHz],2494.1792,
+Core,90,cuckoo,BRANCH,CPI,0.5491,
+Core,90,cuckoo,BRANCH,Branchrate,0.1607,
+Core,90,cuckoo,BRANCH,Branchmispredictionrate,8.437124e-06,
+Core,90,cuckoo,BRANCH,Branchmispredictionratio,0.0001,
+Core,90,cuckoo,BRANCH,Instructionsperbranch,6.2231,
