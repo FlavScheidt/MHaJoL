@@ -1,7 +1,10 @@
+import numpy as np
 import pandas as pd
 #
 import matplotlib.pyplot as plt
-import numpy as np
+
+import matplotlib.ticker as ticker
+# from collections import namedtuple
 
 try:
     # for Python2
@@ -20,46 +23,37 @@ except ImportError:
 
 metrics=[
 ('L3CACHE','UOPS_RETIRED_ALL','UOPS_RETIRED_ALL ', ' ', ' '),
-('FLOPS_AVX','PackedSPMFLOP_s','PackedSPMFLOP_s ', ' ', ' '),
-('FLOPS_AVX','PackedDPMFLOP_s','PackedDPMFLOP_s ', ' ', ' '),
+# ('FLOPS_AVX','PackedSPMFLOP_s','PackedSPMFLOP_s ', ' ', ' '),
+# ('FLOPS_AVX','PackedDPMFLOP_s','PackedDPMFLOP_s ', ' ', ' '),
 ('L3CACHE','MEM_LOAD_RETIRED_L3_MISS','MEM_LOAD_RETIRED_L3_MISS ', ' ', ' '),
 ('L3CACHE','MEM_LOAD_RETIRED_L3_HIT','MEM_LOAD_RETIRED_L3_HIT ', ' ', ' '),
 ('DATA','MEM_INST_RETIRED_ALL_STORES','MEM_INST_RETIRED_ALL_STORES ', ' ', ' '),
 ('DATA','MEM_INST_RETIRED_ALL_LOADS','MEM_INST_RETIRED_ALL_LOADS ', ' ', ' '),
-('DATA','Loadtostoreratio','Loadtostoreratio ', ' ', ' '),
+('DATA','Loadtostoreratio','Load to Store Ratio ', ' ', ' '),
 ('L3CACHE','L3requestrate','L3requestrate ', ' ', ' '),
-('L3CACHE','L3missratio','L3missratio ', ' ', ' '),
 ('L3CACHE','L3missrate','L3missrate ', ' ', ' '),
-('L3','L3loaddatavolume[GBytes]','L3loaddatavolume[GBytes] ', ' ', ' '),
-('L3','L3loadbandwidth[MBytes_s]','L3loadbandwidth[MBytes_s] ', ' ', ' '),
-('L3','L3evictdatavolume[GBytes]','L3evictdatavolume[GBytes] ', ' ', ' '),
-('L3','L3evictbandwidth[MBytes_s]','L3evictbandwidth[MBytes_s] ', ' ', ' '),
-('L3','L3datavolume[GBytes]','L3datavolume[GBytes] ', ' ', ' '),
-('L3','L3bandwidth[MBytes_s]','L3bandwidth[MBytes_s] ', ' ', ' '),
+# ('L3','L3loaddatavolume[GBytes]','L3loaddatavolume[GBytes] ', ' ', ' '),
+# ('L3','L3loadbandwidth[MBytes_s]','L3loadbandwidth[MBytes_s] ', ' ', ' '),
+# ('L3','L3datavolume[GBytes]','L3datavolume[GBytes] ', ' ', ' '),
+# ('L3','L3bandwidth[MBytes_s]','L3bandwidth[MBytes_s] ', ' ', ' '),
 ('L2CACHE','L2requestrate','L2requestrate ', ' ', ' '),
-('L2CACHE','L2missratio','L2missratio ', ' ', ' '),
 ('L2CACHE','L2missrate','L2missrate ', ' ', ' '),
-('L2','L2Dloaddatavolume[GBytes]','L2Dloaddatavolume[GBytes] ', ' ', ' '),
-('L2','L2Dloadbandwidth[MBytes_s]','L2Dloadbandwidth[MBytes_s] ', ' ', ' '),
-('L2','L2Devictdatavolume[GBytes]','L2Devictdatavolume[GBytes] ', ' ', ' '),
-('L2','L2Devictbandwidth[MBytes_s]','L2Devictbandwidth[MBytes_s] ', ' ', ' '),
-('L2','L2datavolume[GBytes]','L2datavolume[GBytes] ', ' ', ' '),
-('L2','L2bandwidth[MBytes_s]','L2bandwidth[MBytes_s] ', ' ', ' '),
+# ('L2','L2Dloaddatavolume[GBytes]','L2Dloaddatavolume[GBytes] ', ' ', ' '),
+# ('L2','L2Dloadbandwidth[MBytes_s]','L2Dloadbandwidth[MBytes_s] ', ' ', ' '),
+# ('L2','L2datavolume[GBytes]','L2datavolume[GBytes] ', ' ', ' '),
+# ('L2','L2bandwidth[MBytes_s]','L2bandwidth[MBytes_s] ', ' ', ' '),
 ('L3','L2_TRANS_L2_WB','L2_TRANS_L2_WB ', ' ', ' '),
 ('L2CACHE','L2_TRANS_ALL_REQUESTS','L2_TRANS_ALL_REQUESTS ', ' ', ' '),
 ('L2CACHE','L2_RQSTS_MISS','L2_RQSTS_MISS ', ' ', ' '),
 ('L3','L2_LINES_IN_ALL','L2_LINES_IN_ALL ', ' ', ' '),
 ('L2','L1D_REPLACEMENT','L1D_REPLACEMENT ', ' ', ' '),
 ('L2','L1D_M_EVICT','L1D_M_EVICT ', ' ', ' '),
-('BRANCH','Instructionsperbranch','Instructionsperbranch ', ' ', ' '),
-('L2','ICACHE_64B_IFTAG_MISS','ICACHE_64B_IFTAG_MISS ', ' ', ' '),
-('FLOPS_AVX','FP_ARITH_INST_RETIRED_256B_PACKED_SINGLE','FP_ARITH_INST_RETIRED_256B_PACKED_SINGLE ', ' ', ' '),
-('FLOPS_AVX','FP_ARITH_INST_RETIRED_256B_PACKED_DOUBLE','FP_ARITH_INST_RETIRED_256B_PACKED_DOUBLE ', ' ', ' '),
-('BRANCH','Branchrate','Branchrate ', ' ', ' '),
-('BRANCH','Branchmispredictionratio','Branchmispredictionratio ', ' ', ' '),
-('BRANCH','Branchmispredictionrate','Branchmispredictionrate ', ' ', ' '),
-('BRANCH','BR_MISP_RETIRED_ALL_BRANCHES','BR_MISP_RETIRED_ALL_BRANCHES ', ' ', ' '),
-('BRANCH','BR_INST_RETIRED_ALL_BRANCHES','BR_INST_RETIRED_ALL_BRANCHES ', ' ', ' ')
+('BRANCH','Instructionsperbranch','Instructions per branch ', ' ', ' '),
+('L2','ICACHE_64B_IFTAG_MISS','L2 misses ', ' ', ' '),
+# ('FLOPS_AVX','FP_ARITH_INST_RETIRED_256B_PACKED_SINGLE','FP_ARITH_INST_RETIRED_256B_PACKED_SINGLE ', ' ', ' '),
+# ('FLOPS_AVX','FP_ARITH_INST_RETIRED_256B_PACKED_DOUBLE','FP_ARITH_INST_RETIRED_256B_PACKED_DOUBLE ', ' ', ' '),
+('BRANCH','Branchrate','Branch rate ', ' ', ' '),
+('BRANCH','Branchmispredictionrate','Branch misprediction rate ', ' ', ' ')
 ]
 
 # metrics=[('CYCLE_ACTIVITY', 'CycleswithoutexecutionduetoL1D[_]'),
@@ -94,69 +88,136 @@ metrics=[
 # ('BRANCH', 'Branchmispredictionrate')
 # ]
 
-generalMetrics=[('Runtimeunhalted[s]', ' ', 'log'),
- 	('RDTSCRuntime[s]', ' ', 'log'),
- 	('Runtime(RDTSC)[s]', ' ', 'log'),
+generalMetrics=[('Runtimeunhalted[s]', ' ', ' '),
+ 	('RDTSCRuntime[s]', ' ', ' '),
+ 	('Runtime(RDTSC)[s]', ' ', ' '),
  	('CPI', ' ', ' ')]
 
 regions=['Core', 'Generation']
 
-methods=[('cuckoo', (0, (5, 5)), 'crimson', 's'), ('vecCuckoo', (0, (3, 10, 1, 10)), 'steelblue', 'p')]
+pd.set_option('display.max_columns', 30)
 
-df=pd.read_csv('/home/flav/Mestrado/MHaJoL/data/grouped.csv', sep=',')
+# df=pd.read_csv('/home/flav/Mestrado/MHaJoL/data/grouped.csv', sep=';', encoding='utf-8-sig')
+df=pd.read_csv('/home/flav/Mestrado/MHaJoL/data/results.csv', sep=',', encoding='utf-8-sig')
+
+#First of all, find the outliers!
+dfQuantile1 = df.groupby(['grp', 'metric', 'method', 'region', 'selectivity']).quantile(q=0.25, axis=0, numeric_only=True, interpolation='linear').reset_index()
+dfQuantile1 = dfQuantile1.rename(index=str, columns={"value": "first"})
+
+dfQuantile2 = df.groupby(['grp', 'metric', 'method', 'region', 'selectivity']).quantile(q=0.75, axis=0, numeric_only=True, interpolation='linear').reset_index()
+dfQuantile2 = dfQuantile2.rename(index=str, columns={"value": "third"})
+
+dfQuantile = pd.merge(dfQuantile1, dfQuantile2, how='inner', on=['grp', 'metric', 'method', 'region', 'selectivity'])
+dfQuantile['IQR'] = dfQuantile['third'] - dfQuantile['first']
+
+dfAggMedian = df.groupby(['grp', 'metric', 'method', 'region', 'selectivity'], as_index = False).aggregate(np.median)
+dfAggMedian = dfAggMedian.rename(index=str, columns={"value": "median"})
+dfIQR = pd.merge(dfQuantile, dfAggMedian, how='inner', on=['grp', 'metric', 'method', 'region', 'selectivity'])
+dfIQR = pd.merge(dfIQR, df, how='inner', on=['grp', 'metric', 'method', 'region', 'selectivity'])
+
+dfIQR['values'] = np.where((dfIQR['value'] < (dfIQR['first'] - (1.5 * dfIQR['IQR']))) | (dfIQR['value'] < (dfIQR['third'] - (1.5 * dfIQR['IQR']))), dfIQR['median'], dfIQR['value'])
+
+dfIQR.to_csv('/home/flav/Mestrado/MHaJoL/data/iqr.csv')
+
+dfIQR = dfIQR.drop(columns=['value', 'first', 'third', 'IQR', 'median'])
+dfIQR = dfIQR.rename(index=str, columns={"values": "value"})
+
+dfAggAVG = dfIQR.groupby(['grp', 'metric', 'method', 'region', 'selectivity'], as_index = False).aggregate(['mean','std'])
+
+# print(dfAggAVG.head(100))
 
 for (group, metric, yAxis, logG, logC) in metrics:
 	for region in regions:
 
-		dfFilter = df.loc[(df['grp'] == group) & (df['metric'] == metric) & (df['region'] == region)]
+		# dfFilter = dfAggAVG.loc((dfAggAVG['grp'] == group) & (dfAggAVG['metric'] == metric) & (dfAggAVG['region'] == region))
+		dfFilter = dfAggAVG.xs(group, level='grp').xs(metric, level='metric').xs(region, level='region')
+		# print(dfFilter.head(100))
+		n_groups = 9
+		fig, ax = plt.subplots()
 
-		plt.figure(figsize=(4.8,2))
-		for (method, linestyle, color, marker) in methods:
-			dfMethod=dfFilter.loc[(dfFilter['method'] == method)]
-			plt.plot( 'selectivity', 'value', data=dfMethod, marker=marker, label=method, linestyle=linestyle, markersize=5, color=color)
+		index = np.arange(n_groups)
+		bar_width = 0.35
 
-		plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3, ncol=5, mode='expand', borderaxespad=0., prop={'size': 7})
+		opacity = 0.4
 
-		plt.xlabel('Selectivity')
-		plt.ylabel(yAxis)
+		dfMethod = dfFilter.xs("cuckoo", level='method')['value'].reset_index().sort_values('selectivity')
+		dfValues = dfMethod["mean"]
+		rects1 = ax.bar(index, dfValues, bar_width, alpha=opacity, color='steelblue', label='Cuckoo')
 
-		plt.subplots_adjust(left=0.19, bottom=0.09, right=0.98, top=0.92, wspace=0.17, hspace=0.17)
+		dfMethodVec = dfFilter.xs("vecCuckoo", level='method')['value'].reset_index().sort_values('selectivity')
+		dfValuesVec = dfMethodVec["mean"]
+		rects2 = ax.bar(index + bar_width, dfValuesVec, bar_width, alpha=opacity, color='deeppink', label='vecCuckoo')
+
+		ax.yaxis.set_major_formatter(ticker.ScalarFormatter(useMathText=True))
+
+		ax.set_xlabel('Selectivity')
+		ax.set_ylabel(yAxis)
+		ax.set_xticks(index + bar_width / 2)
+		ax.set_xticklabels(('10', '20', '30', '40', '50', '60', '70', '80', '90'))
+		ax.legend()
+
+		fig.tight_layout()
+
+		# plt.figure(figsize=(4.8,2))
+		fig.subplots_adjust(left=0.19, bottom=0.09, right=0.98, top=0.92, wspace=0.17, hspace=0.17)
 		
-		plt.grid(alpha=0.4)  
+		ax.grid(alpha=0.4)  
 		if  ((logG == 'log' and region == 'Generation') or (logC == 'log' and region == 'Core')):
 			plt.yscale('log')
 
-		plt.rcParams.update({'font.size': 7})
+		# plt.rcParams.update({'font.size': 7})
+		plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
 
-		plt.savefig('/home/flav/Mestrado/MHaJoL/data/out/plots/'+group+'_'+metric+'_'+region+'.png',  bbox_inches='tight')
-		# plt.show()
-		plt.clf()
-		# plt.close()
+		fig.savefig('/home/flav/Mestrado/MHaJoL/data/out/plots/'+group+'_'+metric+'_'+region+'.png',  bbox_inches='tight')
+		# fig.show()
+		fig.clf()
+		# print('1')
+		# # plt.close()
+
+dfAggAVG = df.groupby(['metric', 'method', 'region', 'selectivity'], as_index = False).aggregate(['mean', np.median, 'std'])
 
 for (metric, logG, logC) in generalMetrics:
+	print(metric)
 	for region in regions:
 
-		dfFilter = df.loc[(df['grp'] == group) & (df['metric'] == metric) & (df['region'] == region)]
+		dfFilter = dfAggAVG.xs(metric, level='metric').xs(region, level='region')
 		# plt.figure(figsize=(8,3))
 
-		for (method, linestyle, color, marker) in methods:
-			dfMethod=dfFilter.loc[(dfFilter['method'] == method)]
-			plt.plot( 'selectivity', 'value', data=dfMethod, marker=marker, label=method, linestyle=linestyle,  markersize=5, color=color)
+		n_groups = 9
+		fig, ax = plt.subplots()
 
-		plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3, ncol=5, mode='expand', borderaxespad=0., prop={'size': 7})
+		index = np.arange(n_groups)
+		bar_width = 0.35
 
-		plt.xlabel('Selectivity')
-		plt.ylabel(metric)
+		opacity = 0.4
 
-		plt.subplots_adjust(left=0.19, bottom=0.09, right=0.98, top=0.92, wspace=0.17, hspace=0.17)
+		dfMethod = dfFilter.xs("cuckoo", level='method')['value'].reset_index().sort_values('selectivity')
+		dfValues = dfMethod["mean"]
+		rects1 = ax.bar(index, dfValues, bar_width, alpha=opacity, color='steelblue', label='Cuckoo')
+
+		dfMethodVec = dfFilter.xs("vecCuckoo", level='method')['value'].reset_index().sort_values('selectivity')
+		dfValuesVec = dfMethodVec["mean"]
+		rects2 = ax.bar(index + bar_width, dfValuesVec, bar_width, alpha=opacity, color='deeppink', label='vecCuckoo')
+
+		# ax.yaxis.set_major_formatter(ticker.ScalarFormatter(useMathText=True))
+
+		ax.set_xlabel('Selectivity')
+		ax.set_ylabel(metric)
+		ax.set_xticks(index + bar_width / 2)
+		ax.set_xticklabels(('10', '20', '30', '40', '50', '60', '70', '80', '90'))
+		ax.legend()
+
+		fig.tight_layout()
+
+		# plt.figure(figsize=(4.8,2))
+		fig.subplots_adjust(left=0.19, bottom=0.09, right=0.98, top=0.92, wspace=0.17, hspace=0.17)
 		
-		plt.grid(alpha=0.4)    
+		ax.grid(alpha=0.4)  
 		if  ((logG == 'log' and region == 'Generation') or (logC == 'log' and region == 'Core')):
 			plt.yscale('log')
 
-		plt.rcParams.update({'font.size': 7})
-
-		plt.savefig('/home/flav/Mestrado/MHaJoL/data/out/plots/general_'+metric+'_'+region+'.png',  bbox_inches='tight')
+		# plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))		
+		fig.savefig('/home/flav/Mestrado/MHaJoL/data/out/plots/general_'+metric+'_'+region+'.png',  bbox_inches='tight')
 		# plt.show()
-		plt.clf()
+		fig.clf()
 		# plt.close()

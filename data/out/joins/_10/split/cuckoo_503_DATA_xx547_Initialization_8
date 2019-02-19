@@ -1,5 +1,0 @@
-Initialization,10,cuckoo,DATA,Runtime(RDTSC)[s],0.0056,
-Initialization,10,cuckoo,DATA,Runtimeunhalted[s],0.0025,
-Initialization,10,cuckoo,DATA,Clock[MHz],1515.8595,
-Initialization,10,cuckoo,DATA,CPI,1.5218,
-Initialization,10,cuckoo,DATA,Loadtostoreratio,2.3214,

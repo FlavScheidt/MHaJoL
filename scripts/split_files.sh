@@ -142,6 +142,6 @@ do
 		sed -i 's/,PWR3//g' ${file}
 		sed -i 's/,TMP0//g' ${file}
 
-		cat ${file} | sed 's/.$//' | sed 's/,-/,0/g' &>> ../../../../results.csv
+		cat ${file} | sed 's/.$//' | sed 's/,-/,0/g' &>> /home/flav/Mestrado/MHaJoL/data/results.csv
 	done
 done
