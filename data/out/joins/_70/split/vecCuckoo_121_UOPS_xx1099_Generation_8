@@ -1,0 +1,7 @@
+Generation,70,vecCuckoo,UOPS,Runtime(RDTSC)[s],0.0653,
+Generation,70,vecCuckoo,UOPS,Runtimeunhalted[s],0.0579,
+Generation,70,vecCuckoo,UOPS,Clock[MHz],2301.7193,
+Generation,70,vecCuckoo,UOPS,CPI,0.9614,
+Generation,70,vecCuckoo,UOPS,IssuedUOPs,168244400,
+Generation,70,vecCuckoo,UOPS,ExecutedUOPs,229378400,
+Generation,70,vecCuckoo,UOPS,RetiredUOPs,229699300,

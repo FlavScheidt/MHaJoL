@@ -1,0 +1,8 @@
+Generation,70,vecCuckoo,BRANCH,Runtime(RDTSC)[s],0.0722,
+Generation,70,vecCuckoo,BRANCH,Runtimeunhalted[s],0.0653,
+Generation,70,vecCuckoo,BRANCH,Clock[MHz],2352.0968,
+Generation,70,vecCuckoo,BRANCH,CPI,1.0846,
+Generation,70,vecCuckoo,BRANCH,Branchrate,0.0396,
+Generation,70,vecCuckoo,BRANCH,Branchmispredictionrate,1.690977e-06,
+Generation,70,vecCuckoo,BRANCH,Branchmispredictionratio,4.266147e-05,
+Generation,70,vecCuckoo,BRANCH,Instructionsperbranch,25.2289,

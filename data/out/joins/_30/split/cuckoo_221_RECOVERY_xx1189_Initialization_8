@@ -1,0 +1,5 @@
+Initialization,30,cuckoo,RECOVERY,Runtime(RDTSC)[s],0.0019,
+Initialization,30,cuckoo,RECOVERY,Runtimeunhalted[s],0.0012,
+Initialization,30,cuckoo,RECOVERY,Clock[MHz],2494.1025,
+Initialization,30,cuckoo,RECOVERY,CPI,0.7195,
+Initialization,30,cuckoo,RECOVERY,Avg.recoveryduration,6.0280,

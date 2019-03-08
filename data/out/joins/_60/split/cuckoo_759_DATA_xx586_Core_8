@@ -1,0 +1,5 @@
+Core,60,cuckoo,DATA,Runtime(RDTSC)[s],0.0207,
+Core,60,cuckoo,DATA,Runtimeunhalted[s],0.0243,
+Core,60,cuckoo,DATA,Clock[MHz],3091.7217,
+Core,60,cuckoo,DATA,CPI,0.4338,
+Core,60,cuckoo,DATA,Loadtostoreratio,1.2740,

@@ -1,0 +1,7 @@
+Generation,80,vecCuckoo,L3CACHE,Runtime(RDTSC)[s],0.0646,
+Generation,80,vecCuckoo,L3CACHE,Runtimeunhalted[s],0.0590,
+Generation,80,vecCuckoo,L3CACHE,Clock[MHz],2375.2998,
+Generation,80,vecCuckoo,L3CACHE,CPI,0.9813,
+Generation,80,vecCuckoo,L3CACHE,L3requestrate,0.0017,
+Generation,80,vecCuckoo,L3CACHE,L3missrate,0.0002,
+Generation,80,vecCuckoo,L3CACHE,L3missratio,0.1069,

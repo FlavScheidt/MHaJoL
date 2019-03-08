@@ -1,0 +1,6 @@
+Initialization,50,cuckoo,UOPS,INSTR_RETIRED_ANY,4198751,
+Initialization,50,cuckoo,UOPS,CPU_CLK_UNHALTED_CORE,2768763,
+Initialization,50,cuckoo,UOPS,CPU_CLK_UNHALTED_REF,7993728,
+Initialization,50,cuckoo,UOPS,UOPS_ISSUED_ANY,4589828,
+Initialization,50,cuckoo,UOPS,UOPS_EXECUTED_THREAD,5880897,
+Initialization,50,cuckoo,UOPS,UOPS_RETIRED_ALL,5673411,

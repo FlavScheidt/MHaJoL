@@ -1,0 +1,6 @@
+Generation,90,vecCuckoo,L2,INSTR_RETIRED_ANY,155792900,
+Generation,90,vecCuckoo,L2,CPU_CLK_UNHALTED_CORE,151511600,
+Generation,90,vecCuckoo,L2,CPU_CLK_UNHALTED_REF,170553300,
+Generation,90,vecCuckoo,L2,L1D_REPLACEMENT,3080997,
+Generation,90,vecCuckoo,L2,L1D_M_EVICT,23045,
+Generation,90,vecCuckoo,L2,ICACHE_64B_IFTAG_MISS,2851,
