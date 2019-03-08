@@ -1,0 +1,2 @@
+Generation,30,vecCuckoo,FLOPS_AVX,RDTSCRuntime[s],0.058122,
+Generation,30,vecCuckoo,FLOPS_AVX,callcount,1,

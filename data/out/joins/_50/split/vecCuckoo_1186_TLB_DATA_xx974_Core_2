@@ -1,0 +1,2 @@
+Core,50,vecCuckoo,TLB_DATA,RDTSCRuntime[s],0.003698,
+Core,50,vecCuckoo,TLB_DATA,callcount,1,

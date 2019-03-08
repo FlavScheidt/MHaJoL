@@ -1,0 +1,5 @@
+Initialization,30,cuckoo,L3,INSTR_RETIRED_ANY,4198656,
+Initialization,30,cuckoo,L3,CPU_CLK_UNHALTED_CORE,2766232,
+Initialization,30,cuckoo,L3,CPU_CLK_UNHALTED_REF,7984872,
+Initialization,30,cuckoo,L3,L2_LINES_IN_ALL,3527,
+Initialization,30,cuckoo,L3,L2_TRANS_L2_WB,1027,

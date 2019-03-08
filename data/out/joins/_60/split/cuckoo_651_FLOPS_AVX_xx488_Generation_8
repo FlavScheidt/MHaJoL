@@ -1,0 +1,6 @@
+Generation,60,cuckoo,FLOPS_AVX,Runtime(RDTSC)[s],0.1996,
+Generation,60,cuckoo,FLOPS_AVX,Runtimeunhalted[s],0.2233,
+Generation,60,cuckoo,FLOPS_AVX,Clock[MHz],2907.5281,
+Generation,60,cuckoo,FLOPS_AVX,CPI,0.3976,
+Generation,60,cuckoo,FLOPS_AVX,PackedSPMFLOP/s,0,
+Generation,60,cuckoo,FLOPS_AVX,PackedDPMFLOP/s,0,

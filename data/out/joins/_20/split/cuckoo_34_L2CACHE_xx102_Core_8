@@ -1,0 +1,7 @@
+Core,20,cuckoo,L2CACHE,Runtime(RDTSC)[s],0.0190,
+Core,20,cuckoo,L2CACHE,Runtimeunhalted[s],0.0225,
+Core,20,cuckoo,L2CACHE,Clock[MHz],3092.3799,
+Core,20,cuckoo,L2CACHE,CPI,0.4118,
+Core,20,cuckoo,L2CACHE,L2requestrate,0.0060,
+Core,20,cuckoo,L2CACHE,L2missrate,0.0027,
+Core,20,cuckoo,L2CACHE,L2missratio,0.4434,

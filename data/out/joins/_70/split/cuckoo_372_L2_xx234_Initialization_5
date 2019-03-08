@@ -1,0 +1,6 @@
+Initialization,70,cuckoo,L2,INSTR_RETIRED_ANY,4198661,
+Initialization,70,cuckoo,L2,CPU_CLK_UNHALTED_CORE,2784281,
+Initialization,70,cuckoo,L2,CPU_CLK_UNHALTED_REF,9040032,
+Initialization,70,cuckoo,L2,L1D_REPLACEMENT,1828,
+Initialization,70,cuckoo,L2,L1D_M_EVICT,1277,
+Initialization,70,cuckoo,L2,ICACHE_64B_IFTAG_MISS,1878,

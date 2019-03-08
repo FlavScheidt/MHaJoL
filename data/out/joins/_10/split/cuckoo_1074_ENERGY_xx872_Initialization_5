@@ -1,0 +1,8 @@
+Initialization,10,cuckoo,ENERGY,INSTR_RETIRED_ANY,4199634,
+Initialization,10,cuckoo,ENERGY,CPU_CLK_UNHALTED_CORE,2771050,
+Initialization,10,cuckoo,ENERGY,CPU_CLK_UNHALTED_REF,8998128,
+Initialization,10,cuckoo,ENERGY,TEMP_CORE,47,
+Initialization,10,cuckoo,ENERGY,PWR_PKG_ENERGY,0.0131,
+Initialization,10,cuckoo,ENERGY,PWR_PP0_ENERGY,0.0060,
+Initialization,10,cuckoo,ENERGY,PWR_PP1_ENERGY,0,
+Initialization,10,cuckoo,ENERGY,PWR_DRAM_ENERGY,0.0029,

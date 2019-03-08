@@ -1,0 +1,5 @@
+Generation,20,vecCuckoo,L3,INSTR_RETIRED_ANY,162110700,
+Generation,20,vecCuckoo,L3,CPU_CLK_UNHALTED_CORE,155844300,
+Generation,20,vecCuckoo,L3,CPU_CLK_UNHALTED_REF,147914900,
+Generation,20,vecCuckoo,L3,L2_LINES_IN_ALL,5393214,
+Generation,20,vecCuckoo,L3,L2_TRANS_L2_WB,337187,
