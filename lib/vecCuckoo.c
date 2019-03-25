@@ -145,7 +145,7 @@ inline void vecCuckooGenerate(column_orders * c_orders)
 	size_t index;
 	int threshold = 0;
 
-	for (int i=0; i<tamOrders;i++)
+	for (unsigned int i=0; i<tamOrders;i++)
 		key[i] = c_orders[i].O_CUSTKEY;
 
 	init = clock();
@@ -378,12 +378,12 @@ int vecCuckooJoin(column_customer * c_customer, column_orders * c_orders)
 		}
 	}
 
-	for (int i=0; i<tamCustomer;i++)
+	for (unsigned int i=0; i<tamCustomer;i++)
 		customer[i] = c_customer[i].C_CUSTKEY;
 
 	init=clock();
 	likwid_markerStartRegion("Core");
-	for (int i=0; i<tamCustomer; i=i+8)
+	for (unsigned int i=0; i<tamCustomer; i=i+8)
 	{
 		keys = _mm256_maskload_epi32(&customer[i], mask_1);
 		index += vecCuckooLookUp(keys);

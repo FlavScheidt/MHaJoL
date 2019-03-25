@@ -39,13 +39,14 @@ int main(int argc, char ** argv)
 
 	strcpy(fileName2, PATH_MAIN);
 	strcat(fileName2, "tbl/customer.tbl");
-	tamCustomer = countLines(fileName2);
-	c_customer = malloc(tamCustomer*sizeof(column_customer));
+	tamCustomer = TAM_CUSTOMER;
+	// c_customer = malloc(tamCustomer*sizeof(column_customer));
 	readCustomerColumn(fileName2, c_customer);
 
 	printf("%s buu\n", fileName);
-	tamOrders = countLines(fileName);
-	c_orders = malloc(tamOrders*sizeof(column_orders));
+	// tamOrders = countLines(fileName);
+	tamOrders = TAM_ORDERS;
+	// c_orders = malloc(tamOrders*sizeof(column_orders));
 	readOrdersColumn(fileName, c_orders, sel);
 
 

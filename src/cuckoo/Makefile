@@ -1,5 +1,10 @@
 CC=gcc
-CFLAGS=-g -Wall -DLIKWID_PERFMON -L$LIKWID_LIB -I$LIKWID_INCLUDE -llikwid -lpthread -mavx2 -march=skylake
+DEBUGFLAGS=-g -pg -Wall -pedantic -Wextra #-lefence
+ARCHFLAGS=-mavx2 -march=skylake
+PROFFLAGS=-DLIKWID_PERFMON -L$LIKWID_LIB -I$LIKWID_INCLUDE -llikwid
+
+CFLAGS=-lpthread $(DEBUGFLAGS) $(PROFFLAGS) $(ARCHFLAGS)
+
 DEPS = ../../lib/hash/hash.h ../lib/../join.h ../../lib/cuckoo.h
 
 csrc = $(wildcard ../../lib/hash/*.c) \
