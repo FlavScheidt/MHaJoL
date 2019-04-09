@@ -1,7 +1,0 @@
-Generation,10,cuckoo,UOPS,Runtime(RDTSC)[s],0.2140,
-Generation,10,cuckoo,UOPS,Runtimeunhalted[s],0.2358,
-Generation,10,cuckoo,UOPS,Clock[MHz],2869.4440,
-Generation,10,cuckoo,UOPS,CPI,0.4109,
-Generation,10,cuckoo,UOPS,IssuedUOPs,1605560000,
-Generation,10,cuckoo,UOPS,ExecutedUOPs,1873233000,
-Generation,10,cuckoo,UOPS,RetiredUOPs,2002843000,

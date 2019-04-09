@@ -26,5 +26,5 @@ uint32_t HOPED;			//Succesfull insertion with hops
 //Functions
 int cuckooHash(column_customer * c_customer, column_orders * c_orders, int tamCustomer, int tamOrders, float * t_result, int nBuckets);
 void generateCuckooTable(column_orders *c_orders, int tamOrders, int nBuckets, int * cTable1, int * cTable2, int * try);
-int cuckooLookUp(unsigned int key, int index1, int index2, int * cTable1, int * cTable2);
-int cuckooInsert(unsigned int key, int *cTable1, int *cTable2, int tamOrders, int nBuckets, int * try);
+int cuckooLookUp(int key, int index1, int index2, int * cTable1, int * cTable2);
+int cuckooInsert(int key, int *cTable1, int *cTable2, int nBuckets, int * try);

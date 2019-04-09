@@ -1,6 +1,6 @@
 #!/bin/bash
 
-metrics=("L3CACHE" "L2CACHE" "L2" "L3" "DATA" "BRANCH" "ICACHE" "ENERGY" "TLB_DATA")
+metrics=("L3CACHE" "L2CACHE" "L2" "L3" "ENERGY")
 
 methods=("cuckoo" "vecCuckoo")
 

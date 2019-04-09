@@ -1,2 +1,2 @@
-Generation,80,vecCuckoo,L3CACHE,RDTSCRuntime[s],0.063811,
+Generation,80,vecCuckoo,L3CACHE,RDTSCRuntime[s],0.055828,
 Generation,80,vecCuckoo,L3CACHE,callcount,1,

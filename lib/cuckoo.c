@@ -193,7 +193,7 @@ inline int cuckooHash(column_customer * c_customer, column_orders * c_orders, in
 		index1 = CUCKOO_H1;
 		index2 = CUCKOO_H2;
 
-		if (cuckooLookUp(c_customer[i].C_CUSTKEY, index1, index2, cTable1, cTable2) == 0)
+		if (cuckooLookUp(c_customer[i].C_CUSTKEY, index1, index2, cTable1, cTable2) == 1)
 		{
 			t_result[index] = c_customer[i].C_ACCTBAL;
 			index++;

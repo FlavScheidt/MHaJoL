@@ -1,2 +1,2 @@
-Initialization,30,cuckoo,L3CACHE,RDTSCRuntime[s],0.003404,
+Initialization,30,cuckoo,L3CACHE,RDTSCRuntime[s],0.001937,
 Initialization,30,cuckoo,L3CACHE,callcount,1,

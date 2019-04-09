@@ -1,2 +1,2 @@
-Core,90,cuckoo,L3CACHE,RDTSCRuntime[s],0.025154,
+Core,90,cuckoo,L3CACHE,RDTSCRuntime[s],0.053244,
 Core,90,cuckoo,L3CACHE,callcount,1,

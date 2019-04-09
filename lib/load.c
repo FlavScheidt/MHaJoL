@@ -8,7 +8,7 @@ inline void printCustomerTuple(tuples_customer *t_customer, int tam)
 
 inline void readCustomerTuple(char fileName[50], tuples_customer *t_customer)
 {
-	char read;
+	ssize_t read;
 	size_t len = 0;
 	char *line = NULL;
 	int lineInit = 0;
@@ -81,6 +81,7 @@ inline void readCustomerTuple(char fileName[50], tuples_customer *t_customer)
 
 		nLine++;
 	}
+	free(line);
 	fclose(file);
 }
 
@@ -177,9 +178,9 @@ inline void readOrdersTuple(char fileName[50], tuples_orders *t_orders)
 	fclose(file);
 }
 
-inline void readOrdersColumn(char fileName[50], column_orders *c_orders, int type)
+inline void readOrdersColumn(char fileName[50], column_orders c_orders[TAM_ORDERS], int type)
 {
-	char read;
+	ssize_t read;
 	size_t len = 0;
 	char *line = NULL;
 	int lineInit = 0;
@@ -257,13 +258,13 @@ inline void readOrdersColumn(char fileName[50], column_orders *c_orders, int typ
 			nLine++;
 		}
 	}
-
+	free(line);
 	fclose(file);
 }
 
-inline void readCustomerColumn(char fileName[50], column_customer *c_customer)
+inline void readCustomerColumn(char fileName[50], column_customer c_customer[TAM_CUSTOMER])
 {
-	char read;
+	ssize_t read;
 	size_t len = 0;
 	char *line = NULL;
 	int lineInit = 0;
@@ -321,6 +322,7 @@ inline void readCustomerColumn(char fileName[50], column_customer *c_customer)
 
 		nLine++;
 	}
+	free(line);
 	fclose(file);
 }
 
