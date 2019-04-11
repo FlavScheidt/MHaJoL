@@ -1,0 +1,147 @@
+Running without Marker API. Activate Marker API with -m on commandline.
+CPCT Join 
+-----------------
+selectivity no
+Initialization: 0 ms 
+CHT Generation: 749 ms 
+OHT has 2268 occupied buckets and 955 on the filter 
+CHT has 97728 occupied buckets and 100873 on the filter 
+Join core: 48 ms 
+50004 linhas
+797 ms 
+
+
+ Performance counter stats for '../../cpct/cpct':
+
+        20.457.190      l1d.replacement                                             
+         6.092.968      l2_lines_out.non_silent                                     
+           664.498      l2_lines_out.useless_pref                                   
+
+       4,246848510 seconds time elapsed
+
+Running without Marker API. Activate Marker API with -m on commandline.
+CPCT Join 
+-----------------
+selectivity no
+Initialization: 0 ms 
+CHT Generation: 751 ms 
+OHT has 2268 occupied buckets and 955 on the filter 
+CHT has 97728 occupied buckets and 100873 on the filter 
+Join core: 48 ms 
+50004 linhas
+799 ms 
+
+
+ Performance counter stats for '../../cpct/cpct':
+
+        18.946.335      l1d.replacement                                             
+         7.568.890      l2_lines_out.non_silent                                     
+           466.284      l2_lines_out.useless_pref                                   
+
+       1,267255122 seconds time elapsed
+
+Running without Marker API. Activate Marker API with -m on commandline.
+CPCT Join 
+-----------------
+selectivity no
+Initialization: 0 ms 
+CHT Generation: 747 ms 
+OHT has 2268 occupied buckets and 955 on the filter 
+CHT has 97728 occupied buckets and 100873 on the filter 
+Join core: 48 ms 
+50004 linhas
+795 ms 
+
+
+ Performance counter stats for '../../cpct/cpct':
+
+        18.776.723      l1d.replacement                                             
+         7.575.096      l2_lines_out.non_silent                                     
+           442.551      l2_lines_out.useless_pref                                   
+
+       1,267964251 seconds time elapsed
+
+Running without Marker API. Activate Marker API with -m on commandline.
+CPCT Join 
+-----------------
+selectivity no
+Initialization: 0 ms 
+CHT Generation: 750 ms 
+OHT has 2268 occupied buckets and 955 on the filter 
+CHT has 97728 occupied buckets and 100873 on the filter 
+Join core: 47 ms 
+50004 linhas
+798 ms 
+
+
+ Performance counter stats for '../../cpct/cpct':
+
+        18.818.574      l1d.replacement                                             
+         7.539.332      l2_lines_out.non_silent                                     
+           447.219      l2_lines_out.useless_pref                                   
+
+       1,282513139 seconds time elapsed
+
+Running without Marker API. Activate Marker API with -m on commandline.
+CPCT Join 
+-----------------
+selectivity no
+Initialization: 0 ms 
+CHT Generation: 878 ms 
+OHT has 2268 occupied buckets and 955 on the filter 
+CHT has 97728 occupied buckets and 100873 on the filter 
+Join core: 59 ms 
+50004 linhas
+937 ms 
+
+
+ Performance counter stats for '../../cpct/cpct':
+
+        18.746.158      l1d.replacement                                             
+         7.545.447      l2_lines_out.non_silent                                     
+           439.027      l2_lines_out.useless_pref                                   
+
+       1,354730914 seconds time elapsed
+
+Running without Marker API. Activate Marker API with -m on commandline.
+CPCT Join 
+-----------------
+selectivity no
+Initialization: 1 ms 
+CHT Generation: 905 ms 
+OHT has 2268 occupied buckets and 955 on the filter 
+CHT has 97728 occupied buckets and 100873 on the filter 
+Join core: 58 ms 
+50004 linhas
+963 ms 
+
+
+ Performance counter stats for '../../cpct/cpct':
+
+        18.884.267      l1d.replacement                                             
+         7.554.170      l2_lines_out.non_silent                                     
+           450.370      l2_lines_out.useless_pref                                   
+
+       1,537264569 seconds time elapsed
+
+Running without Marker API. Activate Marker API with -m on commandline.
+CPCT Join 
+-----------------
+selectivity no
+Initialization: 1 ms 
+CHT Generation: 905 ms 
+OHT has 2268 occupied buckets and 955 on the filter 
+CHT has 97728 occupied buckets and 100873 on the filter 
+Join core: 58 ms 
+50004 linhas
+964 ms 
+
+
+ Performance counter stats for '../../cpct/cpct':
+
+        18.777.600      l1d.replacement                                             
+         7.602.709      l2_lines_out.non_silent                                     
+           429.257      l2_lines_out.useless_pref                                   
+
+       1,533302652 seconds time elapsed
+

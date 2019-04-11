@@ -1,4 +1,4 @@
-#include "cpct.h"
+#include "cuckoo.h"
 
 /******************************
 	SIZES
@@ -11,7 +11,7 @@
 
 /*****************************
 	HASH FUNCTIONS FUNCTIONS
-*****************************/
+*****************************/ 
 //NEED TO IMPLEMENT THE VECTORIZED VERSIONS OF THIS FUNCTIONS
 //THE SECOND ONE MUST BE ADD BY 65535 ON THE END
 #define H1 (_mm256_fnv1a_epi32(key) & (TAB_SIZE-1)

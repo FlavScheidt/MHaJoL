@@ -1,4 +1,4 @@
-#include "join.h"
+#include "../../lib/join.h"
 
 int main(int argc, char ** argv)
 {
@@ -33,30 +33,32 @@ int main(int argc, char ** argv)
 
 	strcpy(fileName2, PATH_MAIN);
 	strcat(fileName2, "tbl/customer.tbl");
-	tamCustomer = countLines(fileName2);
-	c_customer = malloc(tamCustomer*sizeof(column_customer));
+	// tamCustomer = countLines(fileName2);
+	tamCustomer = TAM_CUSTOMER;
+	// c_customer = malloc(tamCustomer*sizeof(column_customer));
 	readCustomerColumn(fileName2, c_customer);
 
-	tamOrders = countLines(fileName);
-	c_orders = malloc(tamOrders*sizeof(column_orders));
+	// tamOrders = countLines(fileName);
+	tamOrders = TAM_ORDERS;
+	// c_orders = malloc(tamOrders*sizeof(column_orders));
 	readOrdersColumn(fileName, c_orders, sel);
 
-	printf("CPCT Join \n");
+	printf("Vectorized Cuckoo Join \n");
 	printf("-----------------\n");
 	printf("selectivity %s\n", selectivity);
 
 	init = clock();
 
 	likwid_markerInit();
-	nResult=cpctJoin(c_customer, c_orders);
+	nResult=vecCuckooJoin(c_customer, c_orders);
 	likwid_markerClose();
 
 	end = clock();
 	printf("%d linhas\n", nResult);
 	printf("%.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 
-	free(c_orders);
-	free(c_customer);
+	// free(c_orders);
+	// free(c_customer);
 
 	pthread_exit(NULL);
 	return 1;
