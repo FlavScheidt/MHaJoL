@@ -58,6 +58,8 @@ typedef  unsigned       char ub1;   /* unsigned 1-byte quantities */
 size_t hash_pearson(const char* s);
 size_t hash_jenkins(const char* s);
 
+__m256i _mm256_jenkins_epi32(__m256i data);
+
 /*****************************************
 MurmurHash2, by Austin Appleby
 ******************************************/
