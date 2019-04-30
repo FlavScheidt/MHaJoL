@@ -1,244 +1,341 @@
 #include "vecCuckooFilter.h"
 
+const uint64_t perm[256] = {0x0706050403020100ull,
+     0x0007060504030201ull, 0x0107060504030200ull, 0x0001070605040302ull,
+     0x0207060504030100ull, 0x0002070605040301ull, 0x0102070605040300ull,
+     0x0001020706050403ull, 0x0307060504020100ull, 0x0003070605040201ull,
+     0x0103070605040200ull, 0x0001030706050402ull, 0x0203070605040100ull,
+     0x0002030706050401ull, 0x0102030706050400ull, 0x0001020307060504ull,
+     0x0407060503020100ull, 0x0004070605030201ull, 0x0104070605030200ull,
+     0x0001040706050302ull, 0x0204070605030100ull, 0x0002040706050301ull,
+     0x0102040706050300ull, 0x0001020407060503ull, 0x0304070605020100ull,
+     0x0003040706050201ull, 0x0103040706050200ull, 0x0001030407060502ull,
+     0x0203040706050100ull, 0x0002030407060501ull, 0x0102030407060500ull,
+     0x0001020304070605ull, 0x0507060403020100ull, 0x0005070604030201ull,
+     0x0105070604030200ull, 0x0001050706040302ull, 0x0205070604030100ull,
+     0x0002050706040301ull, 0x0102050706040300ull, 0x0001020507060403ull,
+     0x0305070604020100ull, 0x0003050706040201ull, 0x0103050706040200ull,
+     0x0001030507060402ull, 0x0203050706040100ull, 0x0002030507060401ull,
+     0x0102030507060400ull, 0x0001020305070604ull, 0x0405070603020100ull,
+     0x0004050706030201ull, 0x0104050706030200ull, 0x0001040507060302ull,
+     0x0204050706030100ull, 0x0002040507060301ull, 0x0102040507060300ull,
+     0x0001020405070603ull, 0x0304050706020100ull, 0x0003040507060201ull,
+     0x0103040507060200ull, 0x0001030405070602ull, 0x0203040507060100ull,
+     0x0002030405070601ull, 0x0102030405070600ull, 0x0001020304050706ull,
+     0x0607050403020100ull, 0x0006070504030201ull, 0x0106070504030200ull,
+     0x0001060705040302ull, 0x0206070504030100ull, 0x0002060705040301ull,
+     0x0102060705040300ull, 0x0001020607050403ull, 0x0306070504020100ull,
+     0x0003060705040201ull, 0x0103060705040200ull, 0x0001030607050402ull,
+     0x0203060705040100ull, 0x0002030607050401ull, 0x0102030607050400ull,
+     0x0001020306070504ull, 0x0406070503020100ull, 0x0004060705030201ull,
+     0x0104060705030200ull, 0x0001040607050302ull, 0x0204060705030100ull,
+     0x0002040607050301ull, 0x0102040607050300ull, 0x0001020406070503ull,
+     0x0304060705020100ull, 0x0003040607050201ull, 0x0103040607050200ull,
+     0x0001030406070502ull, 0x0203040607050100ull, 0x0002030406070501ull,
+     0x0102030406070500ull, 0x0001020304060705ull, 0x0506070403020100ull,
+     0x0005060704030201ull, 0x0105060704030200ull, 0x0001050607040302ull,
+     0x0205060704030100ull, 0x0002050607040301ull, 0x0102050607040300ull,
+     0x0001020506070403ull, 0x0305060704020100ull, 0x0003050607040201ull,
+     0x0103050607040200ull, 0x0001030506070402ull, 0x0203050607040100ull,
+     0x0002030506070401ull, 0x0102030506070400ull, 0x0001020305060704ull,
+     0x0405060703020100ull, 0x0004050607030201ull, 0x0104050607030200ull,
+     0x0001040506070302ull, 0x0204050607030100ull, 0x0002040506070301ull,
+     0x0102040506070300ull, 0x0001020405060703ull, 0x0304050607020100ull,
+     0x0003040506070201ull, 0x0103040506070200ull, 0x0001030405060702ull,
+     0x0203040506070100ull, 0x0002030405060701ull, 0x0102030405060700ull,
+     0x0001020304050607ull, 0x0706050403020100ull, 0x0007060504030201ull,
+     0x0107060504030200ull, 0x0001070605040302ull, 0x0207060504030100ull,
+     0x0002070605040301ull, 0x0102070605040300ull, 0x0001020706050403ull,
+     0x0307060504020100ull, 0x0003070605040201ull, 0x0103070605040200ull,
+     0x0001030706050402ull, 0x0203070605040100ull, 0x0002030706050401ull,
+     0x0102030706050400ull, 0x0001020307060504ull, 0x0407060503020100ull,
+     0x0004070605030201ull, 0x0104070605030200ull, 0x0001040706050302ull,
+     0x0204070605030100ull, 0x0002040706050301ull, 0x0102040706050300ull,
+     0x0001020407060503ull, 0x0304070605020100ull, 0x0003040706050201ull,
+     0x0103040706050200ull, 0x0001030407060502ull, 0x0203040706050100ull,
+     0x0002030407060501ull, 0x0102030407060500ull, 0x0001020304070605ull,
+     0x0507060403020100ull, 0x0005070604030201ull, 0x0105070604030200ull,
+     0x0001050706040302ull, 0x0205070604030100ull, 0x0002050706040301ull,
+     0x0102050706040300ull, 0x0001020507060403ull, 0x0305070604020100ull,
+     0x0003050706040201ull, 0x0103050706040200ull, 0x0001030507060402ull,
+     0x0203050706040100ull, 0x0002030507060401ull, 0x0102030507060400ull,
+     0x0001020305070604ull, 0x0405070603020100ull, 0x0004050706030201ull,
+     0x0104050706030200ull, 0x0001040507060302ull, 0x0204050706030100ull,
+     0x0002040507060301ull, 0x0102040507060300ull, 0x0001020405070603ull,
+     0x0304050706020100ull, 0x0003040507060201ull, 0x0103040507060200ull,
+     0x0001030405070602ull, 0x0203040507060100ull, 0x0002030405070601ull,
+     0x0102030405070600ull, 0x0001020304050706ull, 0x0607050403020100ull,
+     0x0006070504030201ull, 0x0106070504030200ull, 0x0001060705040302ull,
+     0x0206070504030100ull, 0x0002060705040301ull, 0x0102060705040300ull,
+     0x0001020607050403ull, 0x0306070504020100ull, 0x0003060705040201ull,
+     0x0103060705040200ull, 0x0001030607050402ull, 0x0203060705040100ull,
+     0x0002030607050401ull, 0x0102030607050400ull, 0x0001020306070504ull,
+     0x0406070503020100ull, 0x0004060705030201ull, 0x0104060705030200ull,
+     0x0001040607050302ull, 0x0204060705030100ull, 0x0002040607050301ull,
+     0x0102040607050300ull, 0x0001020406070503ull, 0x0304060705020100ull,
+     0x0003040607050201ull, 0x0103040607050200ull, 0x0001030406070502ull,
+     0x0203040607050100ull, 0x0002030406070501ull, 0x0102030406070500ull,
+     0x0001020304060705ull, 0x0506070403020100ull, 0x0005060704030201ull,
+     0x0105060704030200ull, 0x0001050607040302ull, 0x0205060704030100ull,
+     0x0002050607040301ull, 0x0102050607040300ull, 0x0001020506070403ull,
+     0x0305060704020100ull, 0x0003050607040201ull, 0x0103050607040200ull,
+     0x0001030506070402ull, 0x0203050607040100ull, 0x0002030506070401ull,
+     0x0102030506070400ull, 0x0001020305060704ull, 0x0405060703020100ull,
+     0x0004050607030201ull, 0x0104050607030200ull, 0x0001040506070302ull,
+     0x0204050607030100ull, 0x0002040506070301ull, 0x0102040506070300ull,
+     0x0001020405060703ull, 0x0304050607020100ull, 0x0003040506070201ull,
+     0x0103040506070200ull, 0x0001030405060702ull, 0x0203040506070100ull,
+     0x0002030405060701ull, 0x0102030405060700ull, 0x0001020304050607ull};
+
 inline void cViViDGenerateFilter(column_orders * c_orders)
 {
-	alignas(32) int cuckooKey[8];
-	alignas(32) int cuckooHashed[8];
-	alignas(32) uint8_t fingerprint[8];
+
+	/*******************************************
+		Masks
+	*******************************************/
+	__mmask8 loadMask;
+	__mmask8 storeMask;
+	__mmask8 filter0Mask;
+	__mmask8 filter1Mask;
+
+	/*******************************************
+		Vectors
+	*******************************************/
+	//Read only (write on load and on fingerprint generation)
+	__m256i keysVector; //Vector of keys
+	__m256i fingerprintVector; //Vector of fingerprints
+
+	//Buckets and positions
+	__m512i bucketVector; //Bucket
+	__m256i bucket1Vector; //Bucket
+	__m256i position1Vector; //Position
+	__m256i bucket0Vector; //Bucket
+	__m256i position0Vector; //Position
+
+	//Retrieved values
+	__m512i valuesVector;
+	__m256i fpValuesVector;
+
+	/*******************************************
+		Auxiliary masks and vectors
+	*******************************************/
+	//Auxiliary integers
+	__m256i oneVector = _mm256_set1_epi32(1);
+	__m256i zeroVector = _mm256_set1_epi32(0);
+
+	__m256i 256integerVector;
+	__m512i 512integerVector;
+
+	__m256i tableSizeVector = _mm256_set1_epi32(FILTER_SIZE-1);
+	__m256i thresholdVector = _mm256_set1_epi32(VCUCKOO_MAX_TRY);
+
+	__m256i temporaryMask;	
+	__m256i temporaryVector; //Auxiliary vector used to load new keys
+	__m512i temporary512Vector1;
+	__m512i temporary512Vector2;
+	__m128i permMask;
+
+	/*******************************************
+		Initiate vectors and masks
+	*******************************************/
+	loadMask = _cvtu32_mask8(255);
+	storeMask = _cvtu32_mask8(255);
+
+	keysVector = _mm256_cmpeq_epi32(zeroVector, oneVector);
+
+	/*******************************************
+		Other Variables
+	*******************************************/
+	clock_t init, end;
 
 	int key[tamOrders];
 	int shiftIndex;
 
-	//Vectors and masks
-	__m256i loadMask; //Mask used to load new keys
-	__m256i keysVector; //Vector of keys
-	__m256i temporaryVector; //Auxiliary vector used to load new keys
-	__m256i  temporaryMask;
-	__m256i fingerprintVector;
-	__m256i permutationMask; //Mask to shuffle new and old keys
-	__m256i bucketVector; //Bucket
-	__m256i positionVector; //Position
-	__m256i shiftVector; //Shifts to be performed to insert and lookup
-	__m256i table1Mask; //Keys to be inserted on table1
-	__m256i table2Mask; //Keys to be stored on table2
-	__m256i remotionMask;
-	__m256i hopsVector; 
-	__m256i table1Values;
-	__m256i table2Values;
-	__m256i storeMask;
-	// __m256i ohtMask;
-	__m256i mask_1 = _mm256_set1_epi32(1);
-	__m256i mask_0 = _mm256_set1_epi32(0);
-
-	__m128i permMask;
-
-	__m256i tableSizeVector = _mm256_set1_epi32(FILTER_SIZE-1);
-	// __m256i thresholdVector = _mm256_set1_epi32(VCUCKOO_MAX_TRY);
-
-	//Initiate vectors 4and masks
-	loadMask = _mm256_cmpeq_epi32(mask_1, mask_1);
-	keysVector = _mm256_cmpeq_epi32(mask_0, mask_1);
-	temporaryVector = _mm256_cmpeq_epi32(mask_0, mask_1);
-	permutationMask =  _mm256_cmpeq_epi32(mask_0, mask_1);
-	bucketVector = _mm256_cmpeq_epi32(mask_1, mask_1);
-	positionVector = _mm256_cmpeq_epi32(mask_1, mask_1);
-	shiftVector = _mm256_cmpeq_epi32(mask_1, mask_1); 
-	table1Mask = _mm256_cmpeq_epi32(mask_1, mask_1);
-	table2Mask =_mm256_cmpeq_epi32(mask_0, mask_1);
-	hopsVector = _mm256_cmpeq_epi32(mask_1, mask_1);
-	remotionMask = _mm256_cmpeq_epi32(mask_0, mask_1);
-	// ohtMask = _mm256_cmpeq_epi32(mask_0, mask_1);
-	table1Values =_mm256_cmpeq_epi32(mask_0, mask_1);
-	table2Values =_mm256_cmpeq_epi32(mask_0, mask_1);
-	storeMask = _mm256_cmpeq_epi32(mask_1, mask_1);
-
-	//Performance counter variables
-	clock_t init, end;
-
-	//Other variables
 	size_t tuples = 0;
 	size_t index;
 	int threshold = 0;
+
 	for (unsigned int i=0; i<tamOrders;i++)
 		key[i] = c_orders[i].O_CUSTKEY;
 
 	init = clock();
 	likwid_markerStartRegion("Generation");
 
-	/******************************************
-		First Iteration
-	******************************************/
-	//Load
-	keysVector = _mm256_maskload_epi32(&key[tuples], loadMask);
-	tuples = 8;
-
-	//Fingerprint
-	fingerprintVector = _mm256_fnv1a_epi32(keysVector);
-	temporaryMask = _mm256_set1_epi32(255);
-	fingerprintVector = _mm256_and_si256(fingerprintVector, temporaryMask); //Truncate to get the last 8 bits
-
-	//Hash to get the bucket
-	bucketVector = _mm256_fnv1a_epi32(keysVector); //hash
-	bucketVector = _mm256_and_si256(bucketVector, tableSizeVector);//Limit the hash to the size of the table
-
-	//Hash to get position into the bucket
-	//No mod instruction! Let's explicitly do this -> hash-((hash/5)*5)
-	temporaryMask = _mm256_set1_epi32(5);
-	positionVector = _mm256_castps_si256(_mm256_round_ps(_mm256_div_ps(_mm256_castsi256_ps(bucketVector), _mm256_castsi256_ps(temporaryMask)),(_MM_FROUND_TO_ZERO |_MM_FROUND_NO_EXC))); //hash/5
-	positionVector = _mm256_mul_epi32(bucketVector, temporaryMask); // (hash/5)*5
-	positionVector = _mm256_sub_epi32(temporaryMask, temporaryVector); //hash - ((hash/5)*5)
-
-	//Retrieve Buckets
-	table1Values = _mm256_i32gather_epi32(filter, bucketVector, 4);
-
-	//Setup store masks for the positions
-	// temporaryVector = _mm256_cmpeq_epi32(mask_0, mask_0);
-	// temporaryMask = _mm256_set1_epi32(FINGERPRINT_SIZE);
-	// temporaryMask = _mm256_mul_epi32(temporaryMask, positionVector);
-	// temporaryMask = _mm256_sub_epi32(temporaryMask, mask_1);
-
-	// temporaryVector = _mm256_srav_epi32(temporaryVector, temporaryMask);
-	// temporaryVector = _mm256_slli_epi32(temporaryVector, 3*FINGERPRINT_SIZE);
-	// temporaryMask = _mm256_set1_epi32(FINGERPRINT_SIZE);
-
-	// remotionMask = _mm256_set1_epi32(4);
-	// temporaryMask = _mm256_mul_epi32(temporaryMask, positionVector);
-	// temporaryMask = _mm256_sub_epi32(remotionMask, temporaryMask);
-
-	// temporaryVector = _mm256_srav_epi32(temporaryVector, temporaryMask);
-	// temporaryVector = _mm256_cmpeq_epi8(temporaryVector, mask_0);
-
-	//Move fingerprints to the desired position
-	
-
-	//Clean up memory to store
-	for (int i=0; i<8; i++)
+	while (tuples <= tamOrders-8)
 	{
-		cuckooKey[i] = 0;
-		cuckooHashed[i] = 0;
+		threshold++;
+
+		/******************************************
+			PHASE 1 - THE LOAD
+			Load the new items using the loadMask
+		******************************************/	
+		//Clean up stored positions
+		fpValuesVector = _mm256_andnot_si256(loadMask, fpValuesVector);
+		fpValuesVector = _mm256_or_si256(fpValuesVector, temporaryVector);
+
+		keysVector = _mm256_andnot_si256(loadMask, keysVector);
+		keysVector = _mm256_or_si256(keysVector, temporaryVector);
+
+		//Number of keys loaded to set the new tuples value
+		index 	= _cvtmask8_u32(loadMask);
+		tuples += _mm_popcnt_u64(index);
+
+		keysVector 	= _mm256_maskload_epi32(&key[tuples], loadMask);
+		tuples 		= 8;
+
+		/*******************************************
+			PHASE 2 - THE HASH AND FINGERPRINT
+		*******************************************/
+		//Fingerprint
+		fingerprintVector 	= _mm256_fnv1a_epi32(keysVector);
+		temporaryMask 		= _mm256_set1_epi32(255);
+		fingerprintVector 	= _mm256_and_si256(fingerprintVector, temporaryMask); //Truncate to get the last byte
+
+		//Table1
+		//Hash to get the bucket
+		bucket0Vector = _mm256_fnv1a_epi32(keysVector); //hash
+		bucket0Vector = _mm256_and_si256(bucketVector, tableSizeVector);//Limit the hash to the size of the table
+
+		//Hash to get position into the bucket
+		//No mod instruction! Let's explicitly do this -> hash-((hash/5)*5)
+		temporaryMask 	= _mm256_set1_epi32(POSITIONS_PER_BUCKET-1);
+		position0Vector = _mm256_cvtps_epi32(_mm256_round_ps(_mm256_div_ps(_mm256_cvtepi32_ps(bucket0Vector), _mm256_cvtepi32_ps(temporaryMask)), _MM_FROUND_TO_ZERO)); //hash/5
+		position0Vector = _mm256_mullo_epi32(position0Vector, temporaryMask); // (hash/5)*5
+		position0Vector = _mm256_sub_epi32(bucket0Vector, position0Vector); //hash - ((hash/5)*5)
+
+		//Table2
+		//Hash to get the bucket
+		bucket1Vector = _mm256_murmur3_epi32(keysVector, 0x0D50064F7);
+		bucket1Vector = _mm256_and_si256(bucket1Vector, tableSizeVector);
+		bucket1Vector = _mm256_add_epi32(bucket1Vector, tableSizeVector);
+
+		//Hash to get position into the bucket
+		//No mod instruction! Let's explicitly do this -> hash-((hash/5)*5)
+		position1Vector = _mm256_cvtps_epi32(_mm256_round_ps(_mm256_div_ps(_mm256_cvtepi32_ps(bucket1Vector), _mm256_cvtepi32_ps(temporaryMask)), _MM_FROUND_TO_ZERO)); //hash/5
+		position1Vector = _mm256_mullo_epi32(position1Vector, temporaryMask); // (hash/5)*5
+		position1Vector = _mm256_sub_epi32(bucketVector, position1Vector); //hash - ((hash/5)*5)
+
+		/*******************************************
+			PHASE 3 - THE RETRIEVAL
+			Load the cuckoo filter values and check for zeros and duplicated values
+		*******************************************/
+		temporary512Vector1 	= _mm512_maskz_cvtepi32_epi64(filter1Mask, position1Vector); //Filter1 indexes
+		temporary512Vector1 	= _mm512_i64gather_epi64(temporary512Vector1, filter, 8); //Filter1 values 
+
+		valuesVector			= _mm512_maskz_cvtepi32_epi64(filter0Mask, position0Vector); //Filter0 indexes
+		valuesVector 			= _mm512_mask_i64gather_epi64(temporary512Vector1, filter0Mask, valuesVector, filter, 8); //Filter0 + Filter1 values
+
+		//Extract fingerprints accordly to the buckets
+		temporary512Vector1 	= _mm512_maskz_cvtepi32_epi64(filter0Mask, bucket0Vector); //convert
+		bucketVector 			= _mm512_mask_cvtepi32_epi64(temporary512Vector1, filter1Mask, bucket1Vector); //convert
+
+		temporary512Vector2 	= _mm512_set1_epi64(2);
+		temporary512Vector1 	= _mm512_add_epi64(bucketVector, temporary512Vector2);
+		temporary512Vector2 	= _mm512_set1_epi64(8);
+		temporary512Vector1 	= _mm512_mullo_epi64(temporary512Vector2, temporary512Vector1);
+
+		//Shift and cast
+		temporary512Vector1 	= _mm512_srlv_epi64(valuesVector, temporary512Vector1);
+		fpValuesVector 			= _mm512_cvtepi64_epi32(temporary512Vector1);
+
+		/*******************************************
+			PHASE 4 - THE DUPLICATES AND THE ZEROS
+			Check if the values are already there
+		*******************************************/
+		//Duplicates
+		remotionMask = _mm256_movepi32_mask(_mm256_cmpeq_epi32(fpValuesVector, fingerprintVector));
+
+		//Zeros
+		loadMask = _mm256_movepi32_mask(_mm256_cmpeq_epi32(fpValuesVector, zeroVector));
+
+		loadMask = _kor_mask8(loadMask, remotionMask);
+		storeMask = _knot_mask8(remotionMask);
+
+		/*******************************************
+			PHASE 5 - THE HOPS CALCULATION 
+			Calculates the hops, who's gonna be stored on the OHT and who goes to each table
+		*******************************************/
+		//Calculates the hops removing the ones who reached the threshold
+		//Did someone reach the threshold?
+		// ohtMask = _mm256_cmpgt_epi32(hopsVector, thresholdVector);
+		//Set zero where the threshold has been reached 
+		// hopsVector = _mm256_castps_si256(_mm256_andnot_ps(_mm256_castsi256_ps(ohtMask), _mm256_castsi256_ps(hopsVector)));
+		//Set zero where a new key must be load
+		hopsVector = _mm256_castps_si256(_mm256_andnot_ps(_mm256_castsi256_ps(loadMask), _mm256_castsi256_ps(hopsVector))); 
+		//Adds 1 to the hops counter
+		hopsVector = _mm256_add_epi32(hopsVector, oneVector);
+
+		//Shifts to set where the number of hops are odd
+		//Even # of hops goes to tb2, odd # to tb1
+		temporaryVector = _mm256_slli_epi32(hopsVector, 31);
+		temporaryVector = _mm256_srli_epi32(temporaryVector, 31);
+		temporaryVector = _mm256_cmpeq_epi32(temporaryVector, oneVector);
+		filter0Mask 	= _mm256_movepi32_mask(temporaryVector);
+		filter1Mask 	= _knot_mask8(filter0Mask);
+
+		/*******************************************
+			PHASE 6 - THE NEW FILTER MASKS 
+		*******************************************/		
+		filter0Mask = _kor_mask8(filter0Mask, remotionMask);
+		filter1Mask = _kor_mask8(filter1Mask, remotionMask);
+
+		/*******************************************
+			PHASE 4 - THE POP COUNTER UPDATES
+		*******************************************/
+		temporary512Vector1 	= _mm512_set1_epi64(1);
+		valuesVector 			= _mm512_add_epi64(valuesVector, temporary512Vector1);
+
+		/*******************************************
+			PHASE 7 - THE STORE
+			Almost everyone goes to the cuckoo table... except the ones that reached the threshold, those must be stored on the OHT
+		*******************************************/
+		//Creates a mask to zero the buckets to be inserted
+		temporary512Vector2		= _mm512_set1_epi64(POSITIONS_PER_BUCKET-1);
+		temporary512Vector2		= _mm512_sub_epi64(temporary512Vector2, bucketVector);
+
+		temporary512Vector1 		= _mm512_set1_epi64(0XFFFFFFFFFFFFFFFF);
+		temporary512Vector1 		= _mm512_sllv_epi64(temporary512Vector1, temporary512Vector2);
+
+		temporary512Vector2		= _mm512_set1_epi64(1);
+		temporary512Vector2		= _mm512_add_epi64(POSITIONS_PER_BUCKET, temporary512Vector2);
+
+		temporary512Vector1		= _mm512_srlv_epi64(temporary512Vector1, temporary512Vector2);
+
+		temporary512Vector2 		= _mm512_set1_epi64(0XFFFFFFFFFFFFFFFF);
+		temporary512Vector1		= _mm512_andnot_si512(temporary512Vector1, temporary512Vector2);
+
+
+		//Unset the bits of the bucket to be inserted
+		valuesVector = _mm512_and_si512(valuesVector, temporary512Vector1);
+
+		//Move fingerprints to the right position
+		temporary512Vector2 	= _mm512_set1_epi64(2);
+		temporary512Vector1 	= _mm512_add_epi64(bucketVector, temporary512Vector2);
+		temporary512Vector2 	= _mm512_set1_epi64(8);
+		temporary512Vector1 	= _mm512_mullo_epi64(temporary512Vector2, temporary512Vector1);
+
+		_2temporaty512Vector	= _mm512_cvtepi32_64(fingerprintVector);
+		temporary512Vector2	= _mm512_sllv_epi64(temporary512Vector2, temporary512Vector1);
+
+		//Insert on the position
+		valuesVector = _mm512_or_si512(temporary512Vector2, valuesVector);
+
+		//Usar scatter para store
+		_mm512_mask_i64scatter_epi64 (filter, filter0Mask, position0Vector, valuesVector, 8);
+		_mm512_mask_i64scatter_epi64 (filter, filter1Mask, position1Vector, valuesVector, 8);
+
+		/*******************************************
+			PHASE 8 - THE SHUFFLE
+		*******************************************/
+		//Update fingerprint
+		
+
+		shiftIndex = _mm256_movemask_ps(_mm256_castsi256_ps(loadMask));
+		permMask = _mm_loadl_epi64((__m128i*) &perm[shiftIndex ^ 255]);
+		permutationMask = _mm256_cvtepi8_epi32(permMask);
+		loadMask = _mm256_permutevar8x32_epi32(loadMask, permutationMask);
+		keysVector = _mm256_permutevar8x32_epi32(temporaryVector, permutationMask);
+		table1Mask = _mm256_permutevar8x32_epi32(table1Mask, permutationMask);
+		table2Mask = _mm256_permutevar8x32_epi32(table2Mask, permutationMask);
 	}
-
-	//
-
-	_mm256_maskstore_epi32(&cuckooKey[0], storeMask, keysVector);
-	_mm256_maskstore_epi32(&cuckooHashed[0], storeMask, bucketVector);
-
-	for (int i=0; i<8; i++)
-	{
-		if (((uint32_t)cuckooKey[i]) != 0)
-			cuckoo[(uint32_t)cuckooHashed[i]] = (uint32_t) cuckooKey[i];
-	}
-
 }
-// inline int vecInsertFilter(unsigned int key, int tamOrders)
-// {
-// 	char str[10];
-
-// 	uint32_t olderCuckoo;
-// 	uint32_t aux;
-// 	uint16_t bigDesloc;
-// 	uint16_t littleDesloc;
-
-// 	uint32_t index0;
-// 	uint32_t index1;
-
-// 	//Filter Phase
-// 	uint32_t vIndex0;
-// 	uint32_t iIndex0;
-	
-// 	uint32_t vIndex1;
-// 	uint32_t iIndex1;
-
-// 	index0 = HASH_FILTER0;
-// 	olderCuckoo = HASH_FINGERPRINT;
-// 	sprintf(str, "%d", olderCuckoo);
-// 	index1 = HASH_FILTER1;
-
-// 	vIndex0 = (uint32_t) index0/5; //vector index
-// 	iIndex0 = index0%5; //bucket index inside 32 bits word
-		
-// 	vIndex1 = (uint32_t) index1/5; //vector index
-// 	iIndex1 = index1%5; //bucket index inside 32 bits word
-
-// 	if ((((filter0CCT[vIndex0] << ((4-iIndex0)*CCT_FINGERPRINT_SIZE) >> 56)) == ((uint64_t)olderCuckoo)) ||
-// 			(((filter1CCT[vIndex1] << ((4-iIndex1)*CCT_FINGERPRINT_SIZE) >> 56)) == ((uint64_t)olderCuckoo)))
-// 		return 3;
-
-// 	if ((((filter0CCT[vIndex0] << ((4-iIndex0)*CCT_FINGERPRINT_SIZE) >> 56)) == 0))
-// 	{
-// 		filter0CCT[vIndex0] = filter0CCT[vIndex0]
-// 				| (((uint64_t)olderCuckoo) << ((iIndex0*CCT_FINGERPRINT_SIZE)+24)) ;
-// 		return 1;
-// 	}
-
-// 	if ((((filter1CCT[vIndex1] << ((4-iIndex1)*CCT_FINGERPRINT_SIZE) >> 56)) == 0))
-// 	{
-// 		filter1CCT[vIndex1] = filter1CCT[vIndex1]
-// 				| (((uint64_t)olderCuckoo) << ((iIndex1*CCT_FINGERPRINT_SIZE)+24)) ;
-// 		return 1;
-// 	}
-
-// 	for (int j=0; j<CCT_THRESHOLD; j++)
-// 	{
-// 		//Always insert on the first table
-// 		aux = (filter0CCT[vIndex0] << ((4-iIndex0)*CCT_FINGERPRINT_SIZE)) >> 56;
-// 		bigDesloc = (4+iIndex0)*CCT_FINGERPRINT_SIZE;
-// 		littleDesloc = (5-iIndex0)*CCT_FINGERPRINT_SIZE;
-// 		if (iIndex0 == 4)
-// 			filter0CCT[vIndex0] = ((filter0CCT[vIndex0] << littleDesloc) >> littleDesloc) 
-// 				| (((uint64_t)olderCuckoo) << ((iIndex0*CCT_FINGERPRINT_SIZE)+24)) 
-// 				| ((filter0CCT[vIndex0] >> bigDesloc) << bigDesloc);
-// 		else
-// 			filter0CCT[vIndex0] = ((filter0CCT[vIndex0] << littleDesloc) >> littleDesloc) 
-// 				| (((uint64_t)olderCuckoo) << ((iIndex0*CCT_FINGERPRINT_SIZE)+24)) 
-// 				| ((filter0CCT[vIndex0] >> bigDesloc) << bigDesloc);
-// 		olderCuckoo = aux;
-
-// 		sprintf(str, "%d", olderCuckoo);
-// 		index1 = HASH_FILTER1;
-		
-// 		vIndex1 = (uint32_t) index1/5; //vector index
-// 		iIndex1 = index1%5; //bucket index inside 32 bits word	
-
-// 		if ((((filter1CCT[vIndex1] << ((4-iIndex1)*CCT_FINGERPRINT_SIZE) >> 56)) == olderCuckoo))
-// 			return 3;
-
-// 		if ((((filter1CCT[vIndex1] << ((4-iIndex1)*CCT_FINGERPRINT_SIZE) >> 56)) == 0))
-// 		{
-// 			filter1CCT[vIndex1] = filter1CCT[vIndex1]
-// 					| (((uint64_t)olderCuckoo) << ((iIndex1*CCT_FINGERPRINT_SIZE)+24)) ;
-// 			return 1;
-// 		}
-
-// 		aux = (filter1CCT[vIndex1] << ((4-iIndex1)*CCT_FINGERPRINT_SIZE)) >> 56;
-// 		bigDesloc = (4+iIndex1)*CCT_FINGERPRINT_SIZE;
-// 		littleDesloc = (5-iIndex1)*CCT_FINGERPRINT_SIZE;
-// 		if (iIndex1 == 4)
-// 			filter1CCT[vIndex1] = ((filter1CCT[vIndex1] << littleDesloc) >> littleDesloc) 
-// 				| (((uint64_t)olderCuckoo) << ((iIndex1*CCT_FINGERPRINT_SIZE)+24)) 
-// 				| ((filter1CCT[vIndex1] >> bigDesloc) << bigDesloc);
-// 		else
-// 			filter1CCT[vIndex1] = ((filter1CCT[vIndex1] << littleDesloc) >> littleDesloc) 
-// 				| (((uint64_t)olderCuckoo) << ((iIndex1*CCT_FINGERPRINT_SIZE)+24)) 
-// 				| ((filter0CCT[vIndex1] >> bigDesloc) << bigDesloc);
-// 		olderCuckoo = aux;
-
-// 		sprintf(str, "%d", olderCuckoo);
-// 		index0 = index1;
-// 		index0 = HASH_FILTER1;
-		
-// 		vIndex0 = (uint32_t) index0/5; //vector index
-// 		iIndex0 = index0%5; //bucket index inside 32 bits word
-
-// 		if ((((filter0CCT[vIndex0] << ((4-iIndex0)*CCT_FINGERPRINT_SIZE) >> 56)) == olderCuckoo))
-// 			return 3;
-
-// 		if ((((filter1CCT[vIndex1] << ((4-iIndex1)*CCT_FINGERPRINT_SIZE) >> 56)) == 0))
-// 		{
-// 			filter0CCT[vIndex0] = filter0CCT[vIndex0]
-// 					| (((uint64_t)olderCuckoo) << ((iIndex0*CCT_FINGERPRINT_SIZE)+24)) ;
-// 			return 1;
-// 		}
-// 	}
-// 	return 2;
-// }

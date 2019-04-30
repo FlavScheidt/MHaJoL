@@ -4,20 +4,21 @@
 	SIZES
 ******************************/
 #define FINGERPRINT_SIZE 8 //1 byte
-#define POPCOUNTER_SIZE 24 //6 nibbles
+#define POSITIONS_PER_BUCKET 6 
+#define POPCOUNTER_SIZE 16 //2 bytes
 
-#define FILTER_SIZE 65536 //2^(16)/2
-#define FILTER_TABLE_SIZE 32768 //FILTER_SIZE/2
+#define FILTER_SIZE 131070 // filter_size * 6 = 786420
+#define FILTER_TABLE_SIZE 65535 //FILTER_SIZE/2 -> each side of the filter has this size
 
 /****************************
 	PARAMETERS
 ****************************/
-#define THRESHOLD 2
+#define THRESHOLD 20
 
 /***************************
 	DATA TYPES AND STRUCTURES
 ****************************/
-alignas(32) uint32_t filter[FILTER_SIZE];
+alignas(32) uint64_t filter[FILTER_SIZE];
 
 uint32_t tamOrders;
 uint32_t tamCustomer;
@@ -27,3 +28,4 @@ uint32_t tamCustomer;
 ***************************/
 // int vecFilterLookUp(__m256i key);
 void cViViDGenerateFilter(column_orders * c_orders);
+void cViViDGenerate(column_orders * c_orders);
