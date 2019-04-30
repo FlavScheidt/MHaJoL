@@ -5,7 +5,7 @@
 ******************************/
 #define FINGERPRINT_SIZE 8 //1 byte
 #define POSITIONS_PER_BUCKET 6 
-#define POPCOUNTER_SIZE 16 //2 bytes
+#define POPCOUNTER_SIZE 2 //2 bytes
 
 #define FILTER_SIZE 131070 // filter_size * 6 = 786420
 #define FILTER_TABLE_SIZE 65535 //FILTER_SIZE/2 -> each side of the filter has this size

@@ -1,6 +1,6 @@
 #include "vecCuckooFilter.h"
 
-const uint64_t perm[256] = {0x0706050403020100ull,
+const uint64_t permTable[256] = {0x0706050403020100ull,
      0x0007060504030201ull, 0x0107060504030200ull, 0x0001070605040302ull,
      0x0207060504030100ull, 0x0002070605040301ull, 0x0102070605040300ull,
      0x0001020706050403ull, 0x0307060504020100ull, 0x0003070605040201ull,
@@ -95,8 +95,8 @@ inline void cViViDGenerateFilter(column_orders * c_orders)
 	*******************************************/
 	__mmask8 loadMask;
 	__mmask8 storeMask;
-	__mmask8 filter0Mask;
-	__mmask8 filter1Mask;
+	__mmask8 remotionMask;
+	__mmask8 fingerprintMask; //~(loadMask)
 
 	/*******************************************
 		Vectors
@@ -106,11 +106,12 @@ inline void cViViDGenerateFilter(column_orders * c_orders)
 	__m256i fingerprintVector; //Vector of fingerprints
 
 	//Buckets and positions
-	__m512i bucketVector; //Bucket
-	__m256i bucket1Vector; //Bucket
-	__m256i position1Vector; //Position
-	__m256i bucket0Vector; //Bucket
-	__m256i position0Vector; //Position
+	__m512i position512Vector; //Bucket
+	__m512i bucket512Vector;
+	__m256i bucketVector; //Bucket
+	__m256i positionVector; //Position
+
+	__m256i hopsVector;
 
 	//Retrieved values
 	__m512i valuesVector;
@@ -123,25 +124,27 @@ inline void cViViDGenerateFilter(column_orders * c_orders)
 	__m256i oneVector = _mm256_set1_epi32(1);
 	__m256i zeroVector = _mm256_set1_epi32(0);
 
-	__m256i 256integerVector;
-	__m512i 512integerVector;
+	__m256i integer256Vector;
+	__m512i integer512Vector;
 
 	__m256i tableSizeVector = _mm256_set1_epi32(FILTER_SIZE-1);
-	__m256i thresholdVector = _mm256_set1_epi32(VCUCKOO_MAX_TRY);
+	// __m256i thresholdVector = _mm256_set1_epi32(VCUCKOO_MAX_TRY);
 
-	__m256i temporaryMask;	
 	__m256i temporaryVector; //Auxiliary vector used to load new keys
 	__m512i temporary512Vector1;
 	__m512i temporary512Vector2;
 	__m128i permMask;
 
+	__m256i permutationMask;
+
 	/*******************************************
 		Initiate vectors and masks
 	*******************************************/
-	loadMask = _cvtu32_mask8(255);
-	storeMask = _cvtu32_mask8(255);
+	loadMask 		= _cvtu32_mask8(255);
+	fingerprintMask = _cvtu32_mask8(0);
 
 	keysVector = _mm256_cmpeq_epi32(zeroVector, oneVector);
+	fingerprintVector = _mm256_cmpeq_epi32(zeroVector, oneVector);
 
 	/*******************************************
 		Other Variables
@@ -149,7 +152,7 @@ inline void cViViDGenerateFilter(column_orders * c_orders)
 	clock_t init, end;
 
 	int key[tamOrders];
-	int shiftIndex;
+	unsigned int shiftIndex;
 
 	size_t tuples = 0;
 	size_t index;
@@ -168,71 +171,50 @@ inline void cViViDGenerateFilter(column_orders * c_orders)
 		/******************************************
 			PHASE 1 - THE LOAD
 			Load the new items using the loadMask
-		******************************************/	
-		//Clean up stored positions
-		fpValuesVector = _mm256_andnot_si256(loadMask, fpValuesVector);
-		fpValuesVector = _mm256_or_si256(fpValuesVector, temporaryVector);
-
-		keysVector = _mm256_andnot_si256(loadMask, keysVector);
-		keysVector = _mm256_or_si256(keysVector, temporaryVector);
+		******************************************/
+		keysVector = _mm256_mask_load_epi32 (keysVector, loadMask, &key[tuples]);
 
 		//Number of keys loaded to set the new tuples value
 		index 	= _cvtmask8_u32(loadMask);
 		tuples += _mm_popcnt_u64(index);
 
-		keysVector 	= _mm256_maskload_epi32(&key[tuples], loadMask);
-		tuples 		= 8;
-
 		/*******************************************
 			PHASE 2 - THE HASH AND FINGERPRINT
 		*******************************************/
 		//Fingerprint
-		fingerprintVector 	= _mm256_fnv1a_epi32(keysVector);
-		temporaryMask 		= _mm256_set1_epi32(255);
-		fingerprintVector 	= _mm256_and_si256(fingerprintVector, temporaryMask); //Truncate to get the last byte
+		temporaryVector 	= _mm256_fnv1a_epi32(keysVector); //Calculate
+		integer256Vector 	= _mm256_set1_epi32(255);
+		fingerprintVector 	= _mm256_mask_and_epi32 (fingerprintVector, loadMask, fingerprintVector, integer256Vector); //Truncate to get the last 8-bits
 
-		//Table1
-		//Hash to get the bucket
-		bucket0Vector = _mm256_fnv1a_epi32(keysVector); //hash
-		bucket0Vector = _mm256_and_si256(bucketVector, tableSizeVector);//Limit the hash to the size of the table
+		//Buckets
+		temporaryVector = _mm256_murmur3_epi32(keysVector, 0x0D50064F7); //hash new keys
+		bucketVector 	= _mm256_mask_and_epi32(bucketVector, loadMask, temporaryVector, tableSizeVector);
 
-		//Hash to get position into the bucket
-		//No mod instruction! Let's explicitly do this -> hash-((hash/5)*5)
-		temporaryMask 	= _mm256_set1_epi32(POSITIONS_PER_BUCKET-1);
-		position0Vector = _mm256_cvtps_epi32(_mm256_round_ps(_mm256_div_ps(_mm256_cvtepi32_ps(bucket0Vector), _mm256_cvtepi32_ps(temporaryMask)), _MM_FROUND_TO_ZERO)); //hash/5
-		position0Vector = _mm256_mullo_epi32(position0Vector, temporaryMask); // (hash/5)*5
-		position0Vector = _mm256_sub_epi32(bucket0Vector, position0Vector); //hash - ((hash/5)*5)
+		temporaryVector = _mm256_murmur3_epi32(fingerprintVector, 0x0D50064F7); //hash old fingerprints
+		temporaryVector = _mm256_and_si256(temporaryVector, tableSizeVector);
+		bucketVector	= _mm256_mask_xor_epi32(bucketVector, fingerprintMask, temporaryVector, bucketVector); 
 
-		//Table2
-		//Hash to get the bucket
-		bucket1Vector = _mm256_murmur3_epi32(keysVector, 0x0D50064F7);
-		bucket1Vector = _mm256_and_si256(bucket1Vector, tableSizeVector);
-		bucket1Vector = _mm256_add_epi32(bucket1Vector, tableSizeVector);
-
-		//Hash to get position into the bucket
-		//No mod instruction! Let's explicitly do this -> hash-((hash/5)*5)
-		position1Vector = _mm256_cvtps_epi32(_mm256_round_ps(_mm256_div_ps(_mm256_cvtepi32_ps(bucket1Vector), _mm256_cvtepi32_ps(temporaryMask)), _MM_FROUND_TO_ZERO)); //hash/5
-		position1Vector = _mm256_mullo_epi32(position1Vector, temporaryMask); // (hash/5)*5
-		position1Vector = _mm256_sub_epi32(bucketVector, position1Vector); //hash - ((hash/5)*5)
+		//Positions (fingerprint%5 = fingerprint-((fingerprint/5)*5))
+		integer256Vector 	= _mm256_set1_epi32(POSITIONS_PER_BUCKET-1);
+		temporaryVector 	= _mm256_cvtps_epi32(_mm256_round_ps(_mm256_div_ps(_mm256_cvtepi32_ps(fingerprintVector), _mm256_cvtepi32_ps(integer256Vector)), _MM_FROUND_TO_ZERO)); //fp/5
+		temporaryVector 	= _mm256_mullo_epi32(temporaryVector, integer256Vector); // *5
+		positionVector 		= _mm256_mask_sub_epi32(positionVector, loadMask, fingerprintVector, positionVector); //-fp
 
 		/*******************************************
 			PHASE 3 - THE RETRIEVAL
 			Load the cuckoo filter values and check for zeros and duplicated values
 		*******************************************/
-		temporary512Vector1 	= _mm512_maskz_cvtepi32_epi64(filter1Mask, position1Vector); //Filter1 indexes
-		temporary512Vector1 	= _mm512_i64gather_epi64(temporary512Vector1, filter, 8); //Filter1 values 
+		//Extract buckets
+		bucket512Vector			= _mm512_cvtepi32_epi64(bucketVector);
+		valuesVector 			= _mm512_i64gather_epi64(bucket512Vector, filter, 8);
 
-		valuesVector			= _mm512_maskz_cvtepi32_epi64(filter0Mask, position0Vector); //Filter0 indexes
-		valuesVector 			= _mm512_mask_i64gather_epi64(temporary512Vector1, filter0Mask, valuesVector, filter, 8); //Filter0 + Filter1 values
+		//Extract fingerprints accordly to the positions
+		position512Vector		= _mm512_cvtepi32_epi64(positionVector);
 
-		//Extract fingerprints accordly to the buckets
-		temporary512Vector1 	= _mm512_maskz_cvtepi32_epi64(filter0Mask, bucket0Vector); //convert
-		bucketVector 			= _mm512_mask_cvtepi32_epi64(temporary512Vector1, filter1Mask, bucket1Vector); //convert
-
-		temporary512Vector2 	= _mm512_set1_epi64(2);
-		temporary512Vector1 	= _mm512_add_epi64(bucketVector, temporary512Vector2);
-		temporary512Vector2 	= _mm512_set1_epi64(8);
-		temporary512Vector1 	= _mm512_mullo_epi64(temporary512Vector2, temporary512Vector1);
+		integer512Vector 		= _mm512_set1_epi64(2);
+		temporary512Vector1 	= _mm512_add_epi64(position512Vector, integer512Vector);
+		integer512Vector 		= _mm512_set1_epi64(8);
+		temporary512Vector1 	= _mm512_mullo_epi64(integer512Vector, temporary512Vector1);
 
 		//Shift and cast
 		temporary512Vector1 	= _mm512_srlv_epi64(valuesVector, temporary512Vector1);
@@ -246,10 +228,11 @@ inline void cViViDGenerateFilter(column_orders * c_orders)
 		remotionMask = _mm256_movepi32_mask(_mm256_cmpeq_epi32(fpValuesVector, fingerprintVector));
 
 		//Zeros
-		loadMask = _mm256_movepi32_mask(_mm256_cmpeq_epi32(fpValuesVector, zeroVector));
+		loadMask 	= _mm256_movepi32_mask(_mm256_cmpeq_epi32(fpValuesVector, zeroVector));
 
-		loadMask = _kor_mask8(loadMask, remotionMask);
-		storeMask = _knot_mask8(remotionMask);
+		//Remove duplicates from the loadMask and set the store mask where there is no repeated key
+		loadMask 	= _kor_mask8(loadMask, remotionMask);
+		storeMask 	= _knot_mask8(remotionMask);
 
 		/*******************************************
 			PHASE 5 - THE HOPS CALCULATION 
@@ -260,82 +243,74 @@ inline void cViViDGenerateFilter(column_orders * c_orders)
 		// ohtMask = _mm256_cmpgt_epi32(hopsVector, thresholdVector);
 		//Set zero where the threshold has been reached 
 		// hopsVector = _mm256_castps_si256(_mm256_andnot_ps(_mm256_castsi256_ps(ohtMask), _mm256_castsi256_ps(hopsVector)));
-		//Set zero where a new key must be load
-		hopsVector = _mm256_castps_si256(_mm256_andnot_ps(_mm256_castsi256_ps(loadMask), _mm256_castsi256_ps(hopsVector))); 
+
 		//Adds 1 to the hops counter
-		hopsVector = _mm256_add_epi32(hopsVector, oneVector);
-
-		//Shifts to set where the number of hops are odd
-		//Even # of hops goes to tb2, odd # to tb1
-		temporaryVector = _mm256_slli_epi32(hopsVector, 31);
-		temporaryVector = _mm256_srli_epi32(temporaryVector, 31);
-		temporaryVector = _mm256_cmpeq_epi32(temporaryVector, oneVector);
-		filter0Mask 	= _mm256_movepi32_mask(temporaryVector);
-		filter1Mask 	= _knot_mask8(filter0Mask);
-
-		/*******************************************
-			PHASE 6 - THE NEW FILTER MASKS 
-		*******************************************/		
-		filter0Mask = _kor_mask8(filter0Mask, remotionMask);
-		filter1Mask = _kor_mask8(filter1Mask, remotionMask);
+		//Set to 1 the counters of the new keys
+		hopsVector = _mm256_mask_add_epi32(oneVector, loadMask, hopsVector, oneVector);
 
 		/*******************************************
 			PHASE 4 - THE POP COUNTER UPDATES
 		*******************************************/
-		temporary512Vector1 	= _mm512_set1_epi64(1);
-		valuesVector 			= _mm512_add_epi64(valuesVector, temporary512Vector1);
+		integer512Vector 	= _mm512_set1_epi64(1);
+		valuesVector 		= _mm512_add_epi64(valuesVector, integer512Vector);
 
 		/*******************************************
 			PHASE 7 - THE STORE
 			Almost everyone goes to the cuckoo table... except the ones that reached the threshold, those must be stored on the OHT
 		*******************************************/
 		//Creates a mask to zero the buckets to be inserted
-		temporary512Vector2		= _mm512_set1_epi64(POSITIONS_PER_BUCKET-1);
-		temporary512Vector2		= _mm512_sub_epi64(temporary512Vector2, bucketVector);
+		//(POSITIONS_PER_BUCKET-1) - position
+		integer512Vector		= _mm512_set1_epi64(POSITIONS_PER_BUCKET-1);
+		temporary512Vector2		= _mm512_sub_epi64(integer512Vector, position512Vector);
 
-		temporary512Vector1 		= _mm512_set1_epi64(0XFFFFFFFFFFFFFFFF);
-		temporary512Vector1 		= _mm512_sllv_epi64(temporary512Vector1, temporary512Vector2);
+		// 1X64 << (POSITIONS_PER_BUCKET-1) - position
+		temporary512Vector1 	= _mm512_set1_epi64(0XFFFFFFFFFFFFFFFF);
+		temporary512Vector1 	= _mm512_sllv_epi64(temporary512Vector1, temporary512Vector2);
 
-		temporary512Vector2		= _mm512_set1_epi64(1);
-		temporary512Vector2		= _mm512_add_epi64(POSITIONS_PER_BUCKET, temporary512Vector2);
+		// >> (FINGERPRINT_SIZE-1)
+		integer512Vector		= _mm512_set1_epi64(FINGERPRINT_SIZE-1);
+		temporary512Vector1		= _mm512_srlv_epi64(temporary512Vector1, integer512Vector);
 
-		temporary512Vector1		= _mm512_srlv_epi64(temporary512Vector1, temporary512Vector2);
-
-		temporary512Vector2 		= _mm512_set1_epi64(0XFFFFFFFFFFFFFFFF);
+		//Invert
+		temporary512Vector2 	= _mm512_set1_epi64(0XFFFFFFFFFFFFFFFF);
 		temporary512Vector1		= _mm512_andnot_si512(temporary512Vector1, temporary512Vector2);
-
 
 		//Unset the bits of the bucket to be inserted
 		valuesVector = _mm512_and_si512(valuesVector, temporary512Vector1);
 
 		//Move fingerprints to the right position
-		temporary512Vector2 	= _mm512_set1_epi64(2);
-		temporary512Vector1 	= _mm512_add_epi64(bucketVector, temporary512Vector2);
-		temporary512Vector2 	= _mm512_set1_epi64(8);
+		//(position+2)*8
+		integer512Vector 		= _mm512_set1_epi64(POPCOUNTER_SIZE);
+		temporary512Vector1 	= _mm512_add_epi64(position512Vector, integer512Vector);
+		integer512Vector 		= _mm512_set1_epi64(FINGERPRINT_SIZE);
 		temporary512Vector1 	= _mm512_mullo_epi64(temporary512Vector2, temporary512Vector1);
 
-		_2temporaty512Vector	= _mm512_cvtepi32_64(fingerprintVector);
-		temporary512Vector2	= _mm512_sllv_epi64(temporary512Vector2, temporary512Vector1);
+		//fingerprint << (position+2)*8
+		temporary512Vector2		= _mm512_cvtepi32_epi64(fingerprintVector);
+		temporary512Vector2		= _mm512_sllv_epi64(temporary512Vector2, temporary512Vector1);
 
 		//Insert on the position
 		valuesVector = _mm512_or_si512(temporary512Vector2, valuesVector);
 
 		//Usar scatter para store
-		_mm512_mask_i64scatter_epi64 (filter, filter0Mask, position0Vector, valuesVector, 8);
-		_mm512_mask_i64scatter_epi64 (filter, filter1Mask, position1Vector, valuesVector, 8);
+		_mm512_mask_i64scatter_epi64 (filter, storeMask, position512Vector, valuesVector, 8);
 
 		/*******************************************
 			PHASE 8 - THE SHUFFLE
 		*******************************************/
-		//Update fingerprint
-		
+		//Calculates shift index
+		shiftIndex 			= _cvtmask8_u32(loadMask);
+		permMask 			= _mm_loadl_epi64((__m128i*) &permTable[shiftIndex ^ 255]);
+		permutationMask 	= _mm256_cvtepi8_epi32(permMask);
 
-		shiftIndex = _mm256_movemask_ps(_mm256_castsi256_ps(loadMask));
-		permMask = _mm_loadl_epi64((__m128i*) &perm[shiftIndex ^ 255]);
-		permutationMask = _mm256_cvtepi8_epi32(permMask);
-		loadMask = _mm256_permutevar8x32_epi32(loadMask, permutationMask);
-		keysVector = _mm256_permutevar8x32_epi32(temporaryVector, permutationMask);
-		table1Mask = _mm256_permutevar8x32_epi32(table1Mask, permutationMask);
-		table2Mask = _mm256_permutevar8x32_epi32(table2Mask, permutationMask);
+		//Shuffle keys and fingerprints
+		fingerprintVector	= _mm256_permutevar8x32_epi32(fpValuesVector, permutationMask);
+		keysVector 			= _mm256_permutevar8x32_epi32(keysVector, permutationMask);
+
+		//Shuffle Masks
+		temporaryVector 	= _mm256_maskz_and_epi32(loadMask, oneVector, oneVector);
+		temporaryVector 	= _mm256_permutevar8x32_epi32(temporaryVector, permutationMask);
+		loadMask 			= _mm256_movepi32_mask(temporaryVector);
+		fingerprintMask		= _knot_mask8(loadMask);
 	}
 }
