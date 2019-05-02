@@ -9,9 +9,9 @@
 // #include <papi.h>
 
 //PATH DEFINITIONS
-#define PATH_MAIN "/home/flav/Mestrado/MHaJoL/"
-#define PATH_SRC "/home/flav/Mestrado/MHaJoL/src/"
-#define PATH_LIB "/home/flav/Mestrado/MHaJoL/lib/"
+#define PATH_MAIN "/home/fscristo/MHaJoL/"
+#define PATH_SRC "/home/fscristo/MHaJoL/src/"
+#define PATH_LIB "/home/fscristo/MHaJoL/lib/"
 
 #ifdef LIKWID_PERFMON
 #include <likwid.h>

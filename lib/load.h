@@ -1,7 +1,7 @@
 #include "functions.h"
 
-#define TAM_CUSTOMER 150000
-#define TAM_ORDERS 1500000
+#define TAM_CUSTOMER 450000
+#define TAM_ORDERS 18000000
 
 /******** VETOR DE STRUCTS CUSTOMER *********/
 typedef struct customer

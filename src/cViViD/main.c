@@ -6,9 +6,11 @@ int main(int argc, char ** argv)
 	clock_t init, end;
 	int sel =0;
 	char selectivity[4];
-	char fileName[50];
-	char fileName2[50];
+	//char fileName[50];
+	//char fileName2[50];
+	//char aux[50];
 
+	//aux[0] = '\0';
 	//Arguments
 	if (argc > 1)
 	{
@@ -16,32 +18,39 @@ int main(int argc, char ** argv)
 		sel=1;
 	}
 	else
-		strcpy(selectivity, "no\0");
+		strcpy(selectivity, "no");
+//
+//	if (strcmp(selectivity, "no") == 0)
+//	{
+//		strcpy(fileName, "/home/fscristo/MHaJoL/tbl/order.tbl");
+	//	strcpy(aux, "tbl/orders.tbl");
+	//	aux[14]='\0';
+	//	strcat(fileName, aux);
+//	}
+//	else
+//	{
+//		strcpy(fileName, PATH_MAIN);
+//		strcpy(aux, "tbl/orders_");
+//		strcat(fileName, "aux");
+//		strcat(fileName, selectivity);
+//		aux[0]='\0';
+//		strcpy(aux, ".tbl");
+//		strcat(fileName, aux);
+//	}
 
-	if (strcmp(selectivity, "no") == 0)
-	{
-		strcpy(fileName, PATH_MAIN);
-		strcat(fileName, "tbl/orders.tbl\0");
-	}
-	else
-	{
-		strcpy(fileName, PATH_MAIN);
-		strcat(fileName, "tbl/orders_");
-		strcat(fileName, selectivity);
-		strcat(fileName, ".tbl\0");
-	}
-
-	strcpy(fileName2, PATH_MAIN);
-	strcat(fileName2, "tbl/customer.tbl");
+	//aux[0]='\0';
+	//strcpy(fileName2, "/home/fscristo/MHaJoL/tbl/customer.tbl");
+	//strcpy(aux, "tbl/customer.tbl");
+	//strcat(fileName2, aux);
 	// tamCustomer = countLines(fileName2);
 	tamCustomer = TAM_CUSTOMER;
 	// c_customer = malloc(tamCustomer*sizeof(column_customer));
-	readCustomerColumn(fileName2, c_customer);
+	readCustomerColumn("/home/fscristo/MHaJoL/tbl/customer.tbl", c_customer);
 
 	// tamOrders = countLines(fileName);
 	tamOrders = TAM_ORDERS;
 	// c_orders = malloc(tamOrders*sizeof(column_orders));
-	readOrdersColumn(fileName, c_orders, sel);
+	readOrdersColumn("/home/fscristo/MHaJoL/tbl/orders.tbl", c_orders, sel);
 
 	printf("Vectorized Cuckoo Join \n");
 	printf("-----------------\n");
