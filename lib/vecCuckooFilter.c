@@ -151,16 +151,19 @@ inline void cViViDGenerateFilter(column_orders * c_orders)
 	*******************************************/
 	clock_t init, end;
 
-	int key[tamOrders];
+//	int key[tamOrders];
 	unsigned int shiftIndex;
 
 	size_t tuples = 0;
 	size_t index;
 	int threshold = 0;
 
-	for (unsigned int i=0; i<tamOrders;i++)
-		key[i] = c_orders[i].O_CUSTKEY;
-
+//	key[0] = 0;
+//	for (unsigned int i=0; i<tamOrders;i++)
+//	{
+//		printf("%d %d\n", i, c_orders[i].O_CUSTKEY);
+//		key[i] = c_orders[i].O_CUSTKEY;
+//	}
 	init = clock();
 	likwid_markerStartRegion("Generation");
 
@@ -172,7 +175,7 @@ inline void cViViDGenerateFilter(column_orders * c_orders)
 			PHASE 1 - THE LOAD
 			Load the new items using the loadMask
 		******************************************/
-		keysVector = _mm256_mask_load_epi32 (keysVector, loadMask, &key[tuples]);
+		keysVector = _mm256_mask_load_epi32 (keysVector, loadMask, &c_orders[tuples]);
 
 		//Number of keys loaded to set the new tuples value
 		index 	= _cvtmask8_u32(loadMask);
@@ -184,7 +187,7 @@ inline void cViViDGenerateFilter(column_orders * c_orders)
 		//Fingerprint
 		temporaryVector 	= _mm256_fnv1a_epi32(keysVector); //Calculate
 		integer256Vector 	= _mm256_set1_epi32(255);
-		fingerprintVector 	= _mm256_mask_and_epi32 (fingerprintVector, loadMask, fingerprintVector, integer256Vector); //Truncate to get the last 8-bits
+		fingerprintVector 	= _mm256_mask_and_epi32 (fingerprintVector, loadMask, temporaryVector, integer256Vector); //Truncate to get the last 8-bits
 
 		//Buckets
 		temporaryVector = _mm256_murmur3_epi32(keysVector, 0x0D50064F7); //hash new keys
@@ -196,7 +199,7 @@ inline void cViViDGenerateFilter(column_orders * c_orders)
 
 		//Positions (fingerprint%5 = fingerprint-((fingerprint/5)*5))
 		integer256Vector 	= _mm256_set1_epi32(POSITIONS_PER_BUCKET-1);
-		temporaryVector 	= _mm256_cvtps_epi32(_mm256_round_ps(_mm256_div_ps(_mm256_cvtepi32_ps(fingerprintVector), _mm256_cvtepi32_ps(integer256Vector)), _MM_FROUND_TO_ZERO)); //fp/5
+		temporaryVector 	= _mm256_cvtps_epi32(_mm256_div_ps(_mm256_cvtepi32_ps(fingerprintVector), _mm256_cvtepi32_ps(integer256Vector))); //fp/5
 		temporaryVector 	= _mm256_mullo_epi32(temporaryVector, integer256Vector); // *5
 		positionVector 		= _mm256_mask_sub_epi32(positionVector, loadMask, fingerprintVector, positionVector); //-fp
 

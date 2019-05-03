@@ -20,8 +20,6 @@
 ****************************/
 alignas(32) uint64_t filter[FILTER_SIZE];
 
-uint32_t tamOrders;
-uint32_t tamCustomer;
 
 /***************************
 	FUNCTIONS
