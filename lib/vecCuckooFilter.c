@@ -209,7 +209,7 @@ inline void cViViDGenerateFilter(column_orders * c_orders)
 
 		temporaryVector 	= _mm256_cvtps_epi32(temporaryPSVector3); //fp/5
 		temporaryVector 	= _mm256_mullo_epi32(temporaryVector, integer256Vector); // *5
-		positionVector 		= _mm256_mask_sub_epi32(positionVector, loadMask, fingerprintVector, positionVector); //-fp
+		positionVector 		= _mm256_mask_sub_epi32(positionVector, loadMask, fingerprintVector, temporaryVector); //-fp
 
 		/*******************************************
 			PHASE 3 - THE RETRIEVAL
