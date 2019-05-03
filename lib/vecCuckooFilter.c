@@ -282,9 +282,7 @@ inline void cViViDGenerateFilter(column_orders * c_orders)
 		temporary512Vector1 	= _mm512_sllv_epi64(temporary512Vector1, temporary512Vector2);
 
 
-		// >> (POSITIONS_PER_BUCKET+1)
-		temporary512Vector2		= _mm512_set1_epi64(POSITIONS_PER_BUCKET+1);
-		temporary512Vector2		= _mm512_mullo_epi64(integer512Vector, temporary512Vector2);
+		// >> (POSITIONS_PER_BUCKET-1) - position
 		temporary512Vector1		= _mm512_srlv_epi64(temporary512Vector1, temporary512Vector2);
 
 		//Invert
