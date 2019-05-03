@@ -124,6 +124,10 @@ inline void cViViDGenerateFilter(column_orders * c_orders)
 	__m256i oneVector = _mm256_set1_epi32(1);
 	__m256i zeroVector = _mm256_set1_epi32(0);
 
+	__m256 temporaryPSVector;
+	__m256 temporaryPSVector2;
+	__m256 temporaryPSVector3;
+
 	__m256i integer256Vector;
 	__m512i integer512Vector;
 
@@ -198,15 +202,14 @@ inline void cViViDGenerateFilter(column_orders * c_orders)
 		bucketVector	= _mm256_mask_xor_epi32(bucketVector, fingerprintMask, temporaryVector, bucketVector); 
 
 		//Positions (fingerprint%5 = fingerprint-((fingerprint/5)*5))
-		integer256Vector 	= _mm256_set1_epi32(7);
-		temporaryVector 	= _mm256_and_si256(integer256Vector, fingerprintVector);
-		temporaryVector 	= _mm256_sub_epi32(temporaryVector, oneVector);
-		temporaryVector 	= _mm256_slli_epi32(temporaryVector, 29);
-		positionVector 		= _mm256_srli_epi32(temporaryVector, 29);
-		// integer256Vector 	= _mm256_set1_epi32(POSITIONS_PER_BUCKET-1);
-		// temporaryVector 	= _mm256_cvtps_epi32(_mm256_div_ps(_mm256_cvtepi32_ps(fingerprintVector), _mm256_cvtepi32_ps(integer256Vector))); //fp/5
-		// temporaryVector 	= _mm256_mullo_epi32(temporaryVector, integer256Vector); // *5
-		// positionVector 		= _mm256_mask_sub_epi32(positionVector, loadMask, fingerprintVector, positionVector); //-fp
+		integer256Vector 	= _mm256_set1_epi32(POSITIONS_PER_BUCKET-1);
+		temporaryPSVector 	= _mm256_cvtepi32_ps(fingerprintVector);
+		temporaryPSVector2	= _mm256_cvtepi32_ps(integer256Vector);
+		temporaryPSVector3	= _mm256_div_ps(temporaryPSVector, temporaryPSVector2);
+
+		temporaryVector 	= _mm256_cvtps_epi32(temporaryPSVector3); //fp/5
+		temporaryVector 	= _mm256_mullo_epi32(temporaryVector, integer256Vector); // *5
+		positionVector 		= _mm256_mask_sub_epi32(positionVector, loadMask, fingerprintVector, positionVector); //-fp
 
 		/*******************************************
 			PHASE 3 - THE RETRIEVAL
