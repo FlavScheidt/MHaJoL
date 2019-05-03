@@ -274,14 +274,18 @@ inline void cViViDGenerateFilter(column_orders * c_orders)
 		//(POSITIONS_PER_BUCKET-1) - position
 		integer512Vector		= _mm512_set1_epi64(POSITIONS_PER_BUCKET-1);
 		temporary512Vector2		= _mm512_sub_epi64(integer512Vector, position512Vector);
+		integer512Vector		= _mm512_set1_epi64(FINGERPRINT_SIZE);
+		temporary512Vector2		= _mm512_mullo_epi64(integer512Vector, temporary512Vector2);
 
 		// 1X64 << (POSITIONS_PER_BUCKET-1) - position
 		temporary512Vector1 	= _mm512_set1_epi64(0XFFFFFFFFFFFFFFFF);
 		temporary512Vector1 	= _mm512_sllv_epi64(temporary512Vector1, temporary512Vector2);
 
-		// >> (FINGERPRINT_SIZE-1)
-		integer512Vector		= _mm512_set1_epi64(FINGERPRINT_SIZE-1);
-		temporary512Vector1		= _mm512_srlv_epi64(temporary512Vector1, integer512Vector);
+
+		// >> (POSITIONS_PER_BUCKET+1)
+		temporary512Vector2		= _mm512_set1_epi64(POSITIONS_PER_BUCKET+1);
+		temporary512Vector2		= _mm512_mullo_epi64(integer512Vector, temporary512Vector2);
+		temporary512Vector1		= _mm512_srlv_epi64(temporary512Vector1, temporary512Vector2);
 
 		//Invert
 		temporary512Vector2 	= _mm512_set1_epi64(0XFFFFFFFFFFFFFFFF);
