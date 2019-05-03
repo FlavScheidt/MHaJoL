@@ -206,8 +206,9 @@ inline void cViViDGenerateFilter(column_orders * c_orders)
 		temporaryPSVector 	= _mm256_cvtepi32_ps(fingerprintVector);
 		temporaryPSVector2	= _mm256_cvtepi32_ps(integer256Vector);
 		temporaryPSVector3	= _mm256_div_ps(temporaryPSVector, temporaryPSVector2);
+		temporaryPSVector3  = _mm256_round_ps(temporaryPSVector3, _MM_FROUND_TO_NEG_INF)
 
-		temporaryVector 	= _mm256_round_ps(temporaryPSVector3, _MM_FROUND_TO_NEG_INF); //fp/5
+		temporaryVector 	= _mm256_cvtps_epi32(temporaryPSVector3); //fp/5
 		temporaryVector 	= _mm256_mullo_epi32(temporaryVector, integer256Vector); // *5
 		positionVector 		= _mm256_mask_sub_epi32(positionVector, loadMask, fingerprintVector, temporaryVector); //-fp
 
