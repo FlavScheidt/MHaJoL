@@ -1,5 +1,5 @@
 CC=gcc
-DEBUGFLAGS=-g -pg -Wall -Wextra -lefence
+DEBUGFLAGS=-g -pg -Wall -Wextra -lefence -L/home/fscristo/usr/lib
 ARCHFLAGS=-march=skylake-avx512 -mcmodel=large
 PROFFLAGS=-DLIKWID_PERFMON -L$LIKWID_LIB -I$LIKWID_INCLUDE -llikwid
 
