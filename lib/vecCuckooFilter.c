@@ -172,7 +172,7 @@ inline void cViViDGenerateFilter(int key[tamOrders])
 			PHASE 1 - THE LOAD
 			Load the new items using the loadMask
 		******************************************/
-		keysVector = _mm256_mask_load_epi32 (keysVector, loadMask, key[tuples]);
+		keysVector = _mm256_mask_load_epi32 (keysVector, loadMask, &key[tuples]);
 
 		//Number of keys loaded to set the new tuples value
 		index 	= _cvtmask8_u32(loadMask);
