@@ -1,6 +1,7 @@
 CC=gcc
+RANDOMFLAGS=-lc --entry main -mcmodel=large #no idea why I need those, but it works, so keep it
 DEBUGFLAGS=-g -pg -Wall -Wextra -lefence -L/home/fscristo/usr/lib
-ARCHFLAGS=-march=skylake-avx512 -mcmodel=large
+ARCHFLAGS=-march=skylake-avx512
 PROFFLAGS=-DLIKWID_PERFMON -L$LIKWID_LIB -I$LIKWID_INCLUDE -llikwid
 
 CFLAGS= -lpthread $(DEBUGFLAGS) $(PROFFLAGS) $(ARCHFLAGS) #-O2
