@@ -89,7 +89,7 @@ const uint64_t permTable[256] = {0x0706050403020100ull,
 
 inline void cViViDGenerateFilter(column_orders * c_orders)
 {
-	uint32_t key[TAM_ORDERS];
+	uint32_t key[tamOrders];
 
 	/*******************************************
 		Masks
