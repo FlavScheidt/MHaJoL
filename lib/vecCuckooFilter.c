@@ -89,6 +89,7 @@ const uint64_t permTable[256] = {0x0706050403020100ull,
 
 inline void cViViDGenerateFilter(column_orders * c_orders)
 {
+	uint32_t key[TAM_ORDERS];
 
 	/*******************************************
 		Masks
@@ -162,12 +163,12 @@ inline void cViViDGenerateFilter(column_orders * c_orders)
 	size_t index;
 	int threshold = 0;
 
-//	key[0] = 0;
-//	for (unsigned int i=0; i<tamOrders;i++)
-//	{
-//		printf("%d %d\n", i, c_orders[i].O_CUSTKEY);
-//		key[i] = c_orders[i].O_CUSTKEY;
-//	}
+	key[0] = 0;
+	for (unsigned int i=0; i<tamOrders;i++)
+	{
+		printf("%d %d\n", i, c_orders[i].O_CUSTKEY);
+		key[i] = c_orders[i].O_CUSTKEY;
+	}
 	init = clock();
 	likwid_markerStartRegion("Generation");
 
