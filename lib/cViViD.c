@@ -1,8 +1,8 @@
 #include "cViViD.h"
 
-inline void cViViDGenerate(column_orders * c_orders)
+inline void cViViDGenerate(int orders[tamOrders])
 {
-	cViViDGenerateFilter(c_orders);
+	cViViDGenerateFilter(orders);
 	return;
 }
 
@@ -10,18 +10,22 @@ inline int cViViDJoin(column_customer * c_customer, column_orders * c_orders)
 {
 	clock_t init, end;
 	uint32_t index=0;
-	int customer[tamCustomer];
+	// int customer[tamCustomer];
+	int orders[tamOrders];
 
-	__m256i keys;
+	// __m256i keys;
 
-	__m256i mask_1 = _mm256_set1_epi32(0);
-	__m256i mask_0 = _mm256_set1_epi32(0);
-	mask_1 = _mm256_cmpeq_epi32(mask_1, mask_0);
+	// __m256i mask_1 = _mm256_set1_epi32(0);
+	// __m256i mask_0 = _mm256_set1_epi32(0);
+	// mask_1 = _mm256_cmpeq_epi32(mask_1, mask_0);
 
 	for (int i=0; i<REAL_TAB_SIZE; i++)
 		cuckoo[i]=0;
 
-	cViViDGenerate(c_orders);
+	for (int i=0; i<tamOrders; i++)
+		orders[i] = c_orders[i].O_CUSTKEY;
+
+	cViViDGenerate(orders);
 
 	// for (int i=0; i<REAL_TAB_SIZE; i++)
 	// {

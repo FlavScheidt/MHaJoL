@@ -87,9 +87,8 @@ const uint64_t permTable[256] = {0x0706050403020100ull,
      0x0103040506070200ull, 0x0001030405060702ull, 0x0203040506070100ull,
      0x0002030405060701ull, 0x0102030405060700ull, 0x0001020304050607ull};
 
-inline void cViViDGenerateFilter(column_orders * c_orders)
+inline void cViViDGenerateFilter(int key[tamOrders])
 {
-	uint32_t key[tamOrders];
 
 	/*******************************************
 		Masks
@@ -156,19 +155,12 @@ inline void cViViDGenerateFilter(column_orders * c_orders)
 	*******************************************/
 	clock_t init, end;
 
-//	int key[tamOrders];
 	unsigned int shiftIndex;
 
 	size_t tuples = 0;
 	size_t index;
 	int threshold = 0;
 
-	key[0] = 0;
-	for (unsigned int i=0; i<tamOrders;i++)
-	{
-		printf("%d %d\n", i, c_orders[i].O_CUSTKEY);
-		key[i] = c_orders[i].O_CUSTKEY;
-	}
 	init = clock();
 	likwid_markerStartRegion("Generation");
 
@@ -180,7 +172,7 @@ inline void cViViDGenerateFilter(column_orders * c_orders)
 			PHASE 1 - THE LOAD
 			Load the new items using the loadMask
 		******************************************/
-		keysVector = _mm256_mask_load_epi32 (keysVector, loadMask, &c_orders[tuples]);
+		keysVector = _mm256_mask_load_epi32 (keysVector, loadMask, key[tuples]);
 
 		//Number of keys loaded to set the new tuples value
 		index 	= _cvtmask8_u32(loadMask);
