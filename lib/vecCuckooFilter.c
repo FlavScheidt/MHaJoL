@@ -304,7 +304,7 @@ inline void cViViDGenerateFilter(column_orders * c_orders)
 		integer512Vector 		= _mm512_set1_epi64(POPCOUNTER_SIZE);
 		temporary512Vector1 	= _mm512_add_epi64(position512Vector, integer512Vector);
 		integer512Vector 		= _mm512_set1_epi64(FINGERPRINT_SIZE);
-		temporary512Vector1 	= _mm512_mullo_epi64(temporary512Vector2, temporary512Vector1);
+		temporary512Vector1 	= _mm512_mullo_epi64(integer512Vector, temporary512Vector1);
 
 		//fingerprint << (position+2)*8
 		temporary512Vector2		= _mm512_cvtepi32_epi64(fingerprintVector);
