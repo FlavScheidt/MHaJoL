@@ -11,7 +11,7 @@ inline int cViViDJoin(column_customer * c_customer, column_orders * c_orders)
 	clock_t init, end;
 	uint32_t index=0;
 	// int customer[tamCustomer];
-	int orders[tamOrders];
+	int alignas(32) orders[tamOrders];
 
 	// __m256i keys;
 
