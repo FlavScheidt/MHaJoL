@@ -330,6 +330,7 @@ inline void cViViDGenerateFilter(column_orders * c_orders)
 
 		//Shuffle Masks
 		temporaryVector 	= _mm256_maskz_and_epi32(loadMask, oneVector, oneVector);
+		temporaryVector 	= _mm256_slli_epi32(temporaryVector, 31);
 		temporaryVector 	= _mm256_permutevar8x32_epi32(temporaryVector, permutationMask);
 		loadMask 			= _mm256_movepi32_mask(temporaryVector);
 		fingerprintMask		= _knot_mask8(loadMask);
