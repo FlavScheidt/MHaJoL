@@ -55,3 +55,8 @@ void vecCuckooGenerate(column_orders * c_orders);
 int vecCuckooLookUpOHT(__m256i key, __m256i hash1);
 int _mm256_insertOHT_epi32(__m256i keysVector, __m256i ohtMask);
 __m256i _mm256_lookUpOHT(__m256i key);
+
+
+int vividJoin(column_customer * c_customer, column_orders * c_orders);
+int vividLookUp(__m256i key);
+void vividGenerate(column_orders * c_orders);
