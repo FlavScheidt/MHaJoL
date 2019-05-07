@@ -88,7 +88,7 @@ const uint64_t perm[256] = {0x0706050403020100ull,
      0x0002030405060701ull, 0x0102030405060700ull, 0x0001020304050607ull};
 
 
-inline void vecCuckooGenerate(column_orders * c_orders)
+inline void vividGenerate(column_orders * c_orders)
 {
 	alignas(32) int cuckooKey[8];
 	alignas(32) int cuckooHashed[8];
@@ -125,10 +125,6 @@ inline void vecCuckooGenerate(column_orders * c_orders)
 	table1Mask		= _cvtu32_mask8(255);
 	table2Mask		= _cvtu32_mask8(0);
 
-	keysVector 		= _mm256_cmpeq_epi32(zeroVector, oneVector);
-	temporaryVector = _mm256_cmpeq_epi32(zeroVector, oneVector);
-	permutationMask =  _mm256_cmpeq_epi32(zeroVector, oneVector);
-	hashedVector 	= _mm256_cmpeq_epi32(oneVector, oneVector);
 	hopsVector 		= _mm256_cmpeq_epi32(oneVector, oneVector);
 
 	//Performance counter variables
@@ -191,11 +187,11 @@ inline void vecCuckooGenerate(column_orders * c_orders)
 		remotionMask 	= _mm256_cmpeq_epi32(valuesVector, keysVector);
 
 		//Zeros
-		loadMask 	=	_mm256_cmpeq_epi32(valuesVector, zeroVector);
+		loadMask 		=	_mm256_cmpeq_epi32(valuesVector, zeroVector);
 
 		//New load and store Masks
-		loadMask 	= _kor_mask8(loadMask, remotionMask);
-		storeMask 	= _knot_mask8(remotionMask);
+		loadMask 		= _kor_mask8(loadMask, remotionMask);
+		storeMask 		= _knot_mask8(remotionMask);
 
 		/*******************************************
 			PHASE 5 - THE HOPS CALCULATION 
@@ -264,7 +260,7 @@ inline void vecCuckooGenerate(column_orders * c_orders)
 	return;	
 }
 
-inline int vecCuckooLookUp(__m256i key)
+inline int vividLookUp(__m256i key)
 {
 	__m256i hash1;
 	__m256i hash2;
@@ -272,9 +268,9 @@ inline int vecCuckooLookUp(__m256i key)
 	__m256i table2;
 
 	__m256i tableSizeVector = _mm256_set1_epi32(TAB_SIZE-1);
-	__m256i oneVector = _mm256_set1_epi32(0);
-	__m256i zeroVector = _mm256_set1_epi32(0);
-	oneVector = _mm256_cmpeq_epi32(oneVector, zeroVector);
+	__m256i oneVector 		= _mm256_set1_epi32(0);
+	__m256i zeroVector 		= _mm256_set1_epi32(0);
+	oneVector 				= _mm256_cmpeq_epi32(oneVector, zeroVector);
 
 	uint32_t found = 0;
 
@@ -298,13 +294,15 @@ inline int vecCuckooLookUp(__m256i key)
 
 	hash1 = _mm256_cmpeq_epi32(hash1, zeroVector);
 
-	found = _mm256_movemask_ps(_mm256_castsi256_ps(hash1));
+	found = _popcnt32(_cvtmask8_u32(_mm256_movepi32_mask(hash1)));
 
-	return (((found<<31)>>31)+((found<<30)>>31)+((found<<29)>>31)+((found<<28)>>31)+((found<<27)>>31)+((found<<26)>>31)+((found<<25)>>31)+((found<<24)>>31));
+	return found;
+
+	// return (((found<<31)>>31)+((found<<30)>>31)+((found<<29)>>31)+((found<<28)>>31)+((found<<27)>>31)+((found<<26)>>31)+((found<<25)>>31)+((found<<24)>>31));
 
 }
 
-int vecCuckooJoin(column_customer * c_customer, column_orders * c_orders)
+int vividJoin(column_customer * c_customer, column_orders * c_orders)
 {
 	clock_t init, end;
 	uint32_t index=0;
