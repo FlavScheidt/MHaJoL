@@ -181,10 +181,10 @@ inline void vividGenerate(column_orders * c_orders)
 			Check if the values are already there
 		*******************************************/
 		//Duplicates
-		remotionMask = _mm256_movepi32_mask(_mm256_cmpeq_epi32(fpValuesVector, fingerprintVector));
+		remotionMask = _mm256_movepi32_mask(_mm256_cmpeq_epi32(keysVector, valuesVector));
 
 		//Zeros
-		loadMask 	= _mm256_movepi32_mask(_mm256_cmpeq_epi32(fpValuesVector, zeroVector));
+		loadMask 	= _mm256_movepi32_mask(_mm256_cmpeq_epi32(valuesVector, zeroVector));
 
 		//Remove duplicates from the loadMask and set the store mask where there is no repeated key
 		loadMask 	= _kor_mask8(loadMask, remotionMask);
