@@ -90,9 +90,6 @@ const uint64_t permTB[256] = {0x0706050403020100ull,
 
 inline void vividGenerate(column_orders * c_orders)
 {
-	alignas(32) int cuckooKey[8];
-	alignas(32) int cuckooHashed[8];
-
 	int key[tamOrders];
 	int shiftIndex;
 
@@ -141,7 +138,7 @@ inline void vividGenerate(column_orders * c_orders)
 	init = clock();
 	likwid_markerStartRegion("Generation");
 
-	keysVector = _mm256_load_epi32(&key[tuples]);
+	temporaryVector = _mm256_maskload_epi32(&key[tuples], _mm256_maskz_and_epi32(loadMask, oneVector, oneVector));
 	tuples = 8;
 
 	hashedVector = _mm256_fnv1a_epi32(keysVector);
@@ -160,8 +157,8 @@ inline void vividGenerate(column_orders * c_orders)
 		keysVector		= _mm256_mask_or_epi32(keysVector, loadMask, temporaryVector, zeroVector);
 
 		//Number of keys loaded to set the new tuples value
-		index 			= _mm256_movemask_ps(_mm256_castsi256_ps(loadMask));
-		tuples 			+= _mm_popcnt_u64(index);
+		index 	= _cvtmask8_u32(loadMask);
+		tuples += _mm_popcnt_u64(index);
 
 		/*******************************************
 			PHASE 2 - THE HASH
@@ -184,14 +181,14 @@ inline void vividGenerate(column_orders * c_orders)
 			Check if the values are already there
 		*******************************************/
 		//Duplicates
-		remotionMask 	= _mm256_cmpeq_epi32(valuesVector, keysVector);
+		remotionMask = _mm256_movepi32_mask(_mm256_cmpeq_epi32(fpValuesVector, fingerprintVector));
 
 		//Zeros
-		loadMask 		=	_mm256_cmpeq_epi32(valuesVector, zeroVector);
+		loadMask 	= _mm256_movepi32_mask(_mm256_cmpeq_epi32(fpValuesVector, zeroVector));
 
-		//New load and store Masks
-		loadMask 		= _kor_mask8(loadMask, remotionMask);
-		storeMask 		= _knot_mask8(remotionMask);
+		//Remove duplicates from the loadMask and set the store mask where there is no repeated key
+		loadMask 	= _kor_mask8(loadMask, remotionMask);
+		storeMask 	= _knot_mask8(remotionMask);
 
 		/*******************************************
 			PHASE 5 - THE HOPS CALCULATION 
@@ -234,7 +231,7 @@ inline void vividGenerate(column_orders * c_orders)
 			PHASE 8 - THE SHUFFLE
 		*******************************************/
 		shiftIndex 			= _cvtmask8_u32(loadMask);
-		permMask 			= _mm_loadl_epi64((__m128i*) &permTable[shiftIndex ^ 255]);
+		permMask 			= _mm_loadl_epi64((__m128i*) &permTB[shiftIndex ^ 255]);
 		permutationMask 	= _mm256_cvtepi8_epi32(permMask);
 
 		keysVector = _mm256_permutevar8x32_epi32(valuesVector, permutationMask);
