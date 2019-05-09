@@ -2,7 +2,7 @@
 
 metrics=("L3CACHE" "L2CACHE" "ENERGY" "L2" "L3" "TLB_DATA" "DATA" "ENERGY" "MEM" "BRANCH" "CACHES")
 
-methods=("cuckoo" "vecCuckoo" "ViViD")
+methods=("ViViD") #("cuckoo" "vecCuckoo" "ViViD")
 
 #Selectivity from 0 to 1.0, by 0.1
 for i in `seq 1 9`;
