@@ -1,8 +1,7 @@
 #!/bin/bash
+metrics=("L3CACHE" "L2CACHE" "ENERGY" "L2" "L3" "TLB_DATA" "DATA" "ENERGY" "MEM" "BRANCH" "CACHES")
 
-metrics=("L3CACHE" "L2CACHE" "L2" "L3" "ENERGY")
-
-methods=("cuckoo" "vecCuckoo")
+methods=("cuckoo" "vecCuckoo" "ViViD")
 
 if [ -f ./results.csv ]; then
    rm -rf ./results.csv
@@ -12,7 +11,7 @@ touch ./results.csv
 for i in `seq 1 9`;
 do
 	selectivity=$((i*10))
-	OUT_DIR="/home/flav/Mestrado/MHaJoL/data/out/joins/_${selectivity}"
+	OUT_DIR="/home/fscristo/MHaJoL/data/out/joins/_${selectivity}"
 	SPLIT_DIR="${OUT_DIR}/split"
 	if [ ! -d "$SPLIT_DIR" ]
 	then
@@ -63,7 +62,7 @@ done
 for i in `seq 1 9`;
 do
 	selectivity=$((i*10))
-	OUT_DIR="/home/flav/Mestrado/MHaJoL/data/out/joins/_${selectivity}"
+	OUT_DIR="/home/fscristo/MHaJoL/data/out/joins/_${selectivity}"
 	SPLIT_DIR="${OUT_DIR}/split"
 
 	cd ${SPLIT_DIR}
@@ -88,7 +87,7 @@ done
 for i in `seq 1 9`;
 do
 	selectivity=$((i*10))
-	OUT_DIR="/home/flav/Mestrado/MHaJoL/data/out/joins/_${selectivity}"
+	OUT_DIR="/home/fscristo/MHaJoL/data/out/joins/_${selectivity}"
 	SPLIT_DIR="${OUT_DIR}/split"
 	cd ${SPLIT_DIR}
 	rm *_4 *_7
@@ -97,7 +96,7 @@ done
 for i in `seq 1 9`;
 do
 	selectivity=$((i*10))
-	OUT_DIR="/home/flav/Mestrado/MHaJoL/data/out/joins/_${selectivity}"
+	OUT_DIR="/home/fscristo/MHaJoL/data/out/joins/_${selectivity}"
 	SPLIT_DIR="${OUT_DIR}/split"
 
 	cd ${SPLIT_DIR}
@@ -116,7 +115,7 @@ done
 for i in `seq 1 9`;
 do
 	selectivity=$((i*10))
-	OUT_DIR="/home/flav/Mestrado/MHaJoL/data/out/joins/_${selectivity}"
+	OUT_DIR="/home/fscristo/MHaJoL/data/out/joins/_${selectivity}"
 	SPLIT_DIR="${OUT_DIR}/split"
 
 	cd ${SPLIT_DIR}
@@ -142,6 +141,6 @@ do
 		sed -i 's/,PWR3//g' ${file}
 		sed -i 's/,TMP0//g' ${file}
 
-		cat ${file} | sed 's/.$//' | sed 's/,-/,0/g' &>> /home/flav/Mestrado/MHaJoL/data/results.csv
+		cat ${file} | sed 's/.$//' | sed 's/,-/,0/g' &>> /home/fscristo/MHaJoL/data/results.csv
 	done
 done
