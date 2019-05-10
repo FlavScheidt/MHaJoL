@@ -22,38 +22,26 @@ int main(int argc, char ** argv)
 	tamCustomer = TAM_CUSTOMER;
 	// c_customer = malloc(tamCustomer*sizeof(column_customer));
 
-	switch (selectivity) {
-		case "10": 
+	if (strcmp(selectivity, "10") == 0)
 			readOrdersColumn("/home/fscristo/MHaJoL/tbl/orders_10.tbl", c_orders, sel);
-			break;
-		case "20": 
+	else if (strcmp(selectivity, "20") == 0)
 			readOrdersColumn("/home/fscristo/MHaJoL/tbl/orders_20.tbl", c_orders, sel);
-			break;
-		case "30": 
+	else if (strcmp(selectivity, "30") == 0)
 			readOrdersColumn("/home/fscristo/MHaJoL/tbl/orders_30.tbl", c_orders, sel);
-			break;
-		case "40": 
+	else if (strcmp(selectivity, "40") == 0)
 			readOrdersColumn("/home/fscristo/MHaJoL/tbl/orders_40.tbl", c_orders, sel);
-			break;
-		case "50": 
+	else if (strcmp(selectivity, "50") == 0)
 			readOrdersColumn("/home/fscristo/MHaJoL/tbl/orders_50.tbl", c_orders, sel);
-			break;
-		case "60": 
+	else if (strcmp(selectivity, "60") == 0)
 			readOrdersColumn("/home/fscristo/MHaJoL/tbl/orders_60.tbl", c_orders, sel);
-			break;
-		case "70": 
+	else if (strcmp(selectivity, "70") == 0)
 			readOrdersColumn("/home/fscristo/MHaJoL/tbl/orders_70.tbl", c_orders, sel);
-			break;
-		case "80": 
+	else if (strcmp(selectivity, "80") == 0)
 			readOrdersColumn("/home/fscristo/MHaJoL/tbl/orders_80.tbl", c_orders, sel);
-			break;
-		case "90": 
+	else if (strcmp(selectivity, "90") == 0)
 			readOrdersColumn("/home/fscristo/MHaJoL/tbl/orders_90.tbl", c_orders, sel);
-			break;
-
-		default:
+	else
 			readOrdersColumn("/home/fscristo/MHaJoL/tbl/orders.tbl", c_orders, sel);
-	}
 
 	// tamOrders = countLines(fileName);
 	tamOrders = TAM_ORDERS;
