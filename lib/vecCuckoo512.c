@@ -195,7 +195,7 @@ inline void vividGenerate(column_orders * c_orders)
 		//Set zero where the threshold has been reached 
 		// hopsVector = _mm256_castps_si256(_mm256_andnot_ps(_mm256_castsi256_ps(ohtMask), _mm256_castsi256_ps(hopsVector)));
 		//Set zero where a new key must be load
-		hopsVector = _mm256_mask_add_epi32(oneVector, loadMask, hopsVector, oneVector);
+		hopsVector = _mm256_mask_add_epi32(oneVector, _knot_mask8(loadMask), hopsVector, oneVector);
 
 		//Shifts to set where the number of hops are odd
 		temporaryVector 	= _mm256_slli_epi32(hopsVector, 31);
