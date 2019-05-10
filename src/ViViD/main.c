@@ -20,10 +20,9 @@ int main(int argc, char ** argv)
 		strcpy(selectivity, "no");
 
 	tamCustomer = TAM_CUSTOMER;
-	
 	readCustomerColumn("/home/fscristo/MHaJoL/tbl/customer.tbl", c_customer);
 
-
+	tamOrders = TAM_ORDERS;
 	if (strcmp(selectivity, "10") == 0)
 			readOrdersColumn("/home/fscristo/MHaJoL/tbl/orders_10.tbl", c_orders, sel);
 	else if (strcmp(selectivity, "20") == 0)
@@ -44,11 +43,6 @@ int main(int argc, char ** argv)
 			readOrdersColumn("/home/fscristo/MHaJoL/tbl/orders_90.tbl", c_orders, sel);
 	else
 			readOrdersColumn("/home/fscristo/MHaJoL/tbl/orders.tbl", c_orders, sel);
-
-	// tamOrders = countLines(fileName);
-	tamOrders = TAM_ORDERS;
-	// c_orders = malloc(tamOrders*sizeof(column_orders));
-	readOrdersColumn("/home/fscristo/MHaJoL/tbl/orders.tbl", c_orders, sel);
 
 
 	printf("Vectorized Cuckoo Join \n");
