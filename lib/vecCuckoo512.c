@@ -136,7 +136,7 @@ inline void vividGenerate(column_orders * c_orders)
 		key[i] = c_orders[i].O_CUSTKEY;
 
 	init = clock();
-	likwid_markerStartRegion("Generation");
+	// likwid_markerStartRegion("Generation");
 
 	while (tuples <= tamOrders-8)
 	{
@@ -244,7 +244,7 @@ inline void vividGenerate(column_orders * c_orders)
 		table2Mask 			= _knot_mask8(table1Mask);
 	}
 
-	likwid_markerStopRegion("Generation");
+	// likwid_markerStopRegion("Generation");
 	end = clock();
 	printf("Generation %.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 
@@ -288,9 +288,7 @@ inline int vividLookUp(__m256i key)
 	found = _cvtmask8_u32(_mm256_movepi32_mask(hash1));
 
 	// return found;
-
 	return (((found<<31)>>31)+((found<<30)>>31)+((found<<29)>>31)+((found<<28)>>31)+((found<<27)>>31)+((found<<26)>>31)+((found<<25)>>31)+((found<<24)>>31));
-
 }
 
 int vividJoin(column_customer * c_customer, column_orders * c_orders)
@@ -304,7 +302,6 @@ int vividJoin(column_customer * c_customer, column_orders * c_orders)
 	__m256i oneVector = _mm256_set1_epi32(0);
 	__m256i zeroVector = _mm256_set1_epi32(0);
 	oneVector = _mm256_cmpeq_epi32(oneVector, zeroVector);
-
 
 	HOPS = 0;			//hops for a given key
 	HOPSGENERAL = 0;	//general hops in average
@@ -320,25 +317,20 @@ int vividJoin(column_customer * c_customer, column_orders * c_orders)
 	vividGenerate(c_orders);
 
 	for (int i=0; i<REAL_TAB_SIZE; i++)
-	{
 		if (cuckoo[i] != 0)
-		{
 			OCC++;
-			// printf("%d\n", cuckoo[i]);
-		}
-	}
 
 	for (unsigned int i=0; i<tamCustomer;i++)
 		customer[i] = c_customer[i].C_CUSTKEY;
 
 	init=clock();
-	likwid_markerStartRegion("Core");
+	// likwid_markerStartRegion("Core");
 	for (unsigned int i=0; i<tamCustomer; i=i+8)
 	{
 		keys = _mm256_maskload_epi32(&customer[i], oneVector);
 		index += vividLookUp(keys);
 	}
-	likwid_markerStopRegion("Core");
+	// likwid_markerStopRegion("Core");
 	end=clock();
 
 	printf("Join core: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));

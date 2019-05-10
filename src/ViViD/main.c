@@ -51,17 +51,11 @@ int main(int argc, char ** argv)
 
 	init = clock();
 
-	likwid_markerInit();
 	nResult=vividJoin(c_customer, c_orders);
-	likwid_markerClose();
 
 	end = clock();
 	printf("%d linhas\n", nResult);
 	printf("%.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 
-	// free(c_orders);
-	// free(c_customer);
-
-	pthread_exit(NULL);
 	return 1;
 }

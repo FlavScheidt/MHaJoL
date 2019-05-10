@@ -161,8 +161,8 @@ inline void cViViDGenerateFilter(int key[tamOrders])
 	size_t index;
 	int threshold = 0;
 
-	init = clock();
-	likwid_markerStartRegion("Generation");
+	// init = clock();
+	// likwid_markerStartRegion("Generation");
 
 	while (tuples <= tamOrders-8)
 	{
