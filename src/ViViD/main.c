@@ -22,7 +22,7 @@ int main(int argc, char ** argv)
 	tamCustomer = TAM_CUSTOMER;
 	// c_customer = malloc(tamCustomer*sizeof(column_customer));
 
-	switch selectivity {
+	switch (selectivity) {
 		case "10": 
 			readOrdersColumn("/home/fscristo/MHaJoL/tbl/orders_10.tbl", c_orders, sel);
 			break;
