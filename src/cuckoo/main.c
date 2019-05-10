@@ -59,9 +59,9 @@ int main(int argc, char ** argv)
 	printf("-----------------\n");
 	printf("selectivity %s\n", selectivity);
 	init = clock();
-	likwid_markerInit();
+	// likwid_markerInit();
 	nResult=cuckooHash(c_customer, c_orders, tamCustomer, tamOrders, t_result, CUCKOO_SIZE);
-	likwid_markerClose();
+	// likwid_markerClose();
 	end = clock();
 	printf("%d linhas\n", nResult);
 	printf("%.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));

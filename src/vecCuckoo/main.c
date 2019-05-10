@@ -49,9 +49,9 @@ int main(int argc, char ** argv)
 
 	init = clock();
 
-	likwid_markerInit();
+	// likwid_markerInit();
 	nResult=vecCuckooJoin(c_customer, c_orders);
-	likwid_markerClose();
+	// likwid_markerClose();
 
 	end = clock();
 	printf("%d linhas\n", nResult);
