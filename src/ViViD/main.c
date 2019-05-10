@@ -1,5 +1,4 @@
 #include "../../lib/join.h"
-
 int main(int argc, char ** argv)
 {
 	int nResult;
@@ -19,38 +18,48 @@ int main(int argc, char ** argv)
 	}
 	else
 		strcpy(selectivity, "no");
-//
-//	if (strcmp(selectivity, "no") == 0)
-//	{
-//		strcpy(fileName, "/home/fscristo/MHaJoL/tbl/order.tbl");
-	//	strcpy(aux, "tbl/orders.tbl");
-	//	aux[14]='\0';
-	//	strcat(fileName, aux);
-//	}
-//	else
-//	{
-//		strcpy(fileName, PATH_MAIN);
-//		strcpy(aux, "tbl/orders_");
-//		strcat(fileName, "aux");
-//		strcat(fileName, selectivity);
-//		aux[0]='\0';
-//		strcpy(aux, ".tbl");
-//		strcat(fileName, aux);
-//	}
 
-	//aux[0]='\0';
-	//strcpy(fileName2, "/home/fscristo/MHaJoL/tbl/customer.tbl");
-	//strcpy(aux, "tbl/customer.tbl");
-	//strcat(fileName2, aux);
-	// tamCustomer = countLines(fileName2);
 	tamCustomer = TAM_CUSTOMER;
 	// c_customer = malloc(tamCustomer*sizeof(column_customer));
-	readCustomerColumn("/home/fscristo/MHaJoL/tbl/customer.tbl", c_customer);
+
+	switch selectivity {
+		case "10": 
+			readOrdersColumn("/home/fscristo/MHaJoL/tbl/orders_10.tbl", c_orders, sel);
+			break;
+		case "20": 
+			readOrdersColumn("/home/fscristo/MHaJoL/tbl/orders_20.tbl", c_orders, sel);
+			break;
+		case "30": 
+			readOrdersColumn("/home/fscristo/MHaJoL/tbl/orders_30.tbl", c_orders, sel);
+			break;
+		case "40": 
+			readOrdersColumn("/home/fscristo/MHaJoL/tbl/orders_40.tbl", c_orders, sel);
+			break;
+		case "50": 
+			readOrdersColumn("/home/fscristo/MHaJoL/tbl/orders_50.tbl", c_orders, sel);
+			break;
+		case "60": 
+			readOrdersColumn("/home/fscristo/MHaJoL/tbl/orders_60.tbl", c_orders, sel);
+			break;
+		case "70": 
+			readOrdersColumn("/home/fscristo/MHaJoL/tbl/orders_70.tbl", c_orders, sel);
+			break;
+		case "80": 
+			readOrdersColumn("/home/fscristo/MHaJoL/tbl/orders_80.tbl", c_orders, sel);
+			break;
+		case "90": 
+			readOrdersColumn("/home/fscristo/MHaJoL/tbl/orders_90.tbl", c_orders, sel);
+			break;
+
+		default:
+			readOrdersColumn("/home/fscristo/MHaJoL/tbl/orders.tbl", c_orders, sel);
+	}
 
 	// tamOrders = countLines(fileName);
 	tamOrders = TAM_ORDERS;
 	// c_orders = malloc(tamOrders*sizeof(column_orders));
 	readOrdersColumn("/home/fscristo/MHaJoL/tbl/orders.tbl", c_orders, sel);
+
 
 	printf("Vectorized Cuckoo Join \n");
 	printf("-----------------\n");

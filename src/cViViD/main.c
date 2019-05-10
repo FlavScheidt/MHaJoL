@@ -55,8 +55,6 @@ int main(int argc, char ** argv)
 		default:
 			readOrdersColumn("/home/fscristo/MHaJoL/tbl/orders.tbl", c_orders, sel);
 	}
-//
-	readCustomerColumn("/home/fscristo/MHaJoL/tbl/customer.tbl", c_customer);
 
 	// tamOrders = countLines(fileName);
 	tamOrders = TAM_ORDERS;
