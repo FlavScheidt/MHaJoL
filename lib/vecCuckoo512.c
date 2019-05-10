@@ -123,7 +123,7 @@ inline void vividGenerate(column_orders * c_orders)
 	table1Mask		= _cvtu32_mask8(255);
 	table2Mask		= _cvtu32_mask8(0);
 
-	hopsVector 		= _mm256_cmpeq_epi32(oneVector, oneVector);
+	hopsVector 		= _mm256_set1_epi32(1);
 
 	//Performance counter variables
 	clock_t init, end;
