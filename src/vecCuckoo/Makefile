@@ -1,11 +1,12 @@
 CC=gcc
-DEBUGFLAGS=-g -pg -Wall -pedantic -Wextra #-lefence
-ARCHFLAGS=-mavx2 -march=skylake
-PROFFLAGS=-DLIKWID_PERFMON -L$LIKWID_LIB -I$LIKWID_INCLUDE -llikwid
+RANDOMFLAGS=-mcmodel=large #no idea why I need those, but it works, so keep it
+DEBUGFLAGS=-g -pg -Wall -Wextra -pedantic #-lefence -L/home/fscristo/usr/lib
+ARCHFLAGS=-march=skylake-avx512
+PROFFLAGS= #-DLIKWID_PERFMON -L$LIKWID_LIB -I$LIKWID_INCLUDE -llikwid
 
-CFLAGS=-O2 -lpthread $(DEBUGFLAGS) $(PROFFLAGS) $(ARCHFLAGS)
+CFLAGS= -lpthread $(DEBUGFLAGS) $(RANDOMFLAGS) $(PROFFLAGS) $(ARCHFLAGS) -O2
 
-DEPS = ../../lib/hash/hash.h ../lib/../join.h ../../lib/vecCuckoo.h
+DEPS = ../../lib/hash/hash.h ../lib/../join.h ../../vecCuckoo.h
 
 csrc = $(wildcard ../../lib/hash/*.c) \
 		$(wildcard ../../lib/*.c) \
