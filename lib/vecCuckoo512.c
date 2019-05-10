@@ -138,14 +138,6 @@ inline void vividGenerate(column_orders * c_orders)
 	init = clock();
 	likwid_markerStartRegion("Generation");
 
-	temporaryVector = _mm256_maskload_epi32(&key[tuples], _mm256_maskz_and_epi32(loadMask, oneVector, oneVector));
-	tuples = 8;
-
-	hashedVector = _mm256_fnv1a_epi32(keysVector);
-	hashedVector = _mm256_and_si256(hashedVector, tableSizeVector);
-
-	_mm256_mask_i32scatter_epi32(cuckoo, loadMask, hashedVector, keysVector, 4);
-
 	while (tuples <= tamOrders-8)
 	{
 		threshold++;
