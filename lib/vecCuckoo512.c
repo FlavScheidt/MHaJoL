@@ -162,12 +162,12 @@ inline void vividGenerate(column_orders * c_orders)
 		/*******************************************
 			PHASE 2 - THE HASH
 		*******************************************/
-		hashedAVector 	= _mm256_fnv1a_epi32(keysVector);
-		hashedVector 	= _mm256_and_epi32 (hashedAuxVector, tableSizeVector);
+		hashedVector 	= _mm256_fnv1a_epi32(keysVector);
+		hashedVector 	= _mm256_and_si256 (hashedVector, tableSizeVector);
 
 		temporaryVector = _mm256_murmur3_epi32(keysVector, 0x0D50064F7);
 		temporaryVector = _mm256_and_si256(temporaryVector, tableSizeVector);
-		temporaryVector = _mm256_add_si256(temporaryVector, tableSizeVector);
+		temporaryVector = _mm256_add_epi32(temporaryVector, tableSizeVector);
 
 		hashedVector 	= _mm256_mask_and_epi32(temporaryVector, table1Mask, hashedVector, allOneVector);
 		hashedAuxVector = _mm256_mask_and_epi32(temporaryVector, table2Mask, hashedVector, allOneVector);
