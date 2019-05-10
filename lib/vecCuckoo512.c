@@ -292,8 +292,7 @@ inline int vividLookUp(__m256i key)
 	hash1 = _mm256_cmpeq_epi32(hash1, zeroVector);
 
 	found = _cvtmask8_u32(_mm256_movepi32_mask(hash1));
-
-	printf("%s \n", found);
+	
 	// return found;
 
 	return (((found<<31)>>31)+((found<<30)>>31)+((found<<29)>>31)+((found<<28)>>31)+((found<<27)>>31)+((found<<26)>>31)+((found<<25)>>31)+((found<<24)>>31));
