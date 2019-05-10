@@ -199,7 +199,6 @@ inline void vividGenerate(column_orders * c_orders)
 
 		//Shifts to set where the number of hops are odd
 		temporaryVector 	= _mm256_slli_epi32(hopsVector, 31);
-		temporaryVector 	= _mm256_srli_epi32(temporaryVector, 31);
 
 		table1Mask 			= _mm256_movepi32_mask(temporaryVector);
 		table2Mask 			= _knot_mask8(table1Mask);
