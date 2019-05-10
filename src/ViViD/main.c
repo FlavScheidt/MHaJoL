@@ -19,8 +19,7 @@ int main(int argc, char ** argv)
 	else
 		strcpy(selectivity, "no");
 
-	tamCustomer = TAM_CUSTOMER;
-	// c_customer = malloc(tamCustomer*sizeof(column_customer));
+	readCustomerColumn("/home/fscristo/MHaJoL/tbl/customer.tbl", c_customer);
 
 	if (strcmp(selectivity, "10") == 0)
 			readOrdersColumn("/home/fscristo/MHaJoL/tbl/orders_10.tbl", c_orders, sel);
