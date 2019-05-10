@@ -113,6 +113,11 @@ inline void vividGenerate(column_orders * c_orders)
 	__m256i allOneVector 	= _mm256_set1_epi32(0xFFFFFFFF);
 	__m256i zeroVector 		= _mm256_set1_epi32(0);
 
+	__m256i hashedAuxVector;
+	__m256i valuesAuxVector;
+
+	__mmask8 remotionAuxMask;
+
 	__m128i permMask;
 
 	__m256i tableSizeVector = _mm256_set1_epi32(TAB_SIZE-1);
@@ -157,25 +162,32 @@ inline void vividGenerate(column_orders * c_orders)
 		/*******************************************
 			PHASE 2 - THE HASH
 		*******************************************/
-		hashedVector = _mm256_fnv1a_epi32(keysVector);
-		hashedVector = _mm256_maskz_and_epi32 (table1Mask, hashedVector, tableSizeVector);
+		hashedAVector 	= _mm256_fnv1a_epi32(keysVector);
+		hashedVector 	= _mm256_and_epi32 (hashedAuxVector, tableSizeVector);
 
 		temporaryVector = _mm256_murmur3_epi32(keysVector, 0x0D50064F7);
 		temporaryVector = _mm256_and_si256(temporaryVector, tableSizeVector);
-		hashedVector 	= _mm256_mask_add_epi32(hashedVector, table2Mask, temporaryVector, tableSizeVector);
+		temporaryVector = _mm256_add_si256(temporaryVector, tableSizeVector);
+
+		hashedVector 	= _mm256_mask_and_epi32(temporaryVector, table1Mask, hashedVector, allOneVector);
+		hashedAuxVector = _mm256_mask_and_epi32(temporaryVector, table2Mask, hashedVector, allOneVector);
 
 		/*******************************************
 			PHASE 3 - THE RETRIEVAL
 			Load the cuckoo table values and check for zeros and duplicated values
 		*******************************************/
-		valuesVector = _mm256_i32gather_epi32(cuckoo, hashedVector, 4);
+		valuesVector 	= _mm256_i32gather_epi32(cuckoo, hashedVector, 4);
+		valuesAuxVector = _mm256_i32gather_epi32(cuckoo, hashedAuxVector, 4);
 
 		/*******************************************
 			PHASE 4 - THE DUPLICATES AND THE ZEROS
 			Check if the values are already there
 		*******************************************/
-		//Duplicates
-		remotionMask = _mm256_movepi32_mask(_mm256_cmpeq_epi32(keysVector, valuesVector));
+		//Duplicates -> need to search on BOTH tables
+		remotionAuxMask = _mm256_movepi32_mask(_mm256_cmpeq_epi32(keysVector, valuesAuxVector));
+		remotionMask 	= _mm256_movepi32_mask(_mm256_cmpeq_epi32(keysVector, valuesVector));
+
+		remotionMask	= _kor_mask8(remotionAuxMask, remotionMask);
 
 		//Zeros
 		loadMask 	= _mm256_movepi32_mask(_mm256_cmpeq_epi32(valuesVector, zeroVector));
