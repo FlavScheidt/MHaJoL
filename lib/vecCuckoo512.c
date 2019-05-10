@@ -110,7 +110,7 @@ inline void vividGenerate(column_orders * c_orders)
 
 	//Auxiliary
 	__m256i oneVector 		= _mm256_set1_epi32(1);
-	__m256i allOneVector 	= _mm256_set1_epi32(0xFFFFFFFFFFFFFFFF);
+	__m256i allOneVector 	= _mm256_set1_epi32(0xFFFFFFFF);
 	__m256i zeroVector 		= _mm256_set1_epi32(0);
 
 	__m128i permMask;
