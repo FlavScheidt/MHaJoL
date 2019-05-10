@@ -146,7 +146,7 @@ inline void vividGenerate(column_orders * c_orders)
 			Load the new items using the loadMask
 		******************************************/
 		temporaryVector = _mm256_maskz_and_epi32(loadMask, oneVector, oneVector);
-		temporaryVector = _mm256_srli_epi32(temporaryVector, 31);
+		temporaryVector = _mm256_slli_epi32(temporaryVector, 31);
 		temporaryVector = _mm256_maskload_epi32(&key[tuples], temporaryVector);
 		keysVector		= _mm256_mask_or_epi32(keysVector, loadMask, temporaryVector, zeroVector);
 
