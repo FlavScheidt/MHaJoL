@@ -323,7 +323,7 @@ int vividJoin(column_customer * c_customer, column_orders * c_orders)
 	for (int i=0; i<REAL_TAB_SIZE; i++)
 		cuckoo[i]=0;
 
-	vecCuckooGenerate(c_orders);
+	vividGenerate(c_orders);
 
 	for (int i=0; i<REAL_TAB_SIZE; i++)
 	{
