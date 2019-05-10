@@ -153,7 +153,7 @@ inline void cViViDGenerateFilter(int key[tamOrders])
 	/*******************************************
 		Other Variables
 	*******************************************/
-	clock_t init, end;
+	// clock_t init, end;
 
 	unsigned int shiftIndex;
 

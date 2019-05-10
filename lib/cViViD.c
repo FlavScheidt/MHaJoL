@@ -8,7 +8,7 @@ inline void cViViDGenerate(int orders[tamOrders])
 
 inline int cViViDJoin(column_customer * c_customer, column_orders * c_orders)
 {
-	clock_t init, end;
+	// clock_t init, end;
 	uint32_t index=0;
 	// int customer[tamCustomer];
 	int alignas(32) orders[tamOrders];
@@ -22,7 +22,7 @@ inline int cViViDJoin(column_customer * c_customer, column_orders * c_orders)
 	for (int i=0; i<REAL_TAB_SIZE; i++)
 		cuckoo[i]=0;
 
-	for (int i=0; i<tamOrders; i++)
+	for (unsigned int i=0; i<tamOrders; i++)
 		orders[i] = c_orders[i].O_CUSTKEY;
 
 	cViViDGenerate(orders);

@@ -12,7 +12,7 @@
 /****************************
 	PARAMETERS
 ****************************/
-#define THRESHOLD 20
+// #define THRESHOLD 20
 
 /***************************
 	DATA TYPES AND STRUCTURES
