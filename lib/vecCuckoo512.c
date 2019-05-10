@@ -239,7 +239,7 @@ inline void vividGenerate(column_orders * c_orders)
 		permMask 			= _mm_loadl_epi64((__m128i*) &permTB[shiftIndex ^ 255]);
 		permutationMask 	= _mm256_cvtepi8_epi32(permMask);
 
-		keysVector = _mm256_permutevar8x32_epi32(valuesVector, permutationMask);
+		keysVector 			= _mm256_permutevar8x32_epi32(valuesVector, permutationMask);
 
 		//Shuffle Masks
 		temporaryVector 	= _mm256_maskz_and_epi32(loadMask, allOneVector, allOneVector);

@@ -65,9 +65,6 @@ int main(int argc, char ** argv)
 	end = clock();
 	printf("%d linhas\n", nResult);
 	printf("%.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
-
-	free(c_orders);
-	free(c_customer);
 	
 	return 1;
 }
