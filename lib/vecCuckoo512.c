@@ -148,7 +148,7 @@ inline void vividGenerate(column_orders * c_orders)
 		// temporaryVector = _mm256_maskz_and_epi32(loadMask, oneVector, oneVector);
 		// temporaryVector = _mm256_maskload_epi32(&key[tuples], temporaryVector);
 		// keysVector		= _mm256_mask_or_epi32(keysVector, loadMask, temporaryVector, zeroVector);
-		keysVector = _mm256_mask_expandloadu_epi32 (keysVector, loadMask, &key[tuples]);
+		keysVector = _mm256_mask_expandloadu_epi32(keysVector, loadMask, key[tuples]);
 
 		//Number of keys loaded to set the new tuples value
 		index 	= _cvtmask8_u32(loadMask);
