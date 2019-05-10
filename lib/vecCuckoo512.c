@@ -292,7 +292,7 @@ inline int vividLookUp(__m256i key)
 	hash1 = _mm256_cmpeq_epi32(hash1, zeroVector);
 
 	found = _cvtmask8_u32(_mm256_movepi32_mask(hash1));
-	
+
 	// return found;
 
 	return (((found<<31)>>31)+((found<<30)>>31)+((found<<29)>>31)+((found<<28)>>31)+((found<<27)>>31)+((found<<26)>>31)+((found<<25)>>31)+((found<<24)>>31));
@@ -342,7 +342,7 @@ int vividJoin(column_customer * c_customer, column_orders * c_orders)
 	for (unsigned int i=0; i<tamCustomer; i=i+8)
 	{
 		keys = _mm256_maskload_epi32(&customer[i], oneVector);
-		index += vecCuckooLookUp(keys);
+		index += vividLookUp(keys);
 	}
 	likwid_markerStopRegion("Core");
 	end=clock();
