@@ -109,8 +109,9 @@ inline void vividGenerate(column_orders * c_orders)
 	__m256i valuesVector;
 
 	//Auxiliary
-	__m256i oneVector 	= _mm256_set1_epi32(1);
-	__m256i zeroVector 	= _mm256_set1_epi32(0);
+	__m256i oneVector 		= _mm256_set1_epi32(1);
+	__m256i allOneVector 	= _mm256_set1_epi32(0xFFFFFFFFFFFFFFFF);
+	__m256i zeroVector 		= _mm256_set1_epi32(0);
 
 	__m128i permMask;
 
@@ -145,8 +146,7 @@ inline void vividGenerate(column_orders * c_orders)
 			PHASE 1 - THE LOAD
 			Load the new items using the loadMask
 		******************************************/
-		temporaryVector = _mm256_maskz_and_epi32(loadMask, oneVector, oneVector);
-		temporaryVector = _mm256_slli_epi32(temporaryVector, 31);
+		temporaryVector = _mm256_maskz_and_epi32(loadMask, allOneVector, allOneVector);
 		temporaryVector = _mm256_maskload_epi32(&key[tuples], temporaryVector);
 		keysVector		= _mm256_mask_or_epi32(keysVector, loadMask, temporaryVector, zeroVector);
 
@@ -231,13 +231,11 @@ inline void vividGenerate(column_orders * c_orders)
 		keysVector = _mm256_permutevar8x32_epi32(valuesVector, permutationMask);
 
 		//Shuffle Masks
-		temporaryVector 	= _mm256_maskz_and_epi32(loadMask, oneVector, oneVector);
-		temporaryVector 	= _mm256_slli_epi32(temporaryVector, 31);
+		temporaryVector 	= _mm256_maskz_and_epi32(loadMask, allOneVector, allOneVector);
 		temporaryVector 	= _mm256_permutevar8x32_epi32(temporaryVector, permutationMask);
 		loadMask 			= _mm256_movepi32_mask(temporaryVector);
 
-		temporaryVector 	= _mm256_maskz_and_epi32(table1Mask, oneVector, oneVector);
-		temporaryVector 	= _mm256_slli_epi32(temporaryVector, 31);
+		temporaryVector 	= _mm256_maskz_and_epi32(table1Mask, allOneVector, allOneVector);
 		temporaryVector 	= _mm256_permutevar8x32_epi32(temporaryVector, permutationMask);
 		table1Mask 			= _mm256_movepi32_mask(temporaryVector);
 
