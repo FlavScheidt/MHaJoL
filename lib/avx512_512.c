@@ -144,7 +144,7 @@ inline void vivid512Generate(column_orders * c_orders)
 
 		//Shuffle Masks
 		temporaryVector 	= _mm512_maskz_and_epi32(table1Mask, allOneVector, allOneVector);
-		temporaryVector		= _mm512_mask_compress_epi32(temporaryVector, loadMask, zeroVector);
+		temporaryVector		= _mm512_mask_compress_epi32(temporaryVector, loadMask, oneVector);
 		table1Mask 			= _mm512_movepi32_mask(temporaryVector);
 
 		temporaryVector 	= _mm512_maskz_and_epi32(table2Mask, allOneVector, allOneVector);
@@ -152,7 +152,7 @@ inline void vivid512Generate(column_orders * c_orders)
 		table2Mask 			= _mm512_movepi32_mask(temporaryVector);
 
 		temporaryVector 	= _mm512_maskz_and_epi32(loadMask, allOneVector, allOneVector);
-		temporaryVector		= _mm512_mask_compress_epi32(temporaryVector, loadMask, zeroVector);
+		temporaryVector		= _mm512_mask_compress_epi32(temporaryVector, loadMask, oneVector);
 		loadMask 			= _mm512_movepi32_mask(temporaryVector);
 
 	}
