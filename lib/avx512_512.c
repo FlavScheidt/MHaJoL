@@ -104,6 +104,12 @@ inline void vivid512Generate(column_orders * c_orders)
 
 		remotionMask	= _kor_mask16(remotionAuxMask, remotionMask);
 
+		//Duplicates on the same vector
+		valuesAuxVector = _mm512_conflict_epi32(valuesVector);
+		remotionAuxMask	= _mm512_movepi32_mask(valuesAuxVector);
+
+		remotionMask 	= _kor_mask16(remotionMask, remotionAuxMask);
+
 		//Zeros
 		loadMask 	= _mm512_cmpeq_epi32_mask(valuesVector, zeroVector);
 
