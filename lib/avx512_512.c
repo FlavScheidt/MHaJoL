@@ -238,7 +238,7 @@ inline void vivid512Generate(column_orders * c_orders)
 		table2Mask 			= _mm512_movepi32_mask(temporaryVector);
 
 		temporaryVector 	= _mm512_maskz_and_epi32(loadMask, allOneVector, allOneVector);
-		temporaryVector		= _mm512_maskz_compress_epi32(temporaryVector, loadMask, zeroVector);
+		temporaryVector		= _mm512_mask_compress_epi32(temporaryVector, loadMask, zeroVector);
 		loadMask 			= _mm512_movepi32_mask(temporaryVector);
 
 	}
@@ -261,9 +261,6 @@ inline int vivid512LookUp(__m512i key)
 	__mmask16 found2;
 
 	__m512i tableSizeVector = _mm512_set1_epi32(TAB_SIZE-1);
-	__m512i oneVector 		= _mm512_set1_epi32(0);
-	__m512i zeroVector 		= _mm512_set1_epi32(0);
-	oneVector 				= _mm512_set1_epi32(0xFFFFFFFF);
 
 	uint32_t found = 0;
 
@@ -277,8 +274,8 @@ inline int vivid512LookUp(__m512i key)
 	table1 = _mm512_i32gather_epi32(hash1, (int const*)cuckoo, 4);
 	table2 = _mm512_i32gather_epi32(hash2, (int const*)cuckoo, 4);
 
-	found1 = _mm512_cmpeq_epi32(key, table1);
-	found2 = _mm512_cmpeq_epi32(key, table2);
+	found1 = _mm512_cmpeq_epi32_mask(key, table1);
+	found2 = _mm512_cmpeq_epi32_mask(key, table2);
 
 	found = _mm512_mask2int(_kor_mask16(found1, found2));
 
