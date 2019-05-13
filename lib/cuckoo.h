@@ -10,7 +10,7 @@
 // #define CUCKOO_H4 fnv1a(str) & (nBuckets-1)
 
 //Maximum number of tries before reallocating the entire table
-#define CUCKOO_MAX_TRY 100
+#define CUCKOO_MAX_TRY 300
 
 //Definition
 typedef uint64_t bucket;
