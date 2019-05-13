@@ -68,6 +68,49 @@ inline __m256i _mm256_fnv1a_epi32(__m256i data)
 }
 
 /******************************************************
+	SIMD version 512
+*******************************************************/
+inline __m512i _mm256_fnv1a_epi32(__m256i data)
+{
+	__m512i hash = _mm512_set1_epi32(2166136261);
+	__m512i prime = _mm512_set1_epi32(16777619);
+	__m512i shift;
+
+	//Extract the byte
+	shift = _mm512_slli_epi32(data, 24);
+	shift = _mm512_srli_epi32(shift, 24);
+
+	//Hash
+	hash = _mm512_xor_si512(hash, shift);
+	hash = _mm512_mullo_epi32(hash, prime);
+
+	//Extract the byte
+	shift = _mm512_slli_epi32(data, 16);
+	shift = _mm512_srli_epi32(shift, 24);
+
+	//Hash
+	hash = _mm512_xor_si512(hash, shift);
+	hash = _mm512_mullo_epi32(hash, prime);
+
+	//Extract the byte
+	shift = _mm512_slli_epi32(data, 8);
+	shift = _mm512_srli_epi32(shift, 24);
+
+	//Hash
+	hash = _mm512_xor_si512(hash, shift);
+	hash = _mm512_mullo_epi32(hash, prime);
+
+	//Extract the byte
+	shift = _mm512_srli_epi32(data, 24);
+
+	//Hash
+	hash = _mm512_xor_si512(hash, shift);
+	hash = _mm512_mullo_epi32(hash, prime);
+
+	return hash;
+}
+
+/******************************************************
 	8 bits return
 ******************************************************/
 inline uint8_t fnv1aByte8(unsigned char oneByte, uint8_t hash)

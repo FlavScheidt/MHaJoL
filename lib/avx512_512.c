@@ -15,7 +15,6 @@ inline void vivid512Generate(column_orders * c_orders)
 	//Vectors
 	__m512i keysVector; //Vector of keys
 	__m512i temporaryVector; //Auxiliary vector used to load new keys
-	__m512i permutationMask; //Mask to shuffle new and old keys
 	__m512i hashedVector; //Hashed keys
 	__m512i hopsVector; 
 	__m512i valuesVector;
@@ -59,7 +58,7 @@ inline void vivid512Generate(column_orders * c_orders)
 			Load the new items using the loadMask
 		******************************************/
 		// temporaryVector = _mm512_maskz_and_epi32(loadMask, allOneVector, allOneVector);
-		temporaryVector = _mm512_maskz_load_epi32(&key[tuples], loadMask);
+		temporaryVector = _mm512_maskz_load_epi32(loadMask, &key[tuples]);
 		keysVector		= _mm512_mask_or_epi32(keysVector, loadMask, temporaryVector, zeroVector);
 
 		//Number of keys loaded to set the new tuples value
@@ -171,7 +170,7 @@ inline int vivid512LookUp(__m512i key)
 	__m512i tableSizeVector = _mm512_set1_epi32(TAB_SIZE-1);
 	__m512i oneVector 		= _mm512_set1_epi32(0);
 	__m512i zeroVector 		= _mm512_set1_epi32(0);
-	oneVector 				= _mm512_cmpeq_epi32(oneVector, zeroVector);
+	oneVector 				= _mm512_set1_epi32(0xFFFFFFFF);
 
 	uint32_t found = 0;
 
@@ -182,8 +181,8 @@ inline int vivid512LookUp(__m512i key)
 	hash2 = _mm512_and_si512(hash2, tableSizeVector);
 	hash2 = _mm512_add_epi32(hash2, tableSizeVector);
 
-	table1 = _mm512_i32gather_epi32(cuckoo, hash1, 4);
-	table2 = _mm512_i32gather_epi32(cuckoo, hash2, 4);
+	table1 = _mm512_i32gather_epi32((int const*)cuckoo, hash1, 4);
+	table2 = _mm512_i32gather_epi32((int const*)cuckoo, hash2, 4);
 
 	hash1 = _mm512_cmpeq_epi32(key, table1);
 	hash2 = _mm512_cmpeq_epi32(key, table2);
@@ -203,18 +202,6 @@ int vivid512Join(column_customer * c_customer, column_orders * c_orders)
 	int customer[tamCustomer];
 
 	__m512i keys;
-
-	__m512i oneVector = _mm512_set1_epi32(0);
-	__m512i zeroVector = _mm512_set1_epi32(0);
-	oneVector = _mm512_cmpeq_epi32(oneVector, zeroVector);
-
-	HOPS = 0;			//hops for a given key
-	HOPSGENERAL = 0;	//general hops in average
-	OCC = 0;			//occupation	
-	DUP = 0;			//duplicated keys
-	SUC = 0; 			//successfull insertion on the first try
-	HOPED = 0;			//Succesfull insertion with hops
-	OHTOCC = 0;
 
 	for (int i=0; i<REAL_TAB_SIZE; i++)
 		cuckoo[i]=0;

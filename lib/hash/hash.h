@@ -27,8 +27,6 @@ typedef  unsigned       char ub1;   /* unsigned 1-byte quantities */
 size_t hash_pearson(const char* s);
 size_t hash_jenkins(const char* s);
 
-__m256i _mm256_jenkins_epi32(__m256i data);
-
 /*****************************************
 MurmurHash2, by Austin Appleby
 ******************************************/
@@ -58,6 +56,7 @@ extern "C" {
 uint32_t murmurhash3 (const char *, uint32_t, uint32_t);
 
 __m256i _mm256_murmur3_epi32(__m256i keys, const uint32_t seed);
+__m512i _mm256_murmur3_epi32(__m512i keys, const uint32_t seed);
 
 #ifdef __cplusplus
 }
@@ -92,7 +91,7 @@ uint16_t fnv1aShort16(unsigned short twoBytes, uint16_t hash);
 uint16_t fnv1a16(unsigned int fourBytes);
 
 __m256i _mm256_fnv1a_epi32(__m256i data);
-
+__m512i _mm512_fnv1a_epi32(__m512i data);
 
 /*************************************
   Elf Hash
