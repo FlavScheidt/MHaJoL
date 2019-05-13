@@ -80,8 +80,9 @@ inline int findSeparator(int init, size_t len, char *line)
 }
 
 
-int popCounter(int i)
+uint32_t popCounter(int n)
 {
+	uint32_t i = (uint32_t)n;
 	return (((i<<31)>>31)+((i<<30)>>31)+((i<<29)>>31)+((i<<28)>>31)+((i<<27)>>31)+((i<<26)>>31)+((i<<25)>>31)+((i<<24)>>31)+((i<<23)>>31)+((i<<22)>>31)+((i<<21)>>31)+((i<<20)>>31)+((i<<19)>>31)+((i<<18)>>31)+((i<<17)>>31)+((i<<16)>>31));
 }
 
