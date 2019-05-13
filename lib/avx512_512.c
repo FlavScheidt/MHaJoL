@@ -138,8 +138,8 @@ inline void vivid512Generate(column_orders * c_orders)
 		// permutationMask 	= _mm512_cvtepi16_epi32(permMask);
 
 		// keysVector 			= _mm512_permutexvar_epi32(permutationMask,valuesVector);
-		keysVector			= _mm512_mask_compress_epi32(valuesVector, loadMask, zeroVector);
-		hopsVector			= _mm512_mask_compress_epi32(hopsVector, loadMask, zeroVector);
+		keysVector			= _mm512_mask_compress_epi32(zeroVector, _knot_mask16(loadMask), valuesVector);
+		hopsVector			= _mm512_mask_compress_epi32(zeroVector, _knot_mask16(loadMask), hopsVector);
 
 		//Shuffle Masks
 		table1Mask			= _kor_mask16(table1Mask, loadMask);
