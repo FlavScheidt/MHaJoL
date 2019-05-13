@@ -270,8 +270,8 @@ inline int vivid256LookUp(__m256i key)
 	hash2 = _mm256_and_si256(hash2, tableSizeVector);
 	hash2 = _mm256_add_epi32(hash2, tableSizeVector);
 
-	table1 = _mm256_i32gather_epi32(cuckoo, hash1, 4);
-	table2 = _mm256_i32gather_epi32(cuckoo, hash2, 4);
+	table1 = _mm256_i32gather_epi32((int const*)cuckoo, hash1, 4);
+	table2 = _mm256_i32gather_epi32((int const*)cuckoo, hash2, 4);
 
 	hash1 = _mm256_cmpeq_epi32(key, table1);
 	hash2 = _mm256_cmpeq_epi32(key, table2);
