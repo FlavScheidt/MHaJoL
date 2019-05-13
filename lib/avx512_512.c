@@ -151,8 +151,7 @@ inline void vivid512Generate(column_orders * c_orders)
 		temporaryVector		= _mm512_mask_compress_epi32(temporaryVector, loadMask, zeroVector);
 		table2Mask 			= _mm512_movepi32_mask(temporaryVector);
 
-		temporaryVector 	= _mm512_maskz_and_epi32(loadMask, allOneVector, allOneVector);
-		temporaryVector		= _mm512_mask_compress_epi32(temporaryVector, loadMask, oneVector);
+		temporaryVector		= _mm512_mask_compress_epi32(oneVector, loadMask, zeroVector);
 		loadMask 			= _mm512_movepi32_mask(temporaryVector);
 
 	}
