@@ -2,6 +2,14 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include <time.h>
+
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <stdint.h>
+#include <assert.h>
+#include <sched.h>
+
 #include <immintrin.h>
 
 #include <stdalign.h>
