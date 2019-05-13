@@ -39,8 +39,6 @@
 #define _GNU_SOURCE
 #endif
 
-#include "rand.h"
-
 inline int avx512Join(column_customer * c_customer, column_orders * c_orders)
 {
 	uint32_t index=0;
