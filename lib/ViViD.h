@@ -61,4 +61,4 @@ void vivid512Generate(column_orders * c_orders);
 
 //AVX-512 Ross & Polychroniou
 int avx512Join(column_customer * c_customer, column_orders * c_orders);
-int avx512Generate(column_orders * c_orders,  uint32_t factor[2])
+int avx512Generate(column_orders * c_orders,  uint32_t factor[2]);
