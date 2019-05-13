@@ -56,6 +56,6 @@ int findSeparator(int init, size_t len, char *line);
 int countLines(char fileName[50]);
 float toFloat(const char* s);
 int toInt(char a[]);
-inline int popCounter(int i)
+int popCounter(int i);
 
 // void handle_error (int retval);
