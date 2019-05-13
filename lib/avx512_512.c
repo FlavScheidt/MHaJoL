@@ -143,7 +143,7 @@ inline void vivid512Generate(column_orders * c_orders)
 		*******************************************/
 		shiftIndex 			= popCounter(_cvtmask16_u32(_knot_mask16(loadMask)));
 		permMask 			= permRot[shiftIndex];
-		permutationMask 	= _mm512_set_epi32((int)permMask>>60, (int)((permMask<<4)>>60), (int)((permMask<<8)>>60),(int)((permMask<<12)>>60),(int)((permMask<<16)>>60),(int)((permMask<<20)>>60),(int)((permMask<<24)>>60),(int)((permMask<<28)>>60),(int)((permMask<<32)>>60),(int)((permMask<<36)>>60),(int)((permMask<<40)>>60),(int)((permMask<<44)>>60),(int)((permMask<<48)>>60),(int)((permMask<<52)>>60),(int)((permMask<<54)>>60),(int)((permMask<<60)>>60));
+		permutationMask 	= _mm512_set_epi32(permMask>>60, ((permMask<<4)>>60), ((permMask<<8)>>60),((permMask<<12)>>60),((permMask<<16)>>60),((permMask<<20)>>60),((permMask<<24)>>60),((permMask<<28)>>60),((permMask<<32)>>60),((permMask<<36)>>60),((permMask<<40)>>60),((permMask<<44)>>60),((permMask<<48)>>60),((permMask<<52)>>60),((permMask<<54)>>60),((permMask<<60)>>60));
 
 		// keysVector 			= _mm512_permutexvar_epi32(permutationMask,valuesVector);
 		keysVector			= _mm512_maskz_compress_epi32(_knot_mask16(loadMask), valuesVector);
