@@ -110,7 +110,7 @@ inline void vivid512Generate(column_orders * c_orders)
 
 	//Auxiliary
 	__m512i oneVector 		= _mm512_set1_epi32(1);
-	__m512i allOneVector 	= _mm512_set1_epi32(0xFFFFFFFFFFFFFFFF);
+	__m512i allOneVector 	= _mm512_set1_epi32(0xFFFFFFFF);
 	__m512i zeroVector 		= _mm512_set1_epi32(0);
 
 	__m512i hashedAuxVector;
@@ -150,7 +150,7 @@ inline void vivid512Generate(column_orders * c_orders)
 			Load the new items using the loadMask
 		******************************************/
 		temporaryVector = _mm512_maskz_and_epi32(loadMask, allOneVector, allOneVector);
-		temporaryVector = _mm512_maskload_epi32(&key[tuples], temporaryVector);
+		temporaryVector = _mm512_maskz_load_epi32(&key[tuples], temporaryVector);
 		keysVector		= _mm512_mask_or_epi32(keysVector, loadMask, temporaryVector, zeroVector);
 
 		//Number of keys loaded to set the new tuples value
@@ -174,21 +174,21 @@ inline void vivid512Generate(column_orders * c_orders)
 			PHASE 3 - THE RETRIEVAL
 			Load the cuckoo table values and check for zeros and duplicated values
 		*******************************************/
-		valuesVector 	= _mm512_i32gather_epi32(cuckoo, hashedVector, 4);
-		valuesAuxVector = _mm512_i32gather_epi32(cuckoo, hashedAuxVector, 4);
+		valuesVector 	= _mm512_i32gather_epi32(hashedVector, cuckoo, 4);
+		valuesAuxVector = _mm512_i32gather_epi32(hashedAuxVector, cuckoo, 4);
 
 		/*******************************************
 			PHASE 4 - THE DUPLICATES AND THE ZEROS
 			Check if the values are already there
 		*******************************************/
 		//Duplicates -> need to search on BOTH tables
-		remotionAuxMask = _mm512_movepi32_mask(_mm512_cmpeq_epi32(keysVector, valuesAuxVector));
-		remotionMask 	= _mm512_movepi32_mask(_mm512_cmpeq_epi32(keysVector, valuesVector));
+		remotionAuxMask = _mm512_cmpeq_epi32_mask(keysVector, valuesAuxVector);
+		remotionMask 	= _mm512_cmpeq_epi32_mask(keysVector, valuesVector);
 
 		remotionMask	= _kor_mask16(remotionAuxMask, remotionMask);
 
 		//Zeros
-		loadMask 	= _mm512_movepi32_mask(_mm512_cmpeq_epi32(valuesVector, zeroVector));
+		loadMask 	= _mm512_cmpeq_epi32_mask(valuesVector, zeroVector);
 
 		//Remove duplicates from the loadMask and set the store mask where there is no repeated key
 		loadMask 	= _kor_mask16(loadMask, remotionMask);
@@ -225,22 +225,22 @@ inline void vivid512Generate(column_orders * c_orders)
 		/*******************************************
 			PHASE 8 - THE SHUFFLE
 		*******************************************/
-		shiftIndex 			= _cvtmask16_u32(loadMask);
-		permMask 			= _mm_loadl_epi64((__m128i*) &permTB[shiftIndex ^ 65535]);
-		permutationMask 	= _mm512_cvtepi8_epi32(permMask);
+		// shiftIndex 			= _cvtmask16_u32(loadMask);
+		// permMask 			= _mm_loadl_epi64((__m128i*) &permTB[shiftIndex ^ 65535]);
+		// permutationMask 	= _mm512_cvtepi16_epi32(permMask);
 
-		keysVector 			= _mm512_permutevar8x32_epi32(valuesVector, permutationMask);
+		// keysVector 			= _mm512_permutexvar_epi32(permutationMask,valuesVector);
 
-		//Shuffle Masks
-		temporaryVector 	= _mm512_maskz_and_epi32(loadMask, allOneVector, allOneVector);
-		temporaryVector 	= _mm512_permutevar8x32_epi32(temporaryVector, permutationMask);
-		loadMask 			= _mm512_movepi32_mask(temporaryVector);
+		// //Shuffle Masks
+		// temporaryVector 	= _mm512_maskz_and_epi32(loadMask, allOneVector, allOneVector);
+		// temporaryVector 	= _mm512_permutexvar_epi32(permutationMask, temporaryVector);
+		// loadMask 			= _mm512_movepi32_mask(temporaryVector);
 
-		temporaryVector 	= _mm512_maskz_and_epi32(table1Mask, allOneVector, allOneVector);
-		temporaryVector 	= _mm512_permutevar8x32_epi32(temporaryVector, permutationMask);
-		table1Mask 			= _mm512_movepi32_mask(temporaryVector);
+		// temporaryVector 	= _mm512_maskz_and_epi32(table1Mask, allOneVector, allOneVector);
+		// temporaryVector 	= _mm512_permutexvar_epi32(permutationMask, temporaryVector);
+		// table1Mask 			= _mm512_movepi32_mask(temporaryVector);
 
-		table2Mask 			= _knot_mask16(table1Mask);
+		// table2Mask 			= _knot_mask16(table1Mask);
 	}
 
 	// likwid_markerStopRegion("Generation");

@@ -200,8 +200,8 @@ inline void avx2Generate(column_orders * c_orders)
 			PHASE 3 - THE RETRIEVAL
 			Load the cuckoo table values and check for zeros and duplicated values
 		*******************************************/
-		table1Values = _mm256_i32gather_epi32(cuckoo, hashedVector, 4);
-		table2Values = _mm256_i32gather_epi32(cuckoo, temporaryVector, 4);
+		table1Values = _mm256_i32gather_epi32((int const*)cuckoo, hashedVector, 4);
+		table2Values = _mm256_i32gather_epi32((int const*), temporaryVector, 4);
 
 		/*******************************************
 			PHASE 4 - THE DUPLICATES AND THE ZEROS
