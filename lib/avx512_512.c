@@ -202,7 +202,7 @@ inline int vivid512LookUp(__m512i key)
 	found1 = _mm512_cmpeq_epi32_mask(key, table1);
 	found2 = _mm512_cmpeq_epi32_mask(key, table2);
 
-	found = _mm512_mask2int(_kor_mask16(found1, found2));
+	found = _mm512_mask2int(_knot_mask16(_kor_mask16(found1, found2)));
 
 	return popCounter(found);
 }
