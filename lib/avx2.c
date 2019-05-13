@@ -141,7 +141,7 @@ inline void avx2Generate(column_orders * c_orders)
 	//Other variables
 	size_t tuples = 0;
 	size_t index;
-	int threshold = 0;
+	// int threshold = 0;
 
 	for (unsigned int i=0; i<tamOrders;i++)
 		key[i] = c_orders[i].O_CUSTKEY;
@@ -201,7 +201,7 @@ inline void avx2Generate(column_orders * c_orders)
 			Load the cuckoo table values and check for zeros and duplicated values
 		*******************************************/
 		table1Values = _mm256_i32gather_epi32((int const*)cuckoo, hashedVector, 4);
-		table2Values = _mm256_i32gather_epi32((int const*), temporaryVector, 4);
+		table2Values = _mm256_i32gather_epi32((int const*)cuckoo, temporaryVector, 4);
 
 		/*******************************************
 			PHASE 4 - THE DUPLICATES AND THE ZEROS
