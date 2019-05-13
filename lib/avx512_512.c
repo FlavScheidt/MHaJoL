@@ -2,7 +2,7 @@
 
 inline void vivid512Generate(column_orders * c_orders)
 {
-	alignas(64) int key[tamOrders];
+	int key[tamOrders];
 	// int shiftIndex;
 
 	//Masks
@@ -58,7 +58,7 @@ inline void vivid512Generate(column_orders * c_orders)
 			Load the new items using the loadMask
 		******************************************/
 		// temporaryVector = _mm512_maskz_and_epi32(loadMask, allOneVector, allOneVector);
-		temporaryVector = _mm512_maskz_load_epi32(loadMask, &key[tuples]);
+		temporaryVector = _mm512_maskz_loadu_epi32(loadMask, &key[tuples]);
 		keysVector		= _mm512_mask_or_epi32(keysVector, loadMask, temporaryVector, zeroVector);
 
 		//Number of keys loaded to set the new tuples value
