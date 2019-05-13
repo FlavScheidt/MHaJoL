@@ -123,7 +123,6 @@ inline void vivid512Generate(column_orders * c_orders)
 		*******************************************/
 		//Same as the load, but respecting the positions that must be stored on the t1 on the next iteration
 		table1Mask = _kor_mask16(remotionMask, table1Mask);
-		table2Mask = _kor_mask16(remotionMask, table2Mask);
 
 		/*******************************************
 			PHASE 7 - THE STORE
@@ -143,15 +142,15 @@ inline void vivid512Generate(column_orders * c_orders)
 		hopsVector			= _mm512_mask_compress_epi32(hopsVector, loadMask, zeroVector);
 
 		//Shuffle Masks
-		temporaryVector 	= _mm512_maskz_and_epi32(table1Mask, allOneVector, allOneVector);
-		temporaryVector		= _mm512_mask_compress_epi32(temporaryVector, loadMask, oneVector);
+		table1Mask			= _kor_mask16(table1Mask, loadMask);
+		temporaryVector		= _mm512_mask_compress_epi32(zeroVector, table1Mask, allOneVector);
 		table1Mask 			= _mm512_movepi32_mask(temporaryVector);
 
-		temporaryVector 	= _mm512_maskz_and_epi32(table2Mask, allOneVector, allOneVector);
-		temporaryVector		= _mm512_mask_compress_epi32(temporaryVector, loadMask, zeroVector);
+		table2Mask			= _knot_mask16(table1Mask);
+		temporaryVector		= _mm512_mask_compress_epi32(zeroVector, table2Mask, allOneVector);
 		table2Mask 			= _mm512_movepi32_mask(temporaryVector);
 
-		temporaryVector		= _mm512_mask_compress_epi32(oneVector, loadMask, zeroVector);
+		temporaryVector		= _mm512_mask_compress_epi32(allOneVector, loadMask, zeroVector);
 		loadMask 			= _mm512_movepi32_mask(temporaryVector);
 
 	}
