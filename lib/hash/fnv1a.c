@@ -70,7 +70,7 @@ inline __m256i _mm256_fnv1a_epi32(__m256i data)
 /******************************************************
 	SIMD version 512
 *******************************************************/
-inline __m512i _mm256_fnv1a_epi32(__m256i data)
+inline __m512i _mm512_fnv1a_epi32(__m512i data)
 {
 	__m512i hash = _mm512_set1_epi32(2166136261);
 	__m512i prime = _mm512_set1_epi32(16777619);
