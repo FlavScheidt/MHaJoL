@@ -1,9 +1,16 @@
 #include "ViViD.h"
 
+const uint64_t permRot[15]  =  {0xFEDCBA9876543210, 0xFEDCBA987654321, 0x10FEDCBA98765432, 
+								0x210FEDCBA9876543, 0x3210FEDCBA987654, 0x43210FEDCBA98765, 
+								0x543210FEDCBA9876, 0x6543210FEDCBA987, 0x76543210FEDCBA98,
+								0x876543210FEDCBA9, 0x9876543210FEDCBA, 0xBA9876543210FEDC, 
+								0xDCBA9876543210FE, 0xEDCBA9876543210F, 0xFEDCBA9876543210}
+
 inline void vivid512Generate(column_orders * c_orders)
 {
 	int key[tamOrders];
-	// int shiftIndex;
+	uint32_t shiftIndex;
+	uint64_t permMask;
 
 	//Masks
 	__mmask16 loadMask;
@@ -18,6 +25,7 @@ inline void vivid512Generate(column_orders * c_orders)
 	__m512i hashedVector; //Hashed keys
 	__m512i hopsVector; 
 	__m512i valuesVector;
+	__m512i permutationMask
 
 	//Auxiliary
 	__m512i oneVector 		= _mm512_set1_epi32(1);
@@ -133,13 +141,16 @@ inline void vivid512Generate(column_orders * c_orders)
 		/*******************************************
 			PHASE 8 - THE SHUFFLE
 		*******************************************/
-		// shiftIndex 			= _cvtmask16_u32(loadMask);
-		// permMask 			= _mm_loadl_epi64((__m128i*) &permTB[shiftIndex ^ 65535]);
-		// permutationMask 	= _mm512_cvtepi16_epi32(permMask);
+		shiftIndex 			= popCounter(_cvtmask16_u32(_knot_mask16(loadMask)));
+		permMask 			= permRot[shiftIndex];
+		permutationMask 	= _mm512_set_epi32((int)permMask>>60, (int)(permMask<<4)>>60, (int)(permMask<<8)>>60,(int)(permMask<<12)>>60,(int)(permMask<<16)>>60,(int)(permMask<<20)>>60,(int)(permMask<<24)>>60,(int)(permMask<<28)>>60,(int)(permMask<<32)>>60,(int)(permMask<<36)>>60,(int)(permMask<<40)>>60,(int)(permMask<<44)>>60,(int)(permMask<<48)>>60,(int)(permMask<<52)>>60,(int)(permMask<<54)>>60,(int)(permMask<<60)>>60);
 
 		// keysVector 			= _mm512_permutexvar_epi32(permutationMask,valuesVector);
-		keysVector			= _mm512_mask_compress_epi32(zeroVector, _knot_mask16(loadMask), valuesVector);
-		hopsVector			= _mm512_mask_compress_epi32(zeroVector, _knot_mask16(loadMask), hopsVector);
+		keysVector			= _mm512_maskz_compress_epi32(_knot_mask16(loadMask), valuesVector);
+		hopsVector			= _mm512_maskz_compress_epi32(_knot_mask16(loadMask), hopsVector);
+
+		keysVector 			= _mm512_permutexvar_epi32(permutationMask, keysVector);
+		hopsVector 			= _mm512_permutexvar_epi32(permutationMask, hopsVector);
 
 		//Shuffle Masks
 		table1Mask			= _kor_mask16(table1Mask, loadMask);
