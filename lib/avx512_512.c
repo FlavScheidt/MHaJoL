@@ -57,8 +57,9 @@ inline void vivid512Generate(column_orders * c_orders)
 			PHASE 1 - THE LOAD
 			Load the new items using the loadMask
 		******************************************/
+		//Load functions from AVX-512 dont work - gcc problem?? Try using expandloadu
 		// temporaryVector = _mm512_maskz_and_epi32(loadMask, allOneVector, allOneVector);
-		temporaryVector = _mm512_maskz_loadu_epi32(loadMask, &key[tuples]);
+		temporaryVector = _mm512_maskz_expandloadu_epi32(loadMask,&key[tuples]);
 		keysVector		= _mm512_mask_or_epi32(keysVector, loadMask, temporaryVector, zeroVector);
 
 		//Number of keys loaded to set the new tuples value
