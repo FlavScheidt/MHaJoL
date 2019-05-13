@@ -339,15 +339,6 @@ int avx2Join(column_customer * c_customer, column_orders * c_orders)
 	__m256i mask_0 = _mm256_set1_epi32(0);
 	mask_1 = _mm256_cmpeq_epi32(mask_1, mask_0);
 
-
-	HOPS = 0;			//hops for a given key
-	HOPSGENERAL = 0;	//general hops in average
-	OCC = 0;			//occupation	
-	DUP = 0;			//duplicated keys
-	SUC = 0; 			//successfull insertion on the first try
-	HOPED = 0;			//Succesfull insertion with hops
-	OHTOCC = 0;
-
 	for (int i=0; i<REAL_TAB_SIZE; i++)
 		cuckoo[i]=0;
 
