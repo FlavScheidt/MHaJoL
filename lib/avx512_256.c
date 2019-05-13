@@ -1,4 +1,4 @@
-#include "vivid256.h"
+#include "ViViD.h"
 
 const uint64_t permTB[256] = {0x0706050403020100ull,
      0x0007060504030201ull, 0x0107060504030200ull, 0x0001070605040302ull,

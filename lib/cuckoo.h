@@ -4,13 +4,13 @@
 #define CUCKOO_SIZE 524288
 
 //Hash functions
-#define CUCKOO_H1 (fnv1a(str) & (nBuckets-1))
+#define CUCKOO_H1 (murmurhash2(str, strlen(str), seed1) & (nBuckets-1))
 #define CUCKOO_H2 (murmurhash3(str, strlen(str), seed2) & (nBuckets-1))
 // #define CUCKOO_H3 hash_jenkins(str) & (nBuckets-1)
 // #define CUCKOO_H4 fnv1a(str) & (nBuckets-1)
 
 //Maximum number of tries before reallocating the entire table
-#define CUCKOO_MAX_TRY 300
+#define CUCKOO_MAX_TRY 100
 
 //Definition
 typedef uint64_t bucket;
