@@ -1,5 +1,0 @@
-GOAL: THIS TEST AIMS TO VERIFY IF THE PARALLEZIATION OF THE Array BRINGS ANY IMPROVEMENT
-
-FUNCTIONAL COMMIT: b4c542c113a218cd31bef0b24bf8eef1b40b3b41
-
-CONCLUSION: It does, but only using 2 threads and leting two more on the OHT. But it is a slight difference.

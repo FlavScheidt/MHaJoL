@@ -3,7 +3,11 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "cViViD.h"
+#include <immintrin.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <stdint.h>
+#include <assert.h>
+#include <sched.h>
 
-// int nestedLoopJoin (column_customer *c_customer, column_orders *c_orders, int tamCustomer, int tamOrders, float * t_result);
-// int hashJoin (column_customer *c_customer, column_orders *c_orders, int tamCustomer, int tamOrders, float * t_result);
+#include "ViViD.h"

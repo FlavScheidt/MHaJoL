@@ -1,6 +1,6 @@
 #include "cuckoo.h"
 /***************************************************
-	Cuckoo Hash and Cuckoo Filter Implementations
+	Cuckoo Hash
 ***************************************************/
 inline int cuckooInsert(int key, int *cTable1, int *cTable2, int nBuckets, int *try)
 {

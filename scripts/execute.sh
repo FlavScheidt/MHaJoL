@@ -1,8 +1,8 @@
 #!/bin/bash
 
-metrics=("L3CACHE" "L2CACHE" "ENERGY" "L2" "L3" "TLB_DATA" "DATA" "ENERGY" "MEM" "BRANCH" "CACHES")
+# metrics=("L3CACHE" "L2CACHE" "ENERGY" "L2" "L3" "TLB_DATA" "DATA" "ENERGY" "MEM" "BRANCH" "CACHES")
 
-methods=("cuckoo" "vecCuckoo" "ViViD")
+methods=("avx2" "avx512_256" "avx512_512" "avx512_ross", "scalar")
 
 #Selectivity from 0 to 1.0, by 0.1
 for i in `seq 1 9`;
