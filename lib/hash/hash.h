@@ -56,7 +56,7 @@ extern "C" {
 uint32_t murmurhash3 (const char *, uint32_t, uint32_t);
 
 __m256i _mm256_murmur3_epi32(__m256i keys, const uint32_t seed);
-__m512i _mm256_murmur3_epi32(__m512i keys, const uint32_t seed);
+__m512i _mm512_murmur3_epi32(__m512i keys, const uint32_t seed);
 
 #ifdef __cplusplus
 }
