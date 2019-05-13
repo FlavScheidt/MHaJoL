@@ -214,6 +214,7 @@ int vivid512Join(column_customer * c_customer, column_orders * c_orders)
 	int customer[tamCustomer];
 
 	__m512i keys;
+	__mmask16 auxMask = _cvtu32_mask16(65535);
 
 	for (int i=0; i<REAL_TAB_SIZE; i++)
 		cuckoo[i]=0;
@@ -227,7 +228,7 @@ int vivid512Join(column_customer * c_customer, column_orders * c_orders)
 	// likwid_markerStartRegion("Core");
 	for (unsigned int i=0; i<tamCustomer; i=i+8)
 	{
-		keys = _mm512_load_epi32(&customer[i]);
+		keys = _mm512_maskz_expandloadu_epi32(auxMask, &customer[i]);
 		index += vivid512LookUp(keys);
 	}
 	// likwid_markerStopRegion("Core");
