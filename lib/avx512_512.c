@@ -226,7 +226,7 @@ int vivid512Join(column_customer * c_customer, column_orders * c_orders)
 
 	init=clock();
 	// likwid_markerStartRegion("Core");
-	for (unsigned int i=0; i<tamCustomer; i=i+8)
+	for (unsigned int i=0; i<tamCustomer; i=i+16)
 	{
 		keys = _mm512_maskz_expandloadu_epi32(auxMask, &customer[i]);
 		index += vivid512LookUp(keys);
