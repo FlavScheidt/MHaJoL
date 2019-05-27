@@ -101,13 +101,13 @@ inline void generateCuckooTable(column_orders c_orders[TAM_ORDERS], int tamOrder
 
 	HOPSGENERAL = 0;
 	
-	// likwid_markerStartRegion("Initialization");
+	likwid_markerStartRegion("Initialization");
 	for (int b=0; b<nBuckets; b++)
 	{
 		cTable1[b] = -1;
 		cTable2[b] = -1;
 	}
-	// likwid_markerStopRegion("Initialization");
+	likwid_markerStopRegion("Initialization");
 	end = clock();
 	printf("Initialization: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 
@@ -137,7 +137,7 @@ inline void generateCuckooTable(column_orders c_orders[TAM_ORDERS], int tamOrder
 				return;
 		}
 	}
-	// likwid_markerStopRegion("Generation");
+	likwid_markerStopRegion("Generation");
 	end = clock();
 	printf("Cuckoo Table Generation: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 }
@@ -175,7 +175,7 @@ inline int cuckooHash(column_customer * c_customer, column_orders * c_orders, in
 	}
 
 	init=clock();
-	// likwid_markerStartRegion("Core");
+	likwid_markerStartRegion("Core");
 	if (try == 0)
 	{
 		seed1 = 0x5bd1e995;
@@ -199,7 +199,7 @@ inline int cuckooHash(column_customer * c_customer, column_orders * c_orders, in
 			index++;
 		}
 	}
-	// likwid_markerStopRegion("Core");
+	likwid_markerStopRegion("Core");
 	end=clock();
 
 	free(cTable1);

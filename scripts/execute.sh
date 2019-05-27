@@ -55,7 +55,7 @@ do
 				echo "		test $s of 101"
 				#Runs the join with no parameter variation 
 				outputName="${OUT_DIR}/${n}.out"
-				likwid-perfctr -m -C S0:0 -g  ${m} /home/fscristo/MHaJoL/src/${n}/${n} ${selectivity} &>> ${outputName}
+				sudo likwid-perfctr -m -C S0:0 -g  ${m} /home/fscristo/MHaJoL/src/${n}/${n} ${selectivity} &>> ${outputName}
 				#/home/fscristo/MHaJoL/src/${n}/${n} ${selectivity} &>> ${outputName}				
 			done
 		done

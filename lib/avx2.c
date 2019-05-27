@@ -147,7 +147,7 @@ inline void avx2Generate(column_orders * c_orders)
 		key[i] = c_orders[i].O_CUSTKEY;
 
 	init = clock();
-	// likwid_markerStartRegion("Generation");
+	likwid_markerStartRegion("Generation");
 
 	keysVector = _mm256_maskload_epi32(&key[tuples], loadMask);
 	tuples = 8;
@@ -285,7 +285,7 @@ inline void avx2Generate(column_orders * c_orders)
 		table2Mask = _mm256_permutevar8x32_epi32(table2Mask, permutationMask);
 	}
 
-	// likwid_markerStopRegion("Generation");
+	likwid_markerStopRegion("Generation");
 	end = clock();
 	printf("Generation %.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 
@@ -357,13 +357,13 @@ int avx2Join(column_customer * c_customer, column_orders * c_orders)
 		customer[i] = c_customer[i].C_CUSTKEY;
 
 	init=clock();
-	// likwid_markerStartRegion("Core");
+	likwid_markerStartRegion("Core");
 	for (unsigned int i=0; i<tamCustomer; i=i+8)
 	{
 		keys = _mm256_maskload_epi32(&customer[i], mask_1);
 		index += avx2LookUp(keys);
 	}
-	// likwid_markerStopRegion("Core");
+	likwid_markerStopRegion("Core");
 	end=clock();
 
 	printf("Join core: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));

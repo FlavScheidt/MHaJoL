@@ -139,7 +139,7 @@ inline void vivid256Generate(column_orders * c_orders)
 		key[i] = c_orders[i].O_CUSTKEY;
 
 	init = clock();
-	// likwid_markerStartRegion("Generation");
+	likwid_markerStartRegion("Generation");
 
 	while (tuples <= tamOrders)
 	{
@@ -243,7 +243,7 @@ inline void vivid256Generate(column_orders * c_orders)
 		table2Mask 			= _knot_mask8(table1Mask);
 	}
 
-	// likwid_markerStopRegion("Generation");
+	likwid_markerStopRegion("Generation");
 	end = clock();
 	printf("Generation %.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 
@@ -306,13 +306,13 @@ int vivid256Join(column_customer * c_customer, column_orders * c_orders)
 		customer[i] = c_customer[i].C_CUSTKEY;
 
 	init=clock();
-	// likwid_markerStartRegion("Core");
+	likwid_markerStartRegion("Core");
 	for (unsigned int i=0; i<tamCustomer; i=i+8)
 	{
 		keys = _mm256_maskload_epi32(&customer[i], oneVector);
 		index += vivid256LookUp(keys);
 	}
-	// likwid_markerStopRegion("Core");
+	likwid_markerStopRegion("Core");
 	end=clock();
 
 	printf("Join core: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));

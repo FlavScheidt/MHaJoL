@@ -50,9 +50,9 @@ int main(int argc, char ** argv)
 	printf("selectivity %s\n", selectivity);
 
 	init = clock();
-
+	likwid_markerInit();
 	nResult=vivid512Join(c_customer, c_orders);
-
+	likwid_markerClose();
 	end = clock();
 	printf("%d linhas\n", nResult);
 	printf("%.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));

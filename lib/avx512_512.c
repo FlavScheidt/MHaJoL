@@ -57,7 +57,7 @@ inline void vivid512Generate(column_orders * c_orders)
 		key[i] = c_orders[i].O_CUSTKEY;
 
 	init = clock();
-	// likwid_markerStartRegion("Generation");
+	likwid_markerStartRegion("Generation");
 
 	while (tuples <= tamOrders)
 	{
@@ -174,7 +174,7 @@ inline void vivid512Generate(column_orders * c_orders)
 
 	}
 
-	// likwid_markerStopRegion("Generation");
+	likwid_markerStopRegion("Generation");
 	end = clock();
 	printf("Generation %.f ms \n\n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 
@@ -231,13 +231,13 @@ int vivid512Join(column_customer * c_customer, column_orders * c_orders)
 		customer[i] = c_customer[i].C_CUSTKEY;
 
 	init=clock();
-	// likwid_markerStartRegion("Core");
+	likwid_markerStartRegion("Core");
 	for (unsigned int i=0; i<tamCustomer; i=i+16)
 	{
 		keys = _mm512_maskz_expandloadu_epi32(auxMask, &customer[i]);
 		index += vivid512LookUp(keys);
 	}
-	// likwid_markerStopRegion("Core");
+	likwid_markerStopRegion("Core");
 	end=clock();
 
 	printf("Join core: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
