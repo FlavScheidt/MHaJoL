@@ -1,6 +1,6 @@
 #!/bin/bash
-
-# metrics=("L3CACHE" "L2CACHE" "ENERGY" "L2" "L3" "TLB_DATA" "DATA" "ENERGY" "MEM" "BRANCH" "CACHES")
+# 
+metrics=("L3CACHE" "L2CACHE" "ENERGY" "L2" "L3" "TLB_DATA" "DATA" "ENERGY" "MEM" "BRANCH" "CACHES")
 
 methods=("avx2" "avx512_256" "avx512_512" "scalar")
 
@@ -44,8 +44,8 @@ do
 
 	# echo "Running all the joins..."
 
-	# for m in "${metrics[@]}";
-	# do
+	for m in "${metrics[@]}";
+	do
 		echo "$m"
 		for n in "${methods[@]}";
 		do
@@ -59,7 +59,7 @@ do
 				/home/fscristo/MHaJoL/src/${n}/${n} ${selectivity} &>> ${outputName}				
 			done
 		done
-	# done
+	done
 
 	# echo "Generating .dat files to plot the data..."
 	#The number of registers returned by the nested loop join
