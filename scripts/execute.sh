@@ -1,6 +1,7 @@
 #!/bin/bash
 # 
-metrics=("L3CACHE" "L2CACHE" "ENERGY" "L2" "L3" "TLB_DATA" "DATA" "ENERGY" "MEM" "BRANCH" "CACHES")
+metrics=("L3CACHE" "L2CACHE" "ENERGY" "MEM" "CACHES")
+
 
 methods=("avx2" "avx512_256" "avx512_512" "scalar")
 

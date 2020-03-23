@@ -1,13 +1,14 @@
 #!/bin/bash
 
-metrics=("L3CACHE" "L2CACHE" "ENERGY" "L2" "L3" "TLB_DATA" "DATA" "ENERGY" "MEM" "BRANCH" "CACHES")
+metrics=("L3CACHE" "L2CACHE" "ENERGY" "MEM" "CACHES")
+methods=("avx2" "avx512256" "avx512512" "scalar")
 
-methods=("cuckoo" "vecCuckoo" "ViViD")
 
-if [ -f ./results.csv ]; then
-   rm -rf ./results.csv
+if [ -f /home/flav/Mestrado/MHaJoL/data/results.csv ]; then
+   rm -rf /home/flav/Mestrado/MHaJoL/data/results.csv
 fi
-touch ./results.csv
+touch /home/flav/Mestrado/MHaJoL/data/results.csv
+echo 'region,selectivity,method,grp,metric,value' >> /home/flav/Mestrado/MHaJoL/data/results.csv
 
 for i in `seq 1 9`;
 do
@@ -23,7 +24,7 @@ do
 	for m in "${methods[@]}";
 	do
 		#First split: each execution on a file
-		csplit "$OUT_DIR/${m}.out" "/6500U/" "{*}" > /dev/null
+		csplit "$OUT_DIR/${m}.out" "/Skylake/" "{*}" > /dev/null
 
 		# Rename everything - 00 does not matter - Groups of 7*17 (7 execution for each 17 metrics)
 		counter=1
@@ -124,6 +125,8 @@ do
 	for file in ${SPLIT_DIR}/*;
 	do
 		sed -i '/+------------------/d' ${file}
+		sed -i '/nan/d' ${file}
+		sed -i 's/\//_/g' ${file}
 		sed -i 's/ //g' ${file}
 		sed -i 's/|/\,/g' ${file}
 		sed -i 's/,,/\,/g' $file
@@ -141,6 +144,76 @@ do
 		sed -i 's/,PWR2//g' ${file}
 		sed -i 's/,PWR3//g' ${file}
 		sed -i 's/,TMP0//g' ${file}
+
+		sed -i 's/,CBOX0C1//g' ${file}
+		sed -i 's/,CBOX1C1//g' ${file}
+		sed -i 's/,CBOX2C1//g' ${file}
+		sed -i 's/,CBOX3C1//g' ${file}
+		sed -i 's/,CBOX4C1//g' ${file}
+		sed -i 's/,CBOX5C1//g' ${file}
+		sed -i 's/,CBOX6C1//g' ${file}
+		sed -i 's/,CBOX7C1//g' ${file}
+		sed -i 's/,CBOX8C1//g' ${file}
+		sed -i 's/,CBOX9C1//g' ${file}
+		sed -i 's/,CBOX10C1//g' ${file}
+		sed -i 's/,CBOX11C1//g' ${file}
+		sed -i 's/,CBOX12C1//g' ${file}
+		sed -i 's/,CBOX13C1//g' ${file}
+		sed -i 's/,CBOX14C1//g' ${file}
+		sed -i 's/,CBOX15C1//g' ${file}
+		sed -i 's/,CBOX16C1//g' ${file}
+		sed -i 's/,CBOX17C1//g' ${file}
+		sed -i 's/,CBOX18C1//g' ${file}
+		sed -i 's/,CBOX19C1//g' ${file}
+		sed -i 's/,CBOX20C1//g' ${file}
+		sed -i 's/,CBOX21C1//g' ${file}
+		sed -i 's/,CBOX22C1//g' ${file}
+		sed -i 's/,CBOX23C1//g' ${file}
+		sed -i 's/,CBOX24C1//g' ${file}
+		sed -i 's/,CBOX25C1//g' ${file}
+		sed -i 's/,CBOX26C1//g' ${file}
+		sed -i 's/,CBOX27C1//g' ${file}
+		sed -i 's/,CBOX0C0//g' ${file}
+		sed -i 's/,CBOX1C0//g' ${file}
+		sed -i 's/,CBOX2C0//g' ${file}
+		sed -i 's/,CBOX3C0//g' ${file}
+		sed -i 's/,CBOX4C0//g' ${file}
+		sed -i 's/,CBOX5C0//g' ${file}
+		sed -i 's/,CBOX6C0//g' ${file}
+		sed -i 's/,CBOX7C0//g' ${file}
+		sed -i 's/,CBOX8C0//g' ${file}
+		sed -i 's/,CBOX9C0//g' ${file}
+		sed -i 's/,CBOX10C0//g' ${file}
+		sed -i 's/,CBOX11C0//g' ${file}
+		sed -i 's/,CBOX12C0//g' ${file}
+		sed -i 's/,CBOX13C0//g' ${file}
+		sed -i 's/,CBOX14C0//g' ${file}
+		sed -i 's/,CBOX15C0//g' ${file}
+		sed -i 's/,CBOX16C0//g' ${file}
+		sed -i 's/,CBOX17C0//g' ${file}
+		sed -i 's/,CBOX18C0//g' ${file}
+		sed -i 's/,CBOX19C0//g' ${file}
+		sed -i 's/,CBOX20C0//g' ${file}
+		sed -i 's/,CBOX21C0//g' ${file}
+		sed -i 's/,CBOX22C0//g' ${file}
+		sed -i 's/,CBOX23C0//g' ${file}
+		sed -i 's/,CBOX24C0//g' ${file}
+		sed -i 's/,CBOX25C0//g' ${file}
+		sed -i 's/,CBOX26C0//g' ${file}
+		sed -i 's/,CBOX27C0//g' ${file}
+		sed -i 's/,CBOX28C0//g' ${file}
+		sed -i 's/,MBOX0C0//g' ${file}
+		sed -i 's/,MBOX0C1//g' ${file}
+		sed -i 's/,MBOX1C0//g' ${file}
+		sed -i 's/,MBOX1C1//g' ${file}
+		sed -i 's/,MBOX2C0//g' ${file}
+		sed -i 's/,MBOX2C1//g' ${file}
+		sed -i 's/,MBOX3C0//g' ${file}
+		sed -i 's/,MBOX3C1//g' ${file}
+		sed -i 's/,MBOX4C0//g' ${file}
+		sed -i 's/,MBOX4C1//g' ${file}
+		sed -i 's/,MBOX5C0//g' ${file}
+		sed -i 's/,MBOX5C1//g' ${file}
 
 		cat ${file} | sed 's/.$//' | sed 's/,-/,0/g' &>> /home/flav/Mestrado/MHaJoL/data/results.csv
 	done

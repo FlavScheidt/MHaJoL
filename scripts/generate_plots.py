@@ -130,8 +130,6 @@ dfIQR = pd.merge(dfIQR, df, how='inner', on=['grp', 'metric', 'method', 'region'
 dfIQR['calc1'] = dfIQR['first'] - (1.5 * dfIQR['IQR'])
 dfIQR['calc2'] = dfIQR['third'] - (1.5 * dfIQR['IQR'])
 
-dfIQR.to_csv('/home/flav/Mestrado/MHaJoL/data/iqr.csv')
-
 dfIQR['values'] = np.where((dfIQR['value'] < (dfIQR['first'] - (1.5 * dfIQR['IQR']))) | (dfIQR['value'] < (dfIQR['third'] - (1.5 * dfIQR['IQR']))), dfIQR['value'], dfIQR['median'])
 
 dfIQR = dfIQR.drop(columns=['value', 'first', 'third', 'IQR', 'median', 'calc1', 'calc2'])
