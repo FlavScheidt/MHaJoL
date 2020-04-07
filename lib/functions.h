@@ -2,6 +2,14 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include <time.h>
+
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <stdint.h>
+#include <assert.h>
+#include <sched.h>
+
 #include <immintrin.h>
 
 #include <stdalign.h>
@@ -9,9 +17,9 @@
 // #include <papi.h>
 
 //PATH DEFINITIONS
-#define PATH_MAIN "/home/flav/Mestrado/MHaJoL/"
-#define PATH_SRC "/home/flav/Mestrado/MHaJoL/src/"
-#define PATH_LIB "/home/flav/Mestrado/MHaJoL/lib/"
+#define PATH_MAIN "/home/fscristo/MHaJoL/"
+#define PATH_SRC "/home/fscristo/MHaJoL/src/"
+#define PATH_LIB "/home/fscristo/MHaJoL/lib/"
 
 #ifdef LIKWID_PERFMON
 #include <likwid.h>
@@ -56,5 +64,6 @@ int findSeparator(int init, size_t len, char *line);
 int countLines(char fileName[50]);
 float toFloat(const char* s);
 int toInt(char a[]);
+uint32_t popCounter(int i);
 
 // void handle_error (int retval);

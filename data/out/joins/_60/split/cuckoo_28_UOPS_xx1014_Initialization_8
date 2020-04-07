@@ -1,7 +1,0 @@
-Initialization,60,cuckoo,UOPS,Runtime(RDTSC)[s],0.0041,
-Initialization,60,cuckoo,UOPS,Runtimeunhalted[s],0.0011,
-Initialization,60,cuckoo,UOPS,Clock[MHz],997.5671,
-Initialization,60,cuckoo,UOPS,CPI,0.6617,
-Initialization,60,cuckoo,UOPS,IssuedUOPs,4611063,
-Initialization,60,cuckoo,UOPS,ExecutedUOPs,5898224,
-Initialization,60,cuckoo,UOPS,RetiredUOPs,5673624,

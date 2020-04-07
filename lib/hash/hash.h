@@ -14,37 +14,6 @@
 
 #include <immintrin.h>
 
-/***************************************************
-  Hash Any
-  Postgres default
-***************************************************/
-#define UINT32_ALIGN_MASK (sizeof(int) - 1)
-
-#define rot(x,k) (((x)<<(k)) | ((x)>>(32-(k))))
-
-#define mix(a,b,c) \
-{ \
-  a -= c;  a ^= rot(c, 4);	c += b; \
-  b -= a;  b ^= rot(a, 6);	a += c; \
-  c -= b;  c ^= rot(b, 8);	b += a; \
-  a -= c;  a ^= rot(c,16);	c += b; \
-  b -= a;  b ^= rot(a,19);	a += c; \
-  c -= b;  c ^= rot(b, 4);	b += a; \
-}
-
-#define final(a,b,c) \
-{ \
-  c ^= b; c -= rot(b,14); \
-  a ^= c; a -= rot(c,11); \
-  b ^= a; b -= rot(a,25); \
-  c ^= b; c -= rot(b,16); \
-  a ^= c; a -= rot(c, 4); \
-  b ^= a; b -= rot(a,14); \
-  c ^= b; c -= rot(b,24); \
-}
-
-int hash_any(char *k, int keylen);
-
 /*******************************************
   Pearson and Jenkins
   My implementation
@@ -87,6 +56,7 @@ extern "C" {
 uint32_t murmurhash3 (const char *, uint32_t, uint32_t);
 
 __m256i _mm256_murmur3_epi32(__m256i keys, const uint32_t seed);
+__m512i _mm512_murmur3_epi32(__m512i keys, const uint32_t seed);
 
 #ifdef __cplusplus
 }
@@ -121,7 +91,7 @@ uint16_t fnv1aShort16(unsigned short twoBytes, uint16_t hash);
 uint16_t fnv1a16(unsigned int fourBytes);
 
 __m256i _mm256_fnv1a_epi32(__m256i data);
-
+__m512i _mm512_fnv1a_epi32(__m512i data);
 
 /*************************************
   Elf Hash

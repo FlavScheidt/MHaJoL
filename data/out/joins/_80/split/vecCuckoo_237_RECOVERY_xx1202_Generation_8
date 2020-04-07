@@ -1,5 +1,0 @@
-Generation,80,vecCuckoo,RECOVERY,Runtime(RDTSC)[s],0.0625,
-Generation,80,vecCuckoo,RECOVERY,Runtimeunhalted[s],0.0585,
-Generation,80,vecCuckoo,RECOVERY,Clock[MHz],2428.7762,
-Generation,80,vecCuckoo,RECOVERY,CPI,0.9718,
-Generation,80,vecCuckoo,RECOVERY,Avg.recoveryduration,6.0118,

@@ -1,8 +1,9 @@
 #!/bin/bash
+# 
+metrics=("L3CACHE" "L2CACHE" "ENERGY" "MEM" "CACHES")
 
-metrics=("L3CACHE" "L2CACHE" "L2" "L3" "FLOPS_AVX" "DATA" "BRANCH" "ICACHE" "ENERGY" "TLB_DATA" "UOPS" "RECOVERY")
 
-methods=("cuckoo" "vecCuckoo")
+methods=("avx2" "avx512_256" "avx512_512" "scalar")
 
 #Selectivity from 0 to 1.0, by 0.1
 for i in `seq 1 9`;
@@ -14,21 +15,21 @@ do
 
 	echo "Making directories..."
 	#Makes the .dat folder needed for the plots
-	DAT_DIR="/home/flav/Mestrado/MHaJoL/data/gnu/joins/_${selectivity}"
+	DAT_DIR="/home/fscristo/MHaJoL/data/gnu/joins/_${selectivity}"
 	if [ ! -d "$DAT_DIR" ]
 	then
 		mkdir "$DAT_DIR"
 	fi
 
 	#Makes the .out folder needed for the plots
-	OUT_DIR="/home/flav/Mestrado/MHaJoL/data/out/joins/_${selectivity}"
+	OUT_DIR="/home/fscristo/MHaJoL/data/out/joins/_${selectivity}"
 	if [ ! -d "$OUT_DIR" ]
 	then
 		mkdir "$OUT_DIR"
 	fi
 
 	#Makes the folder to hold temporary tbl
-	TEMP_DIR="/home/flav/Mestrado/MHaJoL/tbl/temp"
+	TEMP_DIR="/home/fscristo/MHaJoL/tbl/temp"
 	if [ ! -d "$TEMP_DIR" ]
 	then
 		mkdir "$TEMP_DIR"
@@ -36,11 +37,11 @@ do
 
 	# echo "Generation orders table..."
 	# #Generates orders table and prints it to file
-	psql bloom bloom -c "select * from generate_sample_by_selectivity(${selectivity});" &>> ${TEMP_DIR}/ORDERS_${selectivity}.tbl
-	chmod 777 ${TEMP_DIR}/ORDERS_${selectivity}.tbl
+	# psql bloom bloom -c "select * from generate_sample_by_selectivity(${selectivity});" &>> ${TEMP_DIR}/ORDERS_${selectivity}.tbl
+	# chmod 777 ${TEMP_DIR}/ORDERS_${selectivity}.tbl
 
-	#Transforms file into a real tbl file to be read by the program
-	cat ${TEMP_DIR}/ORDERS_${selectivity}.tbl | sed '1,2d' | sed '/o_/d' | sed '/function/d' | sed '/^\s*$/d' | sed '/-----/d' | sed '/row/d' | tr -d '\t' | sed -e 's/[ \t]*//' | sed 's/$/|/' &>> /home/flav/Mestrado/MHaJoL/tbl/orders_${selectivity}.tbl
+	# #Transforms file into a real tbl file to be read by the program
+	# cat ${TEMP_DIR}/ORDERS_${selectivity}.tbl | sed '1,2d' | sed '/o_/d' | sed '/function/d' | sed '/^\s*$/d' | sed '/-----/d' | sed '/row/d' | tr -d '\t' | sed -e 's/[ \t]*//' | sed 's/$/|/' &>> /home/flav/Mestrado/MHaJoL/tbl/orders_${selectivity}.tbl
 
 	# echo "Running all the joins..."
 
@@ -55,7 +56,8 @@ do
 				echo "		test $s of 101"
 				#Runs the join with no parameter variation 
 				outputName="${OUT_DIR}/${n}.out"
-				likwid-perfctr -m -C S0:0 -g  ${m} /home/flav/Mestrado/MHaJoL/src/${n}/${n} ${selectivity} &>> ${outputName}
+				sudo likwid-perfctr -m -C S0:0 -g  ${m} /home/fscristo/MHaJoL/src/${n}/${n} ${selectivity} &>> ${outputName}
+				#/home/fscristo/MHaJoL/src/${n}/${n} ${selectivity} &>> ${outputName}				
 			done
 		done
 	done
@@ -103,4 +105,4 @@ done
 
 #Clean
 rm -rf ${TEMP_DIR}
-rm -rf /home/flav/Mestrado/MHaJoL/tbl/orders_*
+# rm -rf /home/flav/Mestrado/MHaJoL/tbl/orders_*

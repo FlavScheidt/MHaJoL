@@ -1,8 +1,8 @@
 #include "cuckoo.h"
 /***************************************************
-	Cuckoo Hash and Cuckoo Filter Implementations
+	Cuckoo Hash
 ***************************************************/
-inline int cuckooInsert(unsigned int key, int *cTable1, int *cTable2, int tamOrders, int nBuckets, int *try)
+inline int cuckooInsert(int key, int *cTable1, int *cTable2, int nBuckets, int *try)
 {
 	char str[10];
 	int index1, index2;
@@ -86,7 +86,7 @@ inline int cuckooInsert(unsigned int key, int *cTable1, int *cTable2, int tamOrd
 	return olderCuckoo;
 }
 
-inline int cuckooLookUp(unsigned int key, int index1, int index2, int * cTable1, int *cTable2)
+inline int cuckooLookUp(int key, int index1, int index2, int * cTable1, int *cTable2)
 {
 	if (cTable1[index1] == key || cTable2[index2] == key)
 		return 1;
@@ -94,7 +94,7 @@ inline int cuckooLookUp(unsigned int key, int index1, int index2, int * cTable1,
 	return 0;
 }
 
-inline void generateCuckooTable(column_orders *c_orders, int tamOrders, int nBuckets, int * cTable1, int * cTable2, int *try)
+inline void generateCuckooTable(column_orders c_orders[TAM_ORDERS], int tamOrders, int nBuckets, int * cTable1, int * cTable2, int *try)
 {
 	clock_t init, end;
 	init = clock();
@@ -112,10 +112,10 @@ inline void generateCuckooTable(column_orders *c_orders, int tamOrders, int nBuc
 	printf("Initialization: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 
 	init = clock();
-	likwid_markerStartRegion("Generation");
+	// likwid_markerStartRegion("Generation");
 	for (int i=0; i<tamOrders; i++)
 	{
-		switch (cuckooInsert(c_orders[i].O_CUSTKEY, cTable1, cTable2, tamOrders, nBuckets, try))
+		switch (cuckooInsert(c_orders[i].O_CUSTKEY, cTable1, cTable2, nBuckets, try))
 		{
 			case 1:
 				SUC++;
@@ -132,7 +132,7 @@ inline void generateCuckooTable(column_orders *c_orders, int tamOrders, int nBuc
 				printf("	Realocating cuckoo table... it may take a while\n");
 				try++;
 				generateCuckooTable(c_orders, tamOrders, nBuckets, cTable1, cTable2, try);
-				likwid_markerStopRegion("Generation");
+				// likwid_markerStopRegion("Generation");
 				end = clock();
 				return;
 		}
@@ -193,7 +193,7 @@ inline int cuckooHash(column_customer * c_customer, column_orders * c_orders, in
 		index1 = CUCKOO_H1;
 		index2 = CUCKOO_H2;
 
-		if (cuckooLookUp(c_customer[i].C_CUSTKEY, index1, index2, cTable1, cTable2) == 0)
+		if (cuckooLookUp(c_customer[i].C_CUSTKEY, index1, index2, cTable1, cTable2) == 1)
 		{
 			t_result[index] = c_customer[i].C_ACCTBAL;
 			index++;
@@ -201,6 +201,9 @@ inline int cuckooHash(column_customer * c_customer, column_orders * c_orders, in
 	}
 	likwid_markerStopRegion("Core");
 	end=clock();
+
+	free(cTable1);
+	free(cTable2);
 
 	printf("Join core: %.f ms \n", ((double)(end - init) / (CLOCKS_PER_SEC / 1000)));
 

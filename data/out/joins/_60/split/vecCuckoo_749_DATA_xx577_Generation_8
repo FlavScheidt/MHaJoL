@@ -1,5 +1,0 @@
-Generation,60,vecCuckoo,DATA,Runtime(RDTSC)[s],0.0593,
-Generation,60,vecCuckoo,DATA,Runtimeunhalted[s],0.0589,
-Generation,60,vecCuckoo,DATA,Clock[MHz],2578.6700,
-Generation,60,vecCuckoo,DATA,CPI,0.9760,
-Generation,60,vecCuckoo,DATA,Loadtostoreratio,1.2794,

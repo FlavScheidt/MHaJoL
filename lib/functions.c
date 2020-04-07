@@ -4,6 +4,7 @@ inline int toInt(char a[])
 {
 	int c, sign, offset, n;
  
+ 	sign = 0;
 	if (a[0] == '-') 
 		sign = -1;
  
@@ -51,15 +52,17 @@ inline float toFloat(const char* s)
 
 inline int countLines(char fileName[50])
 {
-	char read;
+	ssize_t read = 0;
 	size_t len = 0;
 	char *line = NULL;	
 	int nLines=0;
 	FILE *file = fopen(fileName, "r+");
 
 	while ((read = getline(&line, &len, file)) != -1)
+	{
 		nLines++;
-
+	}
+	free(line);
 	fclose(file);
 
 	return nLines;
@@ -67,13 +70,20 @@ inline int countLines(char fileName[50])
 
 inline int findSeparator(int init, size_t len, char *line)
 {
-	for (int i=init; i<len; i++)
+	for (size_t i=init; i<len; i++)
 	{
 		//printf("%c", line[i]);
 		if (line[i] == '|')
 			return i;
 	}
 	return -1;
+}
+
+
+uint32_t popCounter(int n)
+{
+	uint32_t i = (uint32_t)n;
+	return (((i<<31)>>31)+((i<<30)>>31)+((i<<29)>>31)+((i<<28)>>31)+((i<<27)>>31)+((i<<26)>>31)+((i<<25)>>31)+((i<<24)>>31)+((i<<23)>>31)+((i<<22)>>31)+((i<<21)>>31)+((i<<20)>>31)+((i<<19)>>31)+((i<<18)>>31)+((i<<17)>>31)+((i<<16)>>31));
 }
 
 // inline void handle_error (int retval)
